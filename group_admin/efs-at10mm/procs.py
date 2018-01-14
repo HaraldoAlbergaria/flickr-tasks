@@ -18,6 +18,8 @@ import api_credentials
 import group_data
 import data
 
+from datetime import datetime
+
 #===== CONSTANTS =================================#
 
 api_key = api_credentials.api_key
@@ -94,22 +96,22 @@ def createRemoveScript(remove_file_name):
 
 def addReportHeader(report_file_name, group_name, photos_in_report):
     report_file = open(report_file_name,'w')
-    report_file.write('+=================================================================================================================================================================+\n')
+    report_file.write('+==============================================================================================================================================================================+\n')
     if photos_in_report > 1:
-        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTOS ADDED                       | \n'.format(group_name, photos_in_report))
+        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTOS ADDED                                    | \n'.format(group_name, photos_in_report))
     else:
-        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTO ADDED                        | \n'.format(group_name, photos_in_report))
-    report_file.write('+=================================================================================================================================================================+\n')
+        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTO ADDED                                     | \n'.format(group_name, photos_in_report))
+    report_file.write('+==============================================================================================================================================================================+\n')
     report_file.close()
 
 def addPageHeader(report_file_name, page, number_of_pages, photos_per_page):
     report_file = open(report_file_name,'a')
     report_file.write('\n')
-    report_file.write('+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
-    report_file.write('| Page: {0:>5}/{1:<5} | Photos: {2:5}                                                                                                                               |\n'.format(page, number_of_pages, photos_per_page))
-    report_file.write('|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|\n')
-    report_file.write('|     | PHOTO                                              | OWNER                               | LENS MODEL                               |  F. LENGTH | ACTION |\n')
-    report_file.write('|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|\n')
+    report_file.write('+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
+    report_file.write('| Page: {0:>5}/{1:<5} | Photos: {2:5}                                                                                                                                            |\n'.format(page, number_of_pages, photos_per_page))
+    report_file.write('|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n')
+    report_file.write('|     | PHOTO                                              | OWNER                               | LENS MODEL                               | F. LENGTH  | DATE ADDED | ACTION |\n')
+    report_file.write('|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n')
     report_file.close()
 
 def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owner_id, photo_title, lens_model, focal_length):
@@ -128,6 +130,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
     photo_title = pool['photos']['photo'][photo_number]['title']
     photo_owner = pool['photos']['photo'][photo_number]['ownername']
     owner_id = pool['photos']['photo'][photo_number]['owner']
+    date_added = pool['photos']['photo'][photo_number]['dateadded']
     try:
         exif = getExif(photo_id)
         lens_model = getLensModel(exif)
@@ -138,7 +141,8 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
     report_file = open(report_file_name,'a')
     asian = photo_title.strip(data.eastern_chars)
     no_asian = photo_title.replace(asian,'')
-    report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length))
+    date = datetime.fromtimestamp(int(date_added)).strftime('%d/%m/%Y')
+    report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
         if ((not lens_model) or (not focal_length)):
             report_file.write('| REVIEW |\n')
@@ -151,7 +155,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
 
 def addPageFooter(report_file_name):
     report_file = open(report_file_name,'a')
-    report_file.write('+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
+    report_file.write('+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
 
 def addLastRemoveRunProcedure(remove_file_name, group_id):
     remove_file = open(remove_file_name, 'a')
