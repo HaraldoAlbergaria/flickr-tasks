@@ -155,7 +155,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
 
 def addPageFooter(report_file_name):
     report_file = open(report_file_name,'a')
-    report_file.write('+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
+    report_file.write('+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+\n')
 
 def addLastRemoveRunProcedure(remove_file_name, group_id):
     remove_file = open(remove_file_name, 'a')
