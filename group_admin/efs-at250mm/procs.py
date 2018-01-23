@@ -75,23 +75,11 @@ def createRemoveScript(remove_file_name):
     remove_file.write('#!/usr/bin/python3\n\n')
     remove_file.write('import flickrapi\n')
     remove_file.write('import json\n')
+    remove_file.write('import procs\n')
     remove_file.write('import api_credentials\n\n')
     remove_file.write('api_key = api_credentials.api_key\n')
-    remove_file.write('api_secret = api_credentials.api_secret\n\n')
-    remove_file.write('flickr = flickrapi.FlickrAPI(api_key, api_secret, format=\'parsed-json\')\n\n')
-    remove_file.write('def removePhoto(api_key, group_id, photo_id, photo_title):\n')
-    remove_file.write('    try:\n')
-    remove_file.write('        flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)\n')
-    remove_file.write('        print(\'Removed photo: {0}\'.format(photo_title))\n')
-    remove_file.write('    except:\n')
-    remove_file.write('        print(\'FAILED removing photo: {0}\'.format(photo_title))\n\n')
-    remove_file.write('def writeLastRemoveRun(group_id):\n')
-    remove_file.write('    pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)\n')
-    remove_file.write('    number_of_photos_after_current_remove = int(pool[\'photos\'][\'total\'])\n')
-    remove_file.write('    last_run = open(\'last_remove_run.py\', \'w\')\n')
-    remove_file.write('    last_run.write(\'number_of_photos = {0}\'.format(number_of_photos_after_current_remove))\n')
-    remove_file.write('    last_run.close()\n')
-    remove_file.write('\n\n### PHOTOS TO REMOVE:\n\n')
+    remove_file.write('api_secret = api_credentials.api_secret\n\n\n')
+    remove_file.write('### PHOTOS TO REMOVE:\n\n')
     remove_file.close()
 
 def addReportHeader(report_file_name, group_name, photos_in_report):
@@ -120,9 +108,7 @@ def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owne
     if lens_model:
         remove_file.write(' @{0}'.format(focal_length))
     remove_file.write('\n# https://www.flickr.com/photos/{0}/{1}/in/pool-{2}\n'.format(owner_id, photo_id, group_data.group_alias))
-    if ((not lens_model) or (not focal_length)):
-        remove_file.write('# ')
-    remove_file.write('removePhoto(api_key, \'{0}\', \'{1}\', \"{2}\")\n\n'.format(group_id, photo_id, photo_title))
+    remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \"{2}\")\n\n'.format(group_id, photo_id, photo_title))
     remove_file.close()
 
 def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number):
@@ -144,10 +130,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
     date = datetime.fromtimestamp(int(date_added)).strftime('%d/%m/%Y')
     report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
-        if ((not lens_model) or (not focal_length)):
-            report_file.write('| REVIEW |\n')
-        else:
-            report_file.write('| REMOVE |\n')
+        report_file.write('| REMOVE |\n')
         addPhotoToRemove(remove_file_name, page_number, photo_number+1, photo_id, owner_id, photo_title, lens_model, focal_length)
     else:
         report_file.write('|  KEEP  |\n')
@@ -159,7 +142,21 @@ def addPageFooter(report_file_name):
 
 def addLastRemoveRunProcedure(remove_file_name, group_id):
     remove_file = open(remove_file_name, 'a')
-    remove_file.write('\nwriteLastRemoveRun(\'{0}\')\n'.format(group_id))
+    remove_file.write('\nprocs.writeLastRemoveRun(\'{0}\')\n'.format(group_id))
     remove_file.close()
+
+def removePhoto(api_key, group_id, photo_id, photo_title):
+    try:
+        flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
+        print('Removed photo: {0}'.format(photo_title))
+    except:
+        print('FAILED removing photo: {0}'.format(photo_title))
+
+def writeLastRemoveRun(group_id):
+    pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)
+    number_of_photos_after_current_remove = int(pool['photos']['total'])
+    last_run = open('last_remove_run.py', 'w')
+    last_run.write('number_of_photos = {0}'.format(number_of_photos_after_current_remove))
+    last_run.close()
 
 
