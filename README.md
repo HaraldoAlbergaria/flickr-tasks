@@ -38,7 +38,7 @@ Then, [authenticate](https://stuvel.eu/flickrapi-doc/3-auth.html#authenticating-
 ```
 This will open a web browser to get the user approval. After approve, type in the terminal the generated code.
 
-**_Important Note:_** If a headless computer is being used the following procedure must be done in a graphical environment and the generated directory _~/.flickr_ copied to the same location at the headless system.
+**_Important Note:_** If a headless computer is being used the procedure above must be done in a graphical environment and the generated directory _~/.flickr_ copied to the same location at the headless system.
 
 ## Usage:
 
