@@ -1,1 +1,1 @@
-number_of_photos = 0
+number_of_photos = 1445
