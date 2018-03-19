@@ -102,13 +102,13 @@ def addPageHeader(report_file_name, page, number_of_pages, photos_per_page):
     report_file.write('|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n')
     report_file.close()
 
-def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owner_id, photo_title, lens_model, focal_length):
+def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length):
     remove_file = open(remove_file_name, 'a')
     remove_file.write('# {0}/{1} {2}:{3}'.format(page_number, photo_number, photo_title, lens_model))
     if lens_model:
         remove_file.write(' @{0}'.format(focal_length))
     remove_file.write('\n# https://www.flickr.com/photos/{0}/{1}/in/pool-{2}\n'.format(owner_id, photo_id, group_data.group_alias))
-    remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \"{2}\")\n\n'.format(group_id, photo_id, photo_title))
+    remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \'{2}\', \'{3}\')\n\n'.format(group_id, photo_id, photo_title, photo_owner))
     remove_file.close()
 
 def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number):
@@ -131,7 +131,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
     report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
         report_file.write('| REMOVE |\n')
-        addPhotoToRemove(remove_file_name, page_number, photo_number+1, photo_id, owner_id, photo_title, lens_model, focal_length)
+        addPhotoToRemove(remove_file_name, page_number, photo_number+1, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length)
     else:
         report_file.write('|  KEEP  |\n')
     report_file.close()
@@ -145,12 +145,12 @@ def addLastRemoveRunProcedure(remove_file_name, group_id):
     remove_file.write('\nprocs.writeLastRemoveRun(\'{0}\')\n'.format(group_id))
     remove_file.close()
 
-def removePhoto(api_key, group_id, photo_id, photo_title):
+def removePhoto(api_key, group_id, photo_id, photo_title, photo_owner):
     try:
         flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
-        print('Removed photo: {0}'.format(photo_title))
+        print('Removed photo: {0} by {1}'.format(photo_title, photo_owner))
     except:
-        print('FAILED removing photo: {0}'.format(photo_title))
+        print('FAILED removing photo: {0} by {1}'.format(photo_title, photo_owner))
 
 def writeLastRemoveRun(group_id):
     pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)
