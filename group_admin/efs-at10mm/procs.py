@@ -148,9 +148,9 @@ def addLastRemoveRunProcedure(remove_file_name, group_id):
 def removePhoto(api_key, group_id, photo_id, photo_title, photo_owner):
     try:
         flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
-        print('Removed photo: {0} by {1}'.format(photo_title, photo_owner))
+        print('Removed photo: \"{0}\" by {1}'.format(photo_title, photo_owner))
     except:
-        print('FAILED removing photo: {0} by {1}'.format(photo_title, photo_owner))
+        print('FAILED removing photo: \"{0}\" by {1}'.format(photo_title, photo_owner))
 
 def writeLastRemoveRun(group_id):
     pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)
