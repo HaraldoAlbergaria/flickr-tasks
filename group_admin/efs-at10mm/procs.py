@@ -104,7 +104,7 @@ def addPageHeader(report_file_name, page, number_of_pages, photos_per_page):
 
 def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length):
     remove_file = open(remove_file_name, 'a')
-    remove_file.write('# {0}/{1} {2}:{3}'.format(page_number, photo_number, photo_title, lens_model))
+    remove_file.write('# {0},{1} {2}:{3}'.format(page_number, photo_number, photo_title, lens_model))
     if lens_model:
         remove_file.write(' @{0}'.format(focal_length))
     remove_file.write('\n# https://www.flickr.com/photos/{0}/{1}/in/pool-{2}\n'.format(owner_id, photo_id, group_data.group_alias))
