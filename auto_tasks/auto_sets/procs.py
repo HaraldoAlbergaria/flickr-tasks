@@ -25,7 +25,7 @@ fav_others_id = '72157623439971318'
 fav_others_set = flickr.photosets.getPhotos(photoset_id=fav_others_id, user_id=user_id)
 set_title = fav_others_set['photoset']['title']
 
-summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.rep'
+summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.log'
 
 
 #===== PROCEDURES =======================================================#

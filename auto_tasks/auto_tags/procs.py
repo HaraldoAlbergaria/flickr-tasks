@@ -26,7 +26,7 @@ view_tags = data.view_tags
 favorite_tags = data.favorite_tags
 comment_tags = data.comment_tags
 
-summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_tags/summary_tags.rep'
+summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_tags/summary_tags.log'
 
 
 #===== PROCEDURES =======================================================#

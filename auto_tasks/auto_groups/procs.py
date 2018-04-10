@@ -25,7 +25,7 @@ group_url = 'https://www.flickr.com/groups/worldsfavorite/'
 group_id = flickr.urls.lookupGroup(api_key=api_key, url=group_url)['group']['id']
 group_name = flickr.urls.lookupGroup(api_key=api_key, url=group_url)['group']['groupname']['_content']
 
-summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_groups/summary_groups.rep'
+summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_groups/summary_groups.log'
 
 
 #===== PROCEDURES =======================================================#
