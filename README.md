@@ -11,7 +11,7 @@ A collection of _python_ scripts to automate some tasks on _Flickr_. At the mome
 
 To use these scripts it is necessary a basic knowledge of computer programming in _Python_
 
-## Installation:
+## Installation
 
 The scripts were developed to run on _Linux_ systems and need _Python 3.x_ to run.
 
@@ -40,7 +40,7 @@ This will open a web browser to get the user approval. After approve, type in th
 
 **_Important Note:_** If a headless computer is being used the procedure above must be done in a graphical environment and the generated directory _~/.flickr_ copied to the same location at the headless system.
 
-## Usage:
+## Usage
 
 - **auto_tasks**: Inside 'auto_tasks' directory create a new one to your specific need (name it what you want) and copy the scripts in the parent directory to it. Create a link (or copy) to the file __api_credentials.py__. Implement the procedures you need in the file **procs.py**.
 
