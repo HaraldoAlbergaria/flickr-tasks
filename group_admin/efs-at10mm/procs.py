@@ -108,7 +108,7 @@ def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owne
     if lens_model:
         remove_file.write(' @{0}'.format(focal_length))
     remove_file.write('\n# https://www.flickr.com/photos/{0}/{1}/in/pool-{2}\n'.format(owner_id, photo_id, group_data.group_alias))
-    remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \'{2}\', \'{3}\')\n\n'.format(group_id, photo_id, photo_title, photo_owner))
+    remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \'{2}\', \'{3}\')\n\n'.format(group_id, photo_id, photo_title.replace("\'", "\\\'"), photo_owner))
     remove_file.close()
 
 def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number):
