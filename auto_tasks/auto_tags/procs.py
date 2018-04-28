@@ -42,16 +42,13 @@ def addTag(photo_id, tag):
         if tag_str == tag :
             already_tagged = True
     if already_tagged == False:
-        try:
-            flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
-            print(' {0}'.format(tag), end='')
-            photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-            photo_title = photo_info['photo']['title']['_content']
-            summary = open(summary_file, 'a')
-            summary.write('Added {0} to \'{1}\'\n'.format(tag, photo_title))
-            summary.close()
-        except:
-            pass
+        flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
+        print(' {0}'.format(tag), end='')
+        photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+        photo_title = photo_info['photo']['title']['_content']
+        summary = open(summary_file, 'a')
+        summary.write('Added {0} to \'{1}\'\n'.format(tag, photo_title))
+        summary.close()
 
 def removeTag(photo_id, tag):
     photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
@@ -61,16 +58,13 @@ def removeTag(photo_id, tag):
         tag_raw = tags[i]['raw']
         tag_str = '"' + tag_raw + '"'
         if tag_str == tag :
-            try:
-                flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
-                print(' {0}'.format(tag), end='')
-                photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-                photo_title = photo_info['photo']['title']['_content']
-                summary = open(summary_file, 'a')
-                summary.write('Removed {0} from \'{1}\'\n'.format(tag, photo_title))
-                summary.close()
-            except:
-                pass
+            flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
+            print(' {0}'.format(tag), end='')
+            photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+            photo_title = photo_info['photo']['title']['_content']
+            summary = open(summary_file, 'a')
+            summary.write('Removed {0} from \'{1}\'\n'.format(tag, photo_title))
+            summary.close()
 
 def addViewTags(photo_id, views):
     print('\n  added tags:', end='')
@@ -78,7 +72,10 @@ def addViewTags(photo_id, views):
         v = view_tags[i][0]
         tag = view_tags[i][1]
         if views >= v:
-            addTag(photo_id, tag)
+            try:
+                addTag(photo_id, tag)
+            except:
+                print('ERROR: Unable to add tag \'{0}\''.format(tag))
 
 def addFavoriteTags(photo_id, favorites):
     print('\n  added tags:', end='')
@@ -86,7 +83,10 @@ def addFavoriteTags(photo_id, favorites):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites >= fav:
-            addTag(photo_id, tag)
+            try:
+                addTag(photo_id, tag)
+            except:
+                print('ERROR: Unable to add tag \'{0}\''.format(tag))
 
 def delFavoriteTags(photo_id, favorites):
     print('\n  removed tags:', end='')
@@ -94,7 +94,10 @@ def delFavoriteTags(photo_id, favorites):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites < fav:
-            removeTag(photo_id, tag)
+            try:
+                removeTag(photo_id, tag)
+            except:
+                print('ERROR: Unable to remove tag \'{0}\''.format(tag))
 
 def addCommentTags(photo_id, comments):
     print('\n  added tags:', end='')
@@ -102,7 +105,10 @@ def addCommentTags(photo_id, comments):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments >= cmt:
-            addTag(photo_id, tag)
+            try:
+                addTag(photo_id, tag)
+            except:
+                print('ERROR: Unable to add tag \'{0}\''.format(tag))
 
 def delCommentTags(photo_id, comments):
     print('\n  removed tags:', end='')
@@ -110,7 +116,10 @@ def delCommentTags(photo_id, comments):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments < cmt:
-            removeTag(photo_id, tag)
+            try:
+                removeTag(photo_id, tag)
+            except:
+                print('ERROR: Unable to remove tag \'{0}\''.format(tag))
 
 def tagViews(photo_id):
     info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
