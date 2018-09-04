@@ -46,7 +46,7 @@ This will open a web browser to get the user approval. After approve, type in th
 
 - **group_admin**: Inside 'group_admin' directory create a new one to your specific need (name it what you want) and copy the scripts in the parent directory to it. Create a link (or copy) to the file __api_credentials.py__. Implement the procedures you need in the respective **procs_*.py** files.
 
-### IMPORTANT WARNING! Please, read before using these scripts:
+### IMPORTANT WARNING! Please, read before use these scripts:
 These scripts were written for my specific needs and I don't know if they will be useful for anyone else. But, if you want to use them,
 when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_**' and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way Flickr returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
 
