@@ -52,7 +52,7 @@ number_of_pages = int(pool['photos']['pages'])
 photos_per_page = int(pool['photos']['perpage'])
 
 # set output files names
-report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.group_admin.rep'.format(group_alias, group_name).replace(' ','_')
+report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.rep'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
 
 # create and add header to report file
