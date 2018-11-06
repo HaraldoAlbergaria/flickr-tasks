@@ -1,0 +1,11 @@
+00000000000
+
+# Here is the id of the current photo being processed.
+
+# If this file is not provided or the id is invalid, the script will create a new one
+# with the id of the last (newest) photo in the photoset. In this case, the script will
+# run over the photos added from that point. To start the script on any photo in the
+# photoset, set a valid id here. The photos will then be processed in increasing order
+# of upload time.
+
+

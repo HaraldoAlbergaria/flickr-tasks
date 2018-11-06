@@ -11,7 +11,7 @@
 
 ####################################################
 # !!!DO NOT MODIFY THIS FILE!!!                    #
-# Implement the procedures in file procs_report.py #
+# Implement the procedures in file procs.py        #
 # Include the rules in file group_data.py          #
 ####################################################
 
