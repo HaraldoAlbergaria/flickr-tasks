@@ -54,7 +54,7 @@ number_of_pages = int(pool['photos']['pages'])
 photos_per_page = int(pool['photos']['perpage'])
 
 # set output files names
-report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.rep'.format(group_alias, group_name).replace(' ','_')
+report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
 
 number_of_photos_in_last_remove = last_remove_run.number_of_photos
@@ -103,7 +103,7 @@ number_of_pages_ = int(members['members']['pages'])
 members_per_page = int(members['members']['perpage'])
 
 # set output files names
-current_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.current.rep'.format(group_alias, group_name).replace(' ','_')
+current_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.current.txt'.format(group_alias, group_name).replace(' ','_')
 new_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.new.txt'.format(group_alias, group_name).replace(' ','_')
 
 # read the current members file
