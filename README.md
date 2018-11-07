@@ -3,7 +3,7 @@
 A collection of _python_ scripts to automate some tasks on _Flickr_. At the moment, the following are available:
 
 - **_auto_add2groups/_**
-    - **_add_photo_to_group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
+    - **_add-photo-to-group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
 
 - **_auto_tasks/_**
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
