@@ -51,7 +51,6 @@ while added < data.group_limit:
     try:
         current_id_file = open_file('r')
     except FileNotFoundError as e:
-        print(e)
         current_id_file = open_file('w')
         current_id_file.close()
         current_id_file = open_file('r')
@@ -68,8 +67,9 @@ while added < data.group_limit:
         print(e)
         if str(e) == error_1:
             print("Warng: Using the last photo from the user\'s photostream")
-            current_id = flickr.people.getPublicPhotos(user_id=user_id)['photos']['photo'][0]['id']
+            current_id = flickr.people.getPublicPhotos(user_id=user_id)['photos']['photo'][1]['id']
         else:
+            print("Error: FATAL")
             break
     except:
         print("Error: FATAL")

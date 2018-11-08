@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-# This automatically adds photos to a group pool
-# according to the group rules
+# This automatically post photos to a blog
 #
 # Author: Haraldo Albergaria
 # Date  : Nov 5, 2018
@@ -18,8 +17,6 @@
 import flickrapi
 import json
 import api_credentials
-import data
-import procs
 import os
 
 def open_file(mode):
@@ -27,12 +24,7 @@ def open_file(mode):
     file_path = dir_path + '/current_id'
     return open(file_path, mode)
 
-
 error_1 = 'Error: 1: Photo not found'
-error_3 = 'Error: 3: Photo already in pool'
-error_5 = 'Error: 5: Photo limit reached'
-error_6 = 'Error: 6: Your Photo has been added to the Pending Queue for this Pool'
-error_7 = 'Error: 7: Your Photo has already been added to the Pending Queue for this Pool'
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -41,12 +33,10 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
-group_id = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']['id']
-group_name = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']['groupname']['_content']
+user_blogs = flickr.blogs.getList()['blogs']['blog']
 
-added = 0
 
-while added < data.group_limit:
+while True:
 
     try:
         current_id_file = open_file('r')
@@ -78,27 +68,20 @@ while added < data.group_limit:
     photo_id = flickr.photos.getContext(photo_id=current_id)['nextphoto']['id']
 
     if photo_id == 0:
-        print("Warng: No more photos to add to the group \'{0}\'".format(group_name))
+        print("Warng: No more photos to post")
         print("Warng: Reached the end of the photostream")
         break
 
     photo_title = flickr.photos.getInfo(photo_id=photo_id)['photo']['title']['_content']
+    photo_description = flickr.photos.getInfo(photo_id=photo_id)['photo']['description']['_content']
 
-    if procs.isOkToAdd(photo_id):
+    for i in range(len(user_blogs)):
         try:
-            flickr.groups.pools.add(group_id=group_id, photo_id=photo_id)
-            print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
-            added = added + 1
+            flickr.blogs.postPhoto(api_key=api_key, blog_id=user_blogs[i]['id'], photo_id=photo_id, title=photo_title, description=photo_description)
+            print("Postd: Succesfully posted photo \'{0}\' to \'{1}\'!".format(photo_title, user_blogs[i]['service']))
         except flickrapi.exceptions.FlickrError as e:
-            print("Error: Unable to add photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
+            print("Error: Failure on posting photo \'{0}\' to \'{1}\'".format(photo_title, user_blogs[i]['service']))
             print(e)
-            if str(e) != error_3 and str(e) != error_6 and str(e) != error_7:
-                break
-        except:
-            print("Error: FATAL")
-            break
-    else:
-        print("Error: Photo \'{0}\' is not elegible to be added to the group \'{1}\'".format(photo_title, group_name))
 
     current_id_file = open_file('w')
     current_id_file.write('{0}'.format(photo_id))
