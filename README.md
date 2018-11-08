@@ -46,7 +46,7 @@ This will open a web browser to get the user approval. After approve, type in th
 ## Usage
 
 - **auto_add2groups**: Inside directory 'auto_add2groups' create a new one to your specific need (name it what you want, eg: auto_add2group_gp1) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are also tree additional files necessary to run the script:
-    - **current_id**: Includes just the id of the current photo that is being processed on a given run. This is updated by the script with the id of the next photo in the photostream that will be added to the group.
+    - **current_id**: Includes just the id of the last photo processed by the script in the previous run.
     - **data.py**: Include here the group data (url, limit of photos) and any other data necessary to run the script (eg: camera model, for groups of a specific camera).
     - **procs.py**: Implement here the procedures that will actually process the photos to be added to the group.
 

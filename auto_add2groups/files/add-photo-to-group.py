@@ -59,23 +59,30 @@ while added < data.group_limit:
         print("Error: FATAL")
         break
 
-    photo_id = current_id_file.read().replace('\n', '')
+    current_id = current_id_file.read().replace('\n', '')
+    current_id_file.close()
 
     try:
-        photo_title = flickr.photos.getInfo(photo_id=photo_id)['photo']['title']['_content']
+        flickr.photos.getInfo(photo_id=current_id)
     except flickrapi.exceptions.FlickrError as e:
         print(e)
         if str(e) == error_1:
             print("Warng: Using the last photo from the user\'s photostream")
-            photo_id = flickr.people.getPublicPhotos(user_id=user_id)['photos']['photo'][0]['id']
-            photo_title = flickr.photos.getInfo(photo_id=photo_id)['photo']['title']['_content']
+            current_id = flickr.people.getPublicPhotos(user_id=user_id)['photos']['photo'][0]['id']
         else:
             break
     except:
         print("Error: FATAL")
         break
 
-    current_id_file.close()
+    photo_id = flickr.photos.getContext(photo_id=current_id)['nextphoto']['id']
+
+    if photo_id == 0:
+        print("Warng: No more photos to add to the group \'{0}\'".format(group_name))
+        print("Warng: Reached the end of the photostream")
+        break
+
+    photo_title = flickr.photos.getInfo(photo_id=photo_id)['photo']['title']['_content']
 
     if procs.isOkToAdd(photo_id):
         try:
@@ -93,12 +100,7 @@ while added < data.group_limit:
     else:
         print("Error: Photo \'{0}\' is not elegible to be added to the group \'{1}\'".format(photo_title, group_name))
 
-    next_id = flickr.photos.getContext(photo_id=photo_id)['nextphoto']['id']
-    if next_id != 0:
-        current_id_file = open_file('w')
-        current_id_file.write('{0}'.format(next_id))
-        current_id_file.close()
-    else:
-        print("Warng: Reached the end of the photoset")
-        break
+    current_id_file = open_file('w')
+    current_id_file.write('{0}'.format(photo_id))
+    current_id_file.close()
 
