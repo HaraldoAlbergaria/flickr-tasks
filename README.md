@@ -5,6 +5,9 @@ A collection of _python_ scripts to automate some tasks on _Flickr_. At the mome
 - **_auto_add2groups/_**
     - **_add-photo-to-group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
 
+- **_auto_post2blogs/_**
+    - **_post-photo-to-blogs.py_**: Automatically post photos to all the blogs configured in the user's account.
+
 - **_auto_tasks/_**
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
@@ -45,17 +48,20 @@ This will open a web browser to get the user approval. After approve, type in th
 
 ## Usage
 
-- **auto_add2groups**: Inside directory 'auto_add2groups' create a new one to your specific need (name it what you want, eg: auto_add2group_gp1) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are also tree additional files necessary to run the script:
-    - **current_id**: Includes just the id of the last photo processed by the script in the previous run.
+- **auto_add2groups**: Inside directory 'auto_add2groups' create a new one to your specific need (name it what you want, eg: auto_add2group_gp1) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are tree additional files necessary to run the script:
+    - **current_id**: Include here just the id of the last photo processed by the script in the previous run. If this file is not provided or the id is invalid, the script will create a new one with the id of the last (newest) photo in the photostream. In this case, the script will run over just the photos added after it. To start the script on any photo in the photostream, set here a valid photo id. The photos will then be processed in increasing order of upload time, starting from the next photo to the id that was set here.
     - **data.py**: Include here the group data (url, limit of photos) and any other data necessary to run the script (eg: camera model, for groups of a specific camera).
     - **procs.py**: Implement here the procedures that will actually process the photos to be added to the group.
 
     _**TIP**: For groups that allow to add only a limited number of photos during a period (eg: 3 photos per day), create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically do this._
 
-- **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is also an additional file necessary to run the script:
+- **auto_post2blogs**: Inside directory 'auto_post2blogs' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+    - **current_id**: Include here just the id of the last photo processed by the script in the previous run. If this file is not provided or the id is invalid, the script will create a new one with the id of the last (newest) photo in the photostream. In this case, the script will run over just the photos added after it. To start the script on any photo in the photostream, set here a valid photo id. The photos will then be processed in increasing order of upload time, starting from the next photo to the id that was set here.
+
+- **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
 
-- **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are also two additional files necessary to run the script:
+- **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.
 
