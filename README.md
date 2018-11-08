@@ -50,7 +50,7 @@ This will open a web browser to get the user approval. After approve, type in th
     - **data.py**: Include here the group data (url, limit of photos) and any other data necessary to run the script (eg: camera model, for groups of a specific camera).
     - **procs.py**: Implement here the procedures that will actually process the photos to be added to the group.
 
-    _**TIP**: For groups that allow to add only a limited number of photos during a period (eg: 3 photos per day), create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to do this._
+    _**TIP**: For groups that allow to add only a limited number of photos during a period (eg: 3 photos per day), create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically do this._
 
 - **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is also an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
@@ -61,5 +61,5 @@ This will open a web browser to get the user approval. After approve, type in th
 
 ### IMPORTANT WARNING! Please, read before use these scripts:
 These scripts were written for my specific needs and I don't know if they will be useful for anyone else. But, if you want to use them,
-when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_**' and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way Flickr returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
+when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way Flickr returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
 
