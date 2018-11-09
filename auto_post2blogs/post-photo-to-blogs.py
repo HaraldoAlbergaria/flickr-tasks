@@ -3,16 +3,8 @@
 # This automatically post photos to a blog
 #
 # Author: Haraldo Albergaria
-# Date  : Nov 5, 2018
+# Date  : Nov 8, 2018
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-####################################################
-# !!!DO NOT MODIFY THIS FILE!!!                    #
-# Implement the procedures in file procs.py        #
-# Include the rules in file data.py                #
-####################################################
-
 
 import flickrapi
 import json
@@ -76,12 +68,15 @@ while True:
     photo_description = flickr.photos.getInfo(photo_id=photo_id)['photo']['description']['_content']
 
     for i in range(len(user_blogs)):
-        try:
-            flickr.blogs.postPhoto(api_key=api_key, blog_id=user_blogs[i]['id'], photo_id=photo_id, title=photo_title, description=photo_description)
-            print("Postd: Succesfully posted photo \'{0}\' to \'{1}\'!".format(photo_title, user_blogs[i]['service']))
-        except flickrapi.exceptions.FlickrError as e:
-            print("Error: Failure on posting photo \'{0}\' to \'{1}\'".format(photo_title, user_blogs[i]['service']))
-            print(e)
+        permissions = flickr.photos.getPerms(photo_id=photo_id)
+        is_public = permissions['perms']['ispublic']
+        if is_public:
+            try:
+                flickr.blogs.postPhoto(api_key=api_key, blog_id=user_blogs[i]['id'], photo_id=photo_id, title=photo_title, description=photo_description)
+                print("Postd: Succesfully posted photo \'{0}\' to \'{1}\'!".format(photo_title, user_blogs[i]['service']))
+            except flickrapi.exceptions.FlickrError as e:
+                print("Error: Failure on posting photo \'{0}\' to \'{1}\'".format(photo_title, user_blogs[i]['service']))
+                print(e)
 
     current_id_file = open_file('w')
     current_id_file.write('{0}'.format(photo_id))

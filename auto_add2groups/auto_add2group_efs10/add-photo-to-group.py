@@ -90,9 +90,12 @@ while added < data.group_limit:
             print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
             added = added + 1
         except flickrapi.exceptions.FlickrError as e:
-            print("Error: Unable to add photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
+            if str(e) != error_6:
+                print("Error: Unable to add photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
+            else:
+                print("Warng: Photo \'{0}\' not added to the group \'{1}\' yet".format(photo_title, group_name))
             print(e)
-            if str(e) != error_3 and str(e) != error_6 and str(e) != error_7:
+            if str(e) != error_3 and str(e) != error_7:
                 break
         except:
             print("Error: FATAL")
