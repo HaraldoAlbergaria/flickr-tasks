@@ -1,6 +1,6 @@
 # Flickr Tasks
 
-A collection of _python_ scripts to automate some tasks on _Flickr_. At the moment, the following are available:
+A collection of _python_ scripts to automate some tasks on [_Flickr™_](https://www.flickr.com/). At the moment, the following are available:
 
 - **_auto_add2groups/_**
     - **_add-photo-to-group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
@@ -67,5 +67,5 @@ This will open a web browser to get the user approval. After approve, type in th
 
 ### IMPORTANT WARNING! Please, read before use these scripts:
 These scripts were written for my specific needs and I don't know if they will be useful for anyone else. But, if you want to use them,
-when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way Flickr returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
+when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way _Flickr_ returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
 
