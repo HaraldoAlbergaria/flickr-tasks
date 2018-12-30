@@ -66,6 +66,5 @@ This will open a web browser to get the user approval. After approve, type in th
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.
 
 ### IMPORTANT WARNING! Please, read before use these scripts:
-These scripts were written for my specific needs and I don't know if they will be useful for anyone else. But, if you want to use them,
-when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way _Flickr_ returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
+These scripts were written for my specific needs of automating tasks on [my Flickr account](https://www.flickr.com/photos/hpfilho/) and I don't know if they will be useful for anyone else. But, if you want to use them, when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way _Flickr_ returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
 
