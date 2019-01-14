@@ -30,11 +30,21 @@ summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.log'
 
 #===== PROCEDURES =======================================================#
 
+def hasTag(photo_id, tag):
+    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+    tags = photo_tags['photo']['tags']['tag']
+    for i in range(len(tags)):
+        tag_id = tags[i]['id']
+        tag_raw = tags[i]['raw']
+        if tag_raw == tag :
+            return True
+    return False
+
 def addPhotoToSet(photo_id, favorites):
-    if favorites >= 1:
+    if favorites >= 1 and not hasTag(photo_id, 'DNA'):
         try:
             flickr.photosets.addPhoto(api_key=api_key, photoset_id=fav_others_id, photo_id=photo_id)
-            print('\nAdded photo to \'{0}\' photoset'.format(set_title), end='')
+            print('Added photo to \'{0}\' photoset\n'.format(set_title), end='')
             photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
             photo_title = photo_info['photo']['title']['_content']
             summary = open(summary_file, 'a')
@@ -44,10 +54,10 @@ def addPhotoToSet(photo_id, favorites):
             pass
 
 def remPhotoFromSet(photo_id, favorites):
-    if favorites == 0:
+    if favorites == 0 or hasTag(photo_id, 'DNA'):
         try:
             flickr.photosets.removePhoto(api_key=api_key, photoset_id=fav_others_id, photo_id=photo_id)
-            print('\nRemoved photo from \'{0}\' photoset'.format(set_title), end='')
+            print('Removed photo from \'{0}\' photoset\n'.format(set_title), end='')
             photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
             photo_title = photo_info['photo']['title']['_content']
             summary = open(summary_file, 'a')

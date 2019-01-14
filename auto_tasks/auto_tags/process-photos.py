@@ -40,7 +40,7 @@ total = int(photos['photos']['total'])
 
 print('=============================================')
 print('Pages: {0} | Per page: {1} | Total: {2}'.format(npages, ppage, total))
-print('=============================================', end='')
+print('=============================================')
 
 summary = open(procs.summary_file, 'w')
 summary.write('SUMMARY REPORT:\n')
@@ -53,12 +53,12 @@ for pg in range(1, npages+1):
         pp = (npages - 1) * ppage
         ppage = total - pp
     print('\n\n\nPage: {0} | Photos: {1}'.format(pg, ppage))
-    print('---------------------------------------------', end='')
+    print('---------------------------------------------')
 
     for ph in range(0, ppage):
         photo_id = page['photos']['photo'][ph]['id']
         title = page['photos']['photo'][ph]['title']
-        print(u'\n\nphoto id: {0}\ntitle: {1}'.format(photo_id, title))
+        print(u'\nphoto id: {0}\ntitle: {1}'.format(photo_id, title))
         procs.processPhoto(photo_id, user_id)
 
 print('\n\n')

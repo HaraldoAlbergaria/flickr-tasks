@@ -32,39 +32,51 @@ summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_tags/summary_tags.log'
 #===== PROCEDURES =======================================================#
 
 def addTag(photo_id, tag):
-    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    tags = photo_tags['photo']['tags']['tag']
-    already_tagged = False
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        tag_str = '"' + tag_raw + '"'
-        if tag_str == tag :
-            already_tagged = True
-    if already_tagged == False:
-        flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
-        print(' {0}'.format(tag), end='')
-        photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-        photo_title = photo_info['photo']['title']['_content']
-        summary = open(summary_file, 'a')
-        summary.write('Added {0} to \'{1}\'\n'.format(tag, photo_title))
-        summary.close()
+    try:
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+        tags = photo_tags['photo']['tags']['tag']
+        already_tagged = False
+        for i in range(len(tags)):
+            tag_id = tags[i]['id']
+            tag_raw = tags[i]['raw']
+            tag_str = '"' + tag_raw + '"'
+            if tag_str == tag :
+                already_tagged = True
+        if already_tagged == False:
+            try:
+                flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
+                print(' {0}'.format(tag), end='')
+                photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+                photo_title = photo_info['photo']['title']['_content']
+                summary = open(summary_file, 'a')
+                summary.write('Added {0} to \'{1}\'\n'.format(tag, photo_title))
+                summary.close()
+            except:
+                print(' ERROR: Unable to add tag \'{0}\''.format(tag))
+    except:
+        pass
 
 def removeTag(photo_id, tag):
-    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        tag_str = '"' + tag_raw + '"'
-        if tag_str == tag :
-            flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
-            print(' {0}'.format(tag), end='')
-            photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-            photo_title = photo_info['photo']['title']['_content']
-            summary = open(summary_file, 'a')
-            summary.write('Removed {0} from \'{1}\'\n'.format(tag, photo_title))
-            summary.close()
+    try:
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+        tags = photo_tags['photo']['tags']['tag']
+        for i in range(len(tags)):
+            tag_id = tags[i]['id']
+            tag_raw = tags[i]['raw']
+            tag_str = '"' + tag_raw + '"'
+            if tag_str == tag :
+                try:
+                    flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
+                    print(' {0}'.format(tag), end='')
+                    photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+                    photo_title = photo_info['photo']['title']['_content']
+                    summary = open(summary_file, 'a')
+                    summary.write('Removed {0} from \'{1}\'\n'.format(tag, photo_title))
+                    summary.close()
+                except:
+                    print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
+    except:
+        pass
 
 def addViewTags(photo_id, views):
     print('\n  added tags:', end='')
@@ -72,10 +84,7 @@ def addViewTags(photo_id, views):
         v = view_tags[i][0]
         tag = view_tags[i][1]
         if views >= v:
-            try:
-                addTag(photo_id, tag)
-            except:
-                print('ERROR: Unable to add tag \'{0}\''.format(tag))
+            addTag(photo_id, tag)
 
 def addFavoriteTags(photo_id, favorites):
     print('\n  added tags:', end='')
@@ -83,10 +92,7 @@ def addFavoriteTags(photo_id, favorites):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites >= fav:
-            try:
-                addTag(photo_id, tag)
-            except:
-                print('ERROR: Unable to add tag \'{0}\''.format(tag))
+            addTag(photo_id, tag)
 
 def delFavoriteTags(photo_id, favorites):
     print('\n  removed tags:', end='')
@@ -97,7 +103,7 @@ def delFavoriteTags(photo_id, favorites):
             try:
                 removeTag(photo_id, tag)
             except:
-                print('ERROR: Unable to remove tag \'{0}\''.format(tag))
+                print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
 
 def addCommentTags(photo_id, comments):
     print('\n  added tags:', end='')
@@ -105,10 +111,7 @@ def addCommentTags(photo_id, comments):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments >= cmt:
-            try:
-                addTag(photo_id, tag)
-            except:
-                print('ERROR: Unable to add tag \'{0}\''.format(tag))
+            addTag(photo_id, tag)
 
 def delCommentTags(photo_id, comments):
     print('\n  removed tags:', end='')
@@ -116,10 +119,7 @@ def delCommentTags(photo_id, comments):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments < cmt:
-            try:
-                removeTag(photo_id, tag)
-            except:
-                print('ERROR: Unable to remove tag \'{0}\''.format(tag))
+            removeTag(photo_id, tag)
 
 def tagViews(photo_id):
     info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
@@ -155,5 +155,5 @@ def processPhoto(photo_id, user_id):
     tagViews(photo_id)
     tagFavorites(photo_id)
     tagComments(photo_id, user_id)
-
+    print(' ')
 
