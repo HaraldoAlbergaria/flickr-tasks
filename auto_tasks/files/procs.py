@@ -31,6 +31,6 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
-def processPhoto(photo_id, user_id):
+def processPhoto(photo_id, photo_title, user_id):
     # Implement this procedure
     # for your needs

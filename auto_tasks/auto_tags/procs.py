@@ -31,7 +31,7 @@ summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_tags/summary_tags.log'
 
 #===== PROCEDURES =======================================================#
 
-def addTag(photo_id, tag):
+def addTag(photo_id, photo_title, tag):
     try:
         photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         tags = photo_tags['photo']['tags']['tag']
@@ -46,8 +46,6 @@ def addTag(photo_id, tag):
             try:
                 flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
                 print(' {0}'.format(tag), end='')
-                photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-                photo_title = photo_info['photo']['title']['_content']
                 summary = open(summary_file, 'a')
                 summary.write('Added {0} to \'{1}\'\n'.format(tag, photo_title))
                 summary.close()
@@ -56,7 +54,7 @@ def addTag(photo_id, tag):
     except:
         pass
 
-def removeTag(photo_id, tag):
+def removeTag(photo_id, photo_title, tag):
     try:
         photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         tags = photo_tags['photo']['tags']['tag']
@@ -68,8 +66,6 @@ def removeTag(photo_id, tag):
                 try:
                     flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
                     print(' {0}'.format(tag), end='')
-                    photo_info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-                    photo_title = photo_info['photo']['title']['_content']
                     summary = open(summary_file, 'a')
                     summary.write('Removed {0} from \'{1}\'\n'.format(tag, photo_title))
                     summary.close()
@@ -78,63 +74,63 @@ def removeTag(photo_id, tag):
     except:
         pass
 
-def addViewTags(photo_id, views):
+def addViewTags(photo_id, photo_title, views):
     print('\n  added tags:', end='')
     for i in range(len(view_tags)):
         v = view_tags[i][0]
         tag = view_tags[i][1]
         if views >= v:
-            addTag(photo_id, tag)
+            addTag(photo_id, photo_title, tag)
 
-def addFavoriteTags(photo_id, favorites):
+def addFavoriteTags(photo_id, photo_title, favorites):
     print('\n  added tags:', end='')
     for i in range(len(favorite_tags)):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites >= fav:
-            addTag(photo_id, tag)
+            addTag(photo_id, photo_title, tag)
 
-def delFavoriteTags(photo_id, favorites):
+def delFavoriteTags(photo_id, photo_title, favorites):
     print('\n  removed tags:', end='')
     for i in reversed(range(len(favorite_tags))):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites < fav:
             try:
-                removeTag(photo_id, tag)
+                removeTag(photo_id, photo_title, tag)
             except:
                 print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
 
-def addCommentTags(photo_id, comments):
+def addCommentTags(photo_id, photo_title, comments):
     print('\n  added tags:', end='')
     for i in range(len(comment_tags)):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments >= cmt:
-            addTag(photo_id, tag)
+            addTag(photo_id, photo_title, tag)
 
-def delCommentTags(photo_id, comments):
+def delCommentTags(photo_id, photo_title, comments):
     print('\n  removed tags:', end='')
     for i in reversed(range(len(comment_tags))):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments < cmt:
-            removeTag(photo_id, tag)
+            removeTag(photo_id, photo_title, tag)
 
-def tagViews(photo_id):
+def tagViews(photo_id, photo_title):
     info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
     views = int(info['photo']['views'])
     print(' views: {0}'.format(views), end='')
-    addViewTags(photo_id, views)
+    addViewTags(photo_id, photo_title, views)
 
-def tagFavorites(photo_id):
+def tagFavorites(photo_id, photo_title):
     info = flickr.photos.getFavorites(photo_id=photo_id)
     favorites = int(info['photo']['total'])
     print('\n favorites: {0}'.format(favorites), end='')
-    addFavoriteTags(photo_id, favorites)
-    delFavoriteTags(photo_id, favorites)
+    addFavoriteTags(photo_id, photo_title, favorites)
+    delFavoriteTags(photo_id, photo_title, favorites)
 
-def tagComments(photo_id, user_id):
+def tagComments(photo_id, photo_title, user_id):
     comments_list = flickr.photos.comments.getList(photo_id=photo_id)
     try:
         n_comments = len(comments_list['comments']['comment'])
@@ -145,15 +141,15 @@ def tagComments(photo_id, user_id):
         if comments_list['comments']['comment'][i]['author'] == user_id:
             no_author_comments -= 1
     print('\n comments: {0}'.format(no_author_comments), end='')
-    addCommentTags(photo_id, no_author_comments)
-    delCommentTags(photo_id, no_author_comments)
+    addCommentTags(photo_id, photo_title, no_author_comments)
+    delCommentTags(photo_id, photo_title, no_author_comments)
 
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
-def processPhoto(photo_id, user_id):
-    tagViews(photo_id)
-    tagFavorites(photo_id)
-    tagComments(photo_id, user_id)
+def processPhoto(photo_id, photo_title, user_id):
+    tagViews(photo_id, photo_title)
+    tagFavorites(photo_id, photo_title)
+    tagComments(photo_id, photo_title, user_id)
     print(' ')
 
