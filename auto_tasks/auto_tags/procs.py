@@ -52,7 +52,7 @@ def addTag(photo_id, photo_title, tag):
             except:
                 print(' ERROR: Unable to add tag \'{0}\''.format(tag))
     except:
-        pass
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
 
 def removeTag(photo_id, photo_title, tag):
     try:
@@ -72,7 +72,7 @@ def removeTag(photo_id, photo_title, tag):
                 except:
                     print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
     except:
-        pass
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
 
 def addViewTags(photo_id, photo_title, views):
     print('\n  added tags:', end='')
@@ -118,31 +118,40 @@ def delCommentTags(photo_id, photo_title, comments):
             removeTag(photo_id, photo_title, tag)
 
 def tagViews(photo_id, photo_title):
-    info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-    views = int(info['photo']['views'])
-    print(' views: {0}'.format(views), end='')
-    addViewTags(photo_id, photo_title, views)
+    try:
+        info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+        views = int(info['photo']['views'])
+        print(' views: {0}'.format(views), end='')
+        addViewTags(photo_id, photo_title, views)
+    except:
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
 
 def tagFavorites(photo_id, photo_title):
-    info = flickr.photos.getFavorites(photo_id=photo_id)
-    favorites = int(info['photo']['total'])
-    print('\n favorites: {0}'.format(favorites), end='')
-    addFavoriteTags(photo_id, photo_title, favorites)
-    delFavoriteTags(photo_id, photo_title, favorites)
+    try:
+        info = flickr.photos.getFavorites(photo_id=photo_id)
+        favorites = int(info['photo']['total'])
+        print('\n favorites: {0}'.format(favorites), end='')
+        addFavoriteTags(photo_id, photo_title, favorites)
+        delFavoriteTags(photo_id, photo_title, favorites)
+    except:
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
 
 def tagComments(photo_id, photo_title, user_id):
-    comments_list = flickr.photos.comments.getList(photo_id=photo_id)
     try:
-        n_comments = len(comments_list['comments']['comment'])
+        comments_list = flickr.photos.comments.getList(photo_id=photo_id)
+        try:
+            n_comments = len(comments_list['comments']['comment'])
+        except:
+            n_comments = 0
+        no_author_comments = n_comments
+        for i in range(n_comments):
+            if comments_list['comments']['comment'][i]['author'] == user_id:
+                no_author_comments -= 1
+        print('\n comments: {0}'.format(no_author_comments), end='')
+        addCommentTags(photo_id, photo_title, no_author_comments)
+        delCommentTags(photo_id, photo_title, no_author_comments)
     except:
-        n_comments = 0
-    no_author_comments = n_comments
-    for i in range(n_comments):
-        if comments_list['comments']['comment'][i]['author'] == user_id:
-            no_author_comments -= 1
-    print('\n comments: {0}'.format(no_author_comments), end='')
-    addCommentTags(photo_id, photo_title, no_author_comments)
-    delCommentTags(photo_id, photo_title, no_author_comments)
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
 
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!

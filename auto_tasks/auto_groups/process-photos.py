@@ -52,7 +52,7 @@ for pg in range(1, npages+1):
     if pg == npages:
         pp = (npages - 1) * ppage
         ppage = total - pp
-    print('\n\n\nPage: {0} | Photos: {1}'.format(pg, ppage))
+    print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 
     for ph in range(0, ppage):
