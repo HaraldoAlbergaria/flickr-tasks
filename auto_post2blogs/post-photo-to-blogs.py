@@ -16,8 +16,6 @@ def open_file(mode):
     file_path = dir_path + '/current_id'
     return open(file_path, mode)
 
-error_1 = 'Error: 1: Photo not found'
-
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
@@ -42,6 +40,8 @@ while True:
 
     current_id = current_id_file.read().replace('\n', '')
     current_id_file.close()
+
+    error_1 = 'Error: 1: Photo \"' + current_id + '\" not found (invalid ID)'
 
     try:
         flickr.photos.getInfo(photo_id=current_id)

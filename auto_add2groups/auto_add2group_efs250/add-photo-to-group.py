@@ -28,7 +28,6 @@ def open_file(mode):
     return open(file_path, mode)
 
 
-error_1 = 'Error: 1: Photo not found'
 error_3 = 'Error: 3: Photo already in pool'
 error_5 = 'Error: 5: Photo limit reached'
 error_6 = 'Error: 6: Your Photo has been added to the Pending Queue for this Pool'
@@ -60,6 +59,8 @@ while added < data.group_limit:
 
     current_id = current_id_file.read().replace('\n', '')
     current_id_file.close()
+
+    error_1 = 'Error: 1: Photo \"' + current_id + '\" not found (invalid ID)'
 
     try:
         flickr.photos.getInfo(photo_id=current_id)
