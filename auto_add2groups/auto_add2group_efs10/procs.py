@@ -69,11 +69,6 @@ def isOkToAdd(photo_id):
     lens_model = getLensModel(exif)
     focal_length = getFocalLength(exif)
     if is_public and lens_model in data.lens_models and focal_length in data.focal_lengths:
-        try:
-            # add to @10mm photoset also
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=data.set_10mm_id, photo_id=photo_id)
-        except:
-            pass
         return True
     else:
         return False
