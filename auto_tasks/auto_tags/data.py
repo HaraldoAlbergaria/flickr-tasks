@@ -23,6 +23,9 @@ favorite_tags = (
 
 # Comment tags
 comment_tags = (
+    (   1, '"1 cmt"'   ),
+    (   2, '"2 cmt"'   ),
+    (   3, '"3 cmt"'   ),
     (   5, '"5 cmt"'   ),
     (  10, '"10 cmt"'  ),
     (  25, '"25 cmt"'  ),

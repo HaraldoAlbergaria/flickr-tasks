@@ -68,11 +68,12 @@ def removeTag(photo_id, photo_title, tag, tags):
 
 def addViewTags(photo_id, photo_title, views):
     print('\n  added tags:', end='')
+    tags = photo_tags['photo']['tags']['tag']
     for i in range(len(view_tags)):
         v = view_tags[i][0]
         tag = view_tags[i][1]
         if views >= v:
-            addTag(photo_id, photo_title, tag)
+            addTag(photo_id, photo_title, tag, tags)
 
 def addFavoriteTags(photo_id, photo_title, favorites, photo_tags):
     print('\n  added tags:', end='')
@@ -81,11 +82,7 @@ def addFavoriteTags(photo_id, photo_title, favorites, photo_tags):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites >= fav:
-            try:
-                addTag(photo_id, photo_title, tag, tags)
-            except Exception as e:
-                print(' ERROR: Unable to add tag \'{0}\''.format(tag))
-                print(' ' + e)
+            addTag(photo_id, photo_title, tag, tags)
 
 def delFavoriteTags(photo_id, photo_title, favorites, photo_tags):
     print('\n  removed tags:', end='')
@@ -94,27 +91,25 @@ def delFavoriteTags(photo_id, photo_title, favorites, photo_tags):
         fav = favorite_tags[i][0]
         tag = favorite_tags[i][1]
         if favorites < fav:
-            try:
-                removeTag(photo_id, photo_title, tag, tags)
-            except Exception as e:
-                print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
-                print(' ' + e)
+            removeTag(photo_id, photo_title, tag, tags)
 
-def addCommentTags(photo_id, photo_title, comments):
+def addCommentTags(photo_id, photo_title, comments, photo_tags):
     print('\n  added tags:', end='')
+    tags = photo_tags['photo']['tags']['tag']
     for i in range(len(comment_tags)):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments >= cmt:
-            addTag(photo_id, photo_title, tag)
+            addTag(photo_id, photo_title, tag, tags)
 
-def delCommentTags(photo_id, photo_title, comments):
+def delCommentTags(photo_id, photo_title, comments, photo_tags):
     print('\n  removed tags:', end='')
+    tags = photo_tags['photo']['tags']['tag']
     for i in reversed(range(len(comment_tags))):
         cmt = comment_tags[i][0]
         tag = comment_tags[i][1]
         if comments < cmt:
-            removeTag(photo_id, photo_title, tag)
+            removeTag(photo_id, photo_title, tag, tags)
 
 def tagViews(photo_id, photo_title):
     try:
@@ -147,9 +142,10 @@ def tagComments(photo_id, photo_title, user_id):
         for i in range(n_comments):
             if comments_list['comments']['comment'][i]['author'] == user_id:
                 no_author_comments -= 1
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         print('\n comments: {0}'.format(no_author_comments), end='')
-        addCommentTags(photo_id, photo_title, no_author_comments)
-        delCommentTags(photo_id, photo_title, no_author_comments)
+        addCommentTags(photo_id, photo_title, no_author_comments, photo_tags)
+        delCommentTags(photo_id, photo_title, no_author_comments, photo_tags)
     except:
         pass
 
