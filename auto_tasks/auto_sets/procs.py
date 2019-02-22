@@ -108,8 +108,9 @@ def addPhotoToSetFavOthers(photo_id, photo_title, favorites, in_set):
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, fav_others_title))
             summary.close()
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, fav_others_title))
+            print(e)
 
 def addPhotoToSetAt10mm(photo_id, photo_title, in_set):
     if not in_set and not hasTag(photo_id, tag):
@@ -119,8 +120,9 @@ def addPhotoToSetAt10mm(photo_id, photo_title, in_set):
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at10mm_title))
             summary.close()
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at10mm_title))
+            print(e)
 
 def addPhotoToSetAt250mm(photo_id, photo_title, in_set):
     if not in_set and not hasTag(photo_id, tag):
@@ -130,8 +132,9 @@ def addPhotoToSetAt250mm(photo_id, photo_title, in_set):
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at250mm_title))
             summary.close()
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at250mm_title))
+            print(e)
 
 def addPhotoToSetAt1p8(photo_id, photo_title, in_set):
     if not in_set and not hasTag(photo_id, tag):
@@ -141,8 +144,9 @@ def addPhotoToSetAt1p8(photo_id, photo_title, in_set):
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at1p8_title))
             summary.close()
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at1p8_title))
+            print(e)
 
 def remPhotoFromSetFavOthers(photo_id, photo_title, favorites, in_set):
     if in_set and (favorites == 0 or hasTag(photo_id, tag)):
@@ -152,8 +156,9 @@ def remPhotoFromSetFavOthers(photo_id, photo_title, favorites, in_set):
             summary = open(summary_file, 'a')
             summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, fav_others_title))
             summary.close()
-        except:
+        except Exception as e:
             print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, set_title))
+            print(e)
 
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
@@ -187,8 +192,9 @@ def processPhoto(photo_id, photo_title, user_id):
         try:
             in_set = isInSet(photo_id, at10mm_id)
             addPhotoToSetAt10mm(photo_id, photo_title, in_set)
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at10mm_title))
+            print(e)
 
     ## @250mm
     if (focal_length == '250.0 mm' and not hasTag(photo_id, "Kenko TELEPLUS HD DGX 1.4x") and not hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x")) \
@@ -197,15 +203,17 @@ def processPhoto(photo_id, photo_title, user_id):
         try:
             in_set = isInSet(photo_id, at250mm_id)
             addPhotoToSetAt250mm(photo_id, photo_title, in_set)
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at250mm_title))
+            print(e)
 
     ## @f1.8
     if aperture == '1.8':
         try:
-            in_set = isInSet(photo_id, at250mm_id)
+            in_set = isInSet(photo_id, at1p8_id)
             addPhotoToSetAt1p8(photo_id, photo_title, in_set)
-        except:
+        except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at1p8_title))
+            print(e)
 
 

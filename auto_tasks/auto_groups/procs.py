@@ -52,8 +52,9 @@ def addPhotoToGroup(photo_id, photo_title, photo_favs, is_public, in_group):
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, group_name))
             summary.close()
-        except:
+        except Exception as e:
             print('\nERROR: Unable to add photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
+            print(e)
 
 def remPhotoFromGroup(photo_id, photo_title, photo_favs, in_group):
     if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
@@ -63,8 +64,9 @@ def remPhotoFromGroup(photo_id, photo_title, photo_favs, in_group):
             summary = open(summary_file, 'a')
             summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, group_name))
             summary.close()
-        except:
+        except Exception as e:
             print('\nERROR: Unable to remove photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
+            print(e)
 
 def isInGroup(photo_id, group_id):
     try:
