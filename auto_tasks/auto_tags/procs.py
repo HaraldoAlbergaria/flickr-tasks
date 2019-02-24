@@ -66,7 +66,7 @@ def removeTag(photo_id, photo_title, tag, tags):
                 print(' ERROR: Unable to remove tag \'{0}\''.format(tag))
                 print(' ' + e)
 
-def addViewTags(photo_id, photo_title, views):
+def addViewTags(photo_id, photo_title, views, photo_tags):
     print('\n  added tags:', end='')
     tags = photo_tags['photo']['tags']['tag']
     for i in range(len(view_tags)):
@@ -115,8 +115,9 @@ def tagViews(photo_id, photo_title):
     try:
         info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
         views = int(info['photo']['views'])
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         print(' views: {0}'.format(views), end='')
-        addViewTags(photo_id, photo_title, views)
+        addViewTags(photo_id, photo_title, views, photo_tags)
     except:
         pass
 

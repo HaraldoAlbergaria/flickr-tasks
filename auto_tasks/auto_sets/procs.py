@@ -104,7 +104,7 @@ def addPhotoToSetFavOthers(photo_id, photo_title, favorites, in_set):
     if not in_set and favorites >= 1 and not hasTag(photo_id, tag):
         try:
             flickr.photosets.addPhoto(api_key=api_key, photoset_id=fav_others_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(set_title), end='')
+            print('Added photo to \'{0}\' photoset\n'.format(fav_others_title), end='')
             summary = open(summary_file, 'a')
             summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, fav_others_title))
             summary.close()
@@ -199,7 +199,8 @@ def processPhoto(photo_id, photo_title, user_id):
     ## @250mm
     if (focal_length == '250.0 mm' and not hasTag(photo_id, "Kenko TELEPLUS HD DGX 1.4x") and not hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x")) \
         or (focal_length == '350.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 1.4x")) \
-        or (focal_length == '500.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x")):
+        or (focal_length == '500.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x")) \
+        or (focal_length == '700.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x") and hasTag(photo_id, "Kenko TELEPLUS HD DGX 1.4x")):
         try:
             in_set = isInSet(photo_id, at250mm_id)
             addPhotoToSetAt250mm(photo_id, photo_title, in_set)
