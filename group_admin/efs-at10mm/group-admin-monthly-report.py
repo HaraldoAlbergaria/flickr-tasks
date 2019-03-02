@@ -101,7 +101,7 @@ current_members_file = open(current_members_file_name, "w")
 
 # iterate over each members page
 for page_number in range(1, number_of_pages_+1):
-    members = flickr.groups.members.getList(api_key=api_key, group_id=group_id, page=page_number, per_page=photos_per_page)
+    members = flickr.groups.members.getList(api_key=api_key, group_id=group_id, page=page_number, per_page=members_per_page)
     # iterate over each member in page
     for member_number in range(members_per_page):
         try:
