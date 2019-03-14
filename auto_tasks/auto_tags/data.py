@@ -33,4 +33,16 @@ comment_tags = (
     ( 100, '"100 cmt"' )
 )
 
-
+# Galleries tags
+gallery_tags = (
+    (   1, '"expo"'    ),
+    (   2, '"2 expo"'  ),
+    (   3, '"3 expo"'  ),
+    (   4, '"4 expo"'  ),
+    (   5, '"5 expo"'  ),
+    (   6, '"6 expo"'  ),
+    (   7, '"7 expo"'  ),
+    (   8, '"8 expo"'  ),
+    (   9, '"9 expo"'  ),
+    (  10, '"10 expo"' )
+)

@@ -25,6 +25,7 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 view_tags = data.view_tags
 favorite_tags = data.favorite_tags
 comment_tags = data.comment_tags
+gallery_tags = data.gallery_tags
 
 summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_tags/summary_tags.log'
 
@@ -111,6 +112,24 @@ def delCommentTags(photo_id, photo_title, comments, photo_tags):
         if comments < cmt:
             removeTag(photo_id, photo_title, tag, tags)
 
+def addGalleryTags(photo_id, photo_title, galleries, photo_tags):
+    print('\n  added tags:', end='')
+    tags = photo_tags['photo']['tags']['tag']
+    for i in range(len(gallery_tags)):
+        exp = gallery_tags[i][0]
+        tag = gallery_tags[i][1]
+        if galleries >= exp:
+            addTag(photo_id, photo_title, tag, tags)
+
+def delGalleryTags(photo_id, photo_title, galleries, photo_tags):
+    print('\n  removed tags:', end='')
+    tags = photo_tags['photo']['tags']['tag']
+    for i in reversed(range(len(gallery_tags))):
+        exp = gallery_tags[i][0]
+        tag = gallery_tags[i][1]
+        if galleries < exp:
+            removeTag(photo_id, photo_title, tag, tags)
+
 def tagViews(photo_id, photo_title):
     try:
         info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
@@ -150,11 +169,23 @@ def tagComments(photo_id, photo_title, user_id):
     except:
         pass
 
+def tagGalleries(photo_id, photo_title):
+    try:
+        info = flickr.galleries.getListForPhoto(photo_id=photo_id)
+        galleries = int(info['galleries']['total'])
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+        print('\n galleries: {0}'.format(galleries), end='')
+        addGalleryTags(photo_id, photo_title, galleries, photo_tags)
+        delGalleryTags(photo_id, photo_title, galleries, photo_tags)
+    except:
+        pass
+
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def processPhoto(photo_id, photo_title, user_id):
     tagViews(photo_id, photo_title)
     tagFavorites(photo_id, photo_title)
     tagComments(photo_id, photo_title, user_id)
+    tagGalleries(photo_id, photo_title)
     print(' ')
 
