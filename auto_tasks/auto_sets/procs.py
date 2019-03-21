@@ -25,6 +25,10 @@ fav_others_id = '72157623439971318'
 fav_others_set = flickr.photosets.getPhotos(photoset_id=fav_others_id, user_id=user_id)
 fav_others_title = fav_others_set['photoset']['title']
 
+galleries_id = '72157662142350881'
+galleries_set = flickr.photosets.getPhotos(photoset_id=galleries_id, user_id=user_id)
+galleries_title = galleries_set['photoset']['title']
+
 at10mm_id = '72157694314388675'
 at10mm_set = flickr.photosets.getPhotos(photoset_id=at10mm_id, user_id=user_id)
 at10mm_title = at10mm_set['photoset']['title']
@@ -112,6 +116,18 @@ def addPhotoToSetFavOthers(photo_id, photo_title, favorites, in_set):
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, fav_others_title))
             print(e)
 
+def addPhotoToSetGalleries(photo_id, photo_title, galleries, in_set):
+    if not in_set and galleries >= 1 and not hasTag(photo_id, tag):
+        try:
+            flickr.photosets.addPhoto(api_key=api_key, photoset_id=galleries_id, photo_id=photo_id)
+            print('Added photo to \'{0}\' photoset\n'.format(galleries_title), end='')
+            summary = open(summary_file, 'a')
+            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, galleries_title))
+            summary.close()
+        except Exception as e:
+            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, galleries_title))
+            print(e)
+
 def addPhotoToSetAt10mm(photo_id, photo_title, in_set):
     if not in_set and not hasTag(photo_id, tag):
         try:
@@ -157,7 +173,19 @@ def remPhotoFromSetFavOthers(photo_id, photo_title, favorites, in_set):
             summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, fav_others_title))
             summary.close()
         except Exception as e:
-            print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, set_title))
+            print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, fav_others_title))
+            print(e)
+
+def remPhotoFromSetGalleries(photo_id, photo_title, galleries, in_set):
+    if in_set and (galleries == 0 or hasTag(photo_id, tag)):
+        try:
+            flickr.photosets.removePhoto(api_key=api_key, photoset_id=galleries_id, photo_id=photo_id)
+            print('Removed photo from \'{0}\' photoset\n'.format(galleries_title), end='')
+            summary = open(summary_file, 'a')
+            summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, galleries_title))
+            summary.close()
+        except Exception as e:
+            print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, galleries_title))
             print(e)
 
 
@@ -175,6 +203,17 @@ def processPhoto(photo_id, photo_title, user_id):
         remPhotoFromSetFavOthers(photo_id, photo_title, photo_favs, in_set)
     except:
         print('ERROR: Unable to get favorites for photo \'{0}\''.format(photo_title))
+
+    # Galleries Set
+    try:
+        galleries = flickr.galleries.getListForPhoto(photo_id=photo_id)
+        photo_expos = int(galleries['galleries']['total'])
+        in_set = isInSet(photo_id, galleries_id)
+        print('galleries: {0}\n'.format(photo_expos), end='')
+        addPhotoToSetGalleries(photo_id, photo_title, photo_expos, in_set)
+        remPhotoFromSetGalleries(photo_id, photo_title, photo_expos, in_set)
+    except:
+        print('ERROR: Unable to get galleries for photo \'{0}\''.format(photo_title))
 
     # Lenses Exif Sets
     try:
