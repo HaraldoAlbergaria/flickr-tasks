@@ -22,24 +22,10 @@ user_id = api_credentials.user_id
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 fav_others_id = '72157623439971318'
-fav_others_set = flickr.photosets.getPhotos(photoset_id=fav_others_id, user_id=user_id)
-fav_others_title = fav_others_set['photoset']['title']
-
 galleries_id = '72157662142350881'
-galleries_set = flickr.photosets.getPhotos(photoset_id=galleries_id, user_id=user_id)
-galleries_title = galleries_set['photoset']['title']
-
 at10mm_id = '72157694314388675'
-at10mm_set = flickr.photosets.getPhotos(photoset_id=at10mm_id, user_id=user_id)
-at10mm_title = at10mm_set['photoset']['title']
-
 at250mm_id = '72157666561896128'
-at250mm_set = flickr.photosets.getPhotos(photoset_id=at250mm_id, user_id=user_id)
-at250mm_title = at250mm_set['photoset']['title']
-
 at1p8_id = '72157703794055595'
-at1p8_set = flickr.photosets.getPhotos(photoset_id=at1p8_id, user_id=user_id)
-at1p8_title = at1p8_set['photoset']['title']
 
 tag = 'DNA'
 summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.log'
@@ -104,89 +90,31 @@ def getAperture(exif):
             return exif[i]['raw']['_content']
     return ''
 
-def addPhotoToSetFavOthers(photo_id, photo_title, favorites, in_set):
-    if not in_set and favorites >= 1 and not hasTag(photo_id, tag):
-        try:
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=fav_others_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(fav_others_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, fav_others_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, fav_others_title))
-            print(e)
+def addPhotoToSet(set_id, photo_id, photo_title, in_set):
+    try:
+        set_photos = flickr.photosets.getPhotos(photoset_id=set_id, user_id=user_id)
+        set_title = set_photos['photoset']['title']
+        flickr.photosets.addPhoto(api_key=api_key, photoset_id=set_id, photo_id=photo_id)
+        print('Added photo to \'{0}\' photoset\n'.format(set_title), end='')
+        summary = open(summary_file, 'a')
+        summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, set_title))
+        summary.close()
+    except Exception as e:
+        print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, set_title))
+        print(e)
 
-def addPhotoToSetGalleries(photo_id, photo_title, galleries, in_set):
-    if not in_set and galleries >= 1 and not hasTag(photo_id, tag):
-        try:
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=galleries_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(galleries_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, galleries_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, galleries_title))
-            print(e)
-
-def addPhotoToSetAt10mm(photo_id, photo_title, in_set):
-    if not in_set and not hasTag(photo_id, tag):
-        try:
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=at10mm_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(at10mm_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at10mm_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at10mm_title))
-            print(e)
-
-def addPhotoToSetAt250mm(photo_id, photo_title, in_set):
-    if not in_set and not hasTag(photo_id, tag):
-        try:
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=at250mm_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(at250mm_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at250mm_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at250mm_title))
-            print(e)
-
-def addPhotoToSetAt1p8(photo_id, photo_title, in_set):
-    if not in_set and not hasTag(photo_id, tag):
-        try:
-            flickr.photosets.addPhoto(api_key=api_key, photoset_id=at1p8_id, photo_id=photo_id)
-            print('Added photo to \'{0}\' photoset\n'.format(at1p8_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, at1p8_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at1p8_title))
-            print(e)
-
-def remPhotoFromSetFavOthers(photo_id, photo_title, favorites, in_set):
-    if in_set and (favorites == 0 or hasTag(photo_id, tag)):
-        try:
-            flickr.photosets.removePhoto(api_key=api_key, photoset_id=fav_others_id, photo_id=photo_id)
-            print('Removed photo from \'{0}\' photoset\n'.format(fav_others_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, fav_others_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, fav_others_title))
-            print(e)
-
-def remPhotoFromSetGalleries(photo_id, photo_title, galleries, in_set):
-    if in_set and (galleries == 0 or hasTag(photo_id, tag)):
-        try:
-            flickr.photosets.removePhoto(api_key=api_key, photoset_id=galleries_id, photo_id=photo_id)
-            print('Removed photo from \'{0}\' photoset\n'.format(galleries_title), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, galleries_title))
-            summary.close()
-        except Exception as e:
-            print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, galleries_title))
-            print(e)
+def remPhotoFromSet(set_id, photo_id, photo_title, in_set):
+    try:
+        set_photos = flickr.photosets.getPhotos(photoset_id=set_id, user_id=user_id)
+        set_title = set_photos['photoset']['title']
+        flickr.photosets.removePhoto(api_key=api_key, photoset_id=set_id, photo_id=photo_id)
+        print('Removed photo from \'{0}\' photoset\n'.format(set_title), end='')
+        summary = open(summary_file, 'a')
+        summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, set_title))
+        summary.close()
+    except Exception as e:
+        print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, set_title))
+        print(e)
 
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
@@ -199,8 +127,10 @@ def processPhoto(photo_id, photo_title, user_id):
         photo_favs = int(favorites['photo']['total'])
         in_set = isInSet(photo_id, fav_others_id)
         print('favorites: {0}\n'.format(photo_favs), end='')
-        addPhotoToSetFavOthers(photo_id, photo_title, photo_favs, in_set)
-        remPhotoFromSetFavOthers(photo_id, photo_title, photo_favs, in_set)
+        if not in_set and photo_favs >= 1 and not hasTag(photo_id, tag):
+            addPhotoToSet(fav_others_id, photo_id, photo_title, in_set)
+        if in_set and (photo_favs == 0 or hasTag(photo_id, tag)):
+            remPhotoFromSet(fav_others_id, photo_id, photo_title, in_set)
     except:
         print('ERROR: Unable to get favorites for photo \'{0}\''.format(photo_title))
 
@@ -210,8 +140,10 @@ def processPhoto(photo_id, photo_title, user_id):
         photo_expos = int(galleries['galleries']['total'])
         in_set = isInSet(photo_id, galleries_id)
         print('galleries: {0}\n'.format(photo_expos), end='')
-        addPhotoToSetGalleries(photo_id, photo_title, photo_expos, in_set)
-        remPhotoFromSetGalleries(photo_id, photo_title, photo_expos, in_set)
+        if not in_set and photo_expos >= 1 and not hasTag(photo_id, tag):
+            addPhotoToSet(galleries_id, photo_id, photo_title, in_set)
+        if in_set and (photo_expos == 0 or hasTag(photo_id, tag)):
+            remPhotoFromSet(gallleries_id, photo_id, photo_title, in_set)
     except:
         print('ERROR: Unable to get galleries for photo \'{0}\''.format(photo_title))
 
@@ -229,8 +161,10 @@ def processPhoto(photo_id, photo_title, user_id):
     ## @10mm
     if focal_length == '10.0 mm':
         try:
+            at10mm_set = flickr.photosets.getPhotos(photoset_id=at10mm_id, user_id=user_id)
+            at10mm_title = at10mm_set['photoset']['title']
             in_set = isInSet(photo_id, at10mm_id)
-            addPhotoToSetAt10mm(photo_id, photo_title, in_set)
+            addPhotoToSet(at10mm_id, photo_id, photo_title, in_set)
         except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at10mm_title))
             print(e)
@@ -241,8 +175,10 @@ def processPhoto(photo_id, photo_title, user_id):
         or (focal_length == '500.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x")) \
         or (focal_length == '700.0 mm' and hasTag(photo_id, "Kenko TELEPLUS HD DGX 2x") and hasTag(photo_id, "Kenko TELEPLUS HD DGX 1.4x")):
         try:
+            at250mm_set = flickr.photosets.getPhotos(photoset_id=at250mm_id, user_id=user_id)
+            at250mm_title = at250mm_set['photoset']['title']
             in_set = isInSet(photo_id, at250mm_id)
-            addPhotoToSetAt250mm(photo_id, photo_title, in_set)
+            addPhotoToSet(at250mm_id, photo_id, photo_title, in_set)
         except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at250mm_title))
             print(e)
@@ -250,8 +186,10 @@ def processPhoto(photo_id, photo_title, user_id):
     ## @f1.8
     if aperture == '1.8':
         try:
+            at1p8_set = flickr.photosets.getPhotos(photoset_id=at1p8_id, user_id=user_id)
+            at1p8_title = at1p8_set['photoset']['title']
             in_set = isInSet(photo_id, at1p8_id)
-            addPhotoToSetAt1p8(photo_id, photo_title, in_set)
+            addPhotoToSet(at1p8_id, photo_id, photo_title, in_set)
         except Exception as e:
             print('ERROR: Unable to add photo \'{0}\' to set \'{1}\''.format(photo_title, at1p8_title))
             print(e)
