@@ -44,30 +44,6 @@ def hasTag(photo_id, tag):
             return True
     return False
 
-def addPhotoToGroup(photo_id, photo_title, photo_favs, is_public, in_group):
-    if photo_favs >= 1 and is_public == 1 and not in_group and not hasTag(photo_id, not_add_tag):
-        try:
-            flickr.groups.pools.add(api_key=api_key, photo_id=photo_id, group_id=group_id)
-            print('\nAdded photo to \'{0}\' group'.format(group_name), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, group_name))
-            summary.close()
-        except Exception as e:
-            print('\nERROR: Unable to add photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
-            print(e)
-
-def remPhotoFromGroup(photo_id, photo_title, photo_favs, in_group):
-    if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
-        try:
-            flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
-            print('\nRemoved photo from \'{0}\' group'.format(group_name), end='')
-            summary = open(summary_file, 'a')
-            summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, group_name))
-            summary.close()
-        except Exception as e:
-            print('\nERROR: Unable to remove photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
-            print(e)
-
 def isInGroup(photo_id, group_id):
     try:
         photo_groups = flickr.photos.getAllContexts(photo_id=photo_id)['pool']
@@ -77,6 +53,29 @@ def isInGroup(photo_id, group_id):
     except:
         pass
     return False
+
+def addPhotoToGroup(photo_id, photo_title):
+    try:
+        flickr.groups.pools.add(api_key=api_key, photo_id=photo_id, group_id=group_id)
+        print('\nAdded photo to \'{0}\' group'.format(group_name), end='')
+        summary = open(summary_file, 'a')
+        summary.write('Added photo \'{0}\' to \'{1}\'\n'.format(photo_title, group_name))
+        summary.close()
+    except Exception as e:
+        print('\nERROR: Unable to add photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
+        print(e)
+
+def remPhotoFromGroup(photo_id, photo_title):
+    try:
+        flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
+        print('\nRemoved photo from \'{0}\' group'.format(group_name), end='')
+        summary = open(summary_file, 'a')
+        summary.write('Removed photo \'{0}\' from \'{1}\'\n'.format(photo_title, group_name))
+        summary.close()
+    except Exception as e:
+        print('\nERROR: Unable to remove photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
+        print(e)
+
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
@@ -88,8 +87,10 @@ def processPhoto(photo_id, photo_title, user_id):
         in_group = isInGroup(photo_id, group_id)
         photo_favs = int(favorites['photo']['total'])
         print('favorites: {0}'.format(photo_favs), end='')
-        addPhotoToGroup(photo_id, photo_title, photo_favs, is_public, in_group)
-        remPhotoFromGroup(photo_id, photo_title, photo_favs, in_group)
+        if photo_favs >= 1 and is_public == 1 and not in_group and not hasTag(photo_id, not_add_tag):
+            addPhotoToGroup(photo_id, photo_title)
+        if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
+            remPhotoFromGroup(photo_id, photo_title)
         print(' ')
     except:
         print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
