@@ -76,10 +76,10 @@ def addTagsToPhoto(photo_id, photo_title, n_count, available_tags, photo_tags):
         if n_count >= num:
             addTag(photo_id, photo_title, tag, tags)
 
-def delTagsFromPhoto(photo_id, photo_title, n_count, available_tags, photo_tags):
+def remTagsFromPhoto(photo_id, photo_title, n_count, available_tags, photo_tags):
     print('\n  removed tags:', end='')
     tags = photo_tags['photo']['tags']['tag']
-    for i in reverse(range(len(available_tags))):
+    for i in range(len(available_tags)-1, -1, -1):
         num = available_tags[i][0]
         tag = available_tags[i][1]
         if n_count < num:
@@ -102,7 +102,7 @@ def tagFavorites(photo_id, photo_title):
         photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         print('\n favorites: {0}'.format(favorites), end='')
         addTagsToPhoto(photo_id, photo_title, favorites, favorite_tags, photo_tags)
-        delTagsFromPhotos(photo_id, photo_title, favorites, favorite_tags, photo_tags)
+        remTagsFromPhoto(photo_id, photo_title, favorites, favorite_tags, photo_tags)
     except:
         pass
 
@@ -119,8 +119,8 @@ def tagComments(photo_id, photo_title, user_id):
                 no_author_comments -= 1
         photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         print('\n comments: {0}'.format(no_author_comments), end='')
-        addTagsToPhotos(photo_id, photo_title, no_author_comments, comment_tags, photo_tags)
-        delTagsFromPhotos(photo_id, photo_title, no_author_comments, comment_tags, photo_tags)
+        addTagsToPhoto(photo_id, photo_title, no_author_comments, comment_tags, photo_tags)
+        remTagsFromPhoto(photo_id, photo_title, no_author_comments, comment_tags, photo_tags)
     except:
         pass
 
@@ -130,8 +130,8 @@ def tagGalleries(photo_id, photo_title):
         galleries = int(info['galleries']['total'])
         photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
         print('\n galleries: {0}'.format(galleries), end='')
-        addTagsToPhotos(photo_id, photo_title, galleries, gallery_tags, photo_tags)
-        delTagsFromPhotos(photo_id, photo_title, galleries, gallery_tags, photo_tags)
+        addTagsToPhoto(photo_id, photo_title, galleries, gallery_tags, photo_tags)
+        remTagsFromPhoto(photo_id, photo_title, galleries, gallery_tags, photo_tags)
     except:
         pass
 
