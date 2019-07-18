@@ -12,7 +12,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
 - **_check_exif/_**
-    - **_check_exif.py_**: Check for missing exif information on photos of a photostream. If a missing information is found, the corresponding photos are added to a photoset (created by the script) so they can be easily identified.
+    - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it.
 
 - **_group_admin/_**
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
@@ -64,7 +64,8 @@ This will open a web browser to get the user approval. After approve, type in th
 - **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
 
-- **check_exif**: Open file 'procs.py' and read the comments to know how to edit it to your specific needs. Then, just run the script 'check_exif.py'. The photoset 'Missing Exif' will be automatically created, and all the photos with missing exif information will be added to it.
+- **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+    - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
 
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
