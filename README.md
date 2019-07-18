@@ -64,6 +64,8 @@ This will open a web browser to get the user approval. After approve, type in th
 - **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
 
+- **check_exif**: Open file 'procs.py' and read the comments to know how to edit it to your specific needs. Then, just run the script 'check_exif.py'. The photoset 'Missing Exif' will be automatically created, and all the photos with missing exif information will be added to it.
+
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.

@@ -1,7 +1,7 @@
 # Procedures of script process-photos.py
 #
 # Author: Haraldo Albergaria
-# Date  : Jan 01, 2018
+# Date  : Jul 17, 2019
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -22,8 +22,14 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
+# If photo has this tag, do not add to photoset
+skip_tag = 'Exhibition'
+
 
 #===== PROCEDURES =======================================================#
+
+# Do not edit any procedure, excepting 'isExifMissing()'
+# Read the comments to know how to do it
 
 def isInSet(photo_id, set_id):
     try:
@@ -125,6 +131,10 @@ def remPhotoFromSet(set_id, photo_id, photo_title, in_set):
         print('ERROR: Unable to remove photo \'{0}\' from set \'{1}\''.format(photo_title, set_title))
         print(e)
 
+
+# This function checks if any exif information is missing
+# The defaut is camera_model, lens_model, focal_length and aperture
+# If needed, add others as stated in the next comment line
 def isExifMissing(photo_id):
     try:
         exif = getExif(photo_id)
@@ -138,9 +148,11 @@ def isExifMissing(photo_id):
         print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
         pass
 
+    # Do not edit the next 1st, 2nd and 4th lines. Edit the 3rd line to include any additional condition
     if (camera_model == '' or lens_model == '' or focal_length == '' or aperture == '' or iso == '') \
+            and not hasTag(photo_id, skip_tag) \
             and (camera_maker != 'NIKON' and camera_maker != 'Vivitar' and camera_maker != 'Fujifilm') \
-            and not hasTag(photo_id, 'Exhibition'):
+            and True:
         return True
     else:
         return False
