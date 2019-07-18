@@ -11,6 +11,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - **_auto_tasks/_**
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
+- **_check_exif/_**
+    - **_check_exif.py_**: Check for missing exif information on photos of a photostream. If a missing information is found, the corresponding photos are added to a photoset (created by the script) so they can be easily identified.
+
 - **_group_admin/_**
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
     - **_group-admin-monthly-report.py_**: Same as above, but the report shows all photos since the group creation and is good to catch photos the should have been removed but for any reason were not. This can happen, for example, if photos are removed of the group by the owner after others been added, which will make some added photos do not show up in the daily report. Made to be run at least once a month.
