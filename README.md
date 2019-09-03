@@ -2,6 +2,9 @@
 
 A collection of _python_ scripts to automate some tasks on [_Flickr™_](https://www.flickr.com/). At the moment, the following are available:
 
+- **_add_gear_tags/_**
+   - **_add-gear-tags.py_**: Automatically add tags for the gear used (eg: camera model, lens model) according to exif data.
+   
 - **_auto_add2groups/_**
     - **_add-photo-to-group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
 
@@ -50,6 +53,10 @@ This will open a web browser to get the user approval. After approve, type in th
 **_Important Note:_** If a headless computer is being used the procedure above must be done in a graphical environment and the generated directory _~/.flickr_ copied to the same location at the headless system.
 
 ## Usage
+
+- **add_gear_tags**: Inside directory 'add_gear_tags' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the script:
+    - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
+    - **data.py**: Include here the id of the photoset where you want to apply the tags and create dictionaries associating the exif data to the tags.
 
 - **auto_add2groups**: Inside directory 'auto_add2groups' create a new one to your specific need (name it what you want, eg: auto_add2group_gp1) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are tree additional files necessary to run the script:
     - **current_id**: Include here just the id of the last photo processed by the script in the previous run. If this file is not provided or the id is invalid, the script will create a new one with the id of the last (newest) photo in the photostream. In this case, the script will run over just the photos added after it. To start the script on any photo in the photostream, set here a valid photo id. The photos will then be processed in increasing order of upload time, starting from the next photo to the id that was set here.
