@@ -1,7 +1,7 @@
 # Procedures of script process-photos.py
 #
 # Author: Haraldo Albergaria
-# Date  : Jan 01, 2018
+# Date  : Sep 03, 2019
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
