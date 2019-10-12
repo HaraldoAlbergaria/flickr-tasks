@@ -17,6 +17,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - **_check_exif/_**
     - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it.
 
+- **_find_explored/_**
+    - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
+
 - **_group_admin/_**
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
     - **_group-admin-monthly-report.py_**: Same as above, but the report shows all photos since the group creation and is good to catch photos the should have been removed but for any reason were not. This can happen, for example, if photos are removed of the group by the owner after others been added, which will make some added photos do not show up in the daily report. Made to be run at least once a month.
@@ -73,6 +76,11 @@ This will open a web browser to get the user approval. After approve, type in th
 
 - **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
+
+- **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+    - **mail.py**: Copy the file from 'mail_cfg' to 'find_explored' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
+    
+    _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
 
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
