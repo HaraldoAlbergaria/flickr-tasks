@@ -41,7 +41,7 @@ pos = 0
 mail_body = ""
 hostname = socket.gethostname()
 
-log = open("explored.log", "w")
+log = open("/home/pi/flickr_tasks/find_explored/explored.log", "w")
 
 # iterate over each explore page
 for page_number in range(1, number_of_pages+1):
