@@ -23,6 +23,7 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 fav_others_id = '72157623439971318'
 galleries_id = '72157662142350881'
+explore_id = '72157651834915447'
 at10mm_id = '72157694314388675'
 at250mm_id = '72157666561896128'
 at1p8_id = '72157703794055595'
@@ -146,6 +147,11 @@ def processPhoto(photo_id, photo_title, user_id):
             remPhotoFromSet(gallleries_id, photo_id, photo_title, in_set)
     except:
         print('ERROR: Unable to get galleries for photo \'{0}\''.format(photo_title))
+
+    # Explore Set
+    in_set = isInSet(photo_id, explore_id)
+    if not in_set and hasTag(photo_id, 'explored'):
+        addPhotoToSet(explore_id, photo_id, photo_title, in_set)
 
     # Lenses Exif Sets
     try:

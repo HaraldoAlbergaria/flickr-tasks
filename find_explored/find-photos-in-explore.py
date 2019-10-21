@@ -5,9 +5,8 @@
 # lenses or anything exif related.
 #
 # Author: Haraldo Albergaria
-# Date  : Jan 01, 2018
+# Date  : Oct 21, 2019
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
 
 import os
 import socket
@@ -28,6 +27,20 @@ user_id = api_credentials.user_id
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 
+#===== PROCEDURES =======================================================#
+
+def hasTag(photo_id, tag):
+    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+    tags = photo_tags['photo']['tags']['tag']
+    for i in range(len(tags)):
+        tag_id = tags[i]['id']
+        tag_raw = tags[i]['raw']
+        if tag_raw == tag :
+            flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
+            return True
+    return False
+
+
 #===== MAIN CODE ==============================================================#
 
 # get photos from explore
@@ -40,6 +53,7 @@ photos_per_page = int(explore['photos']['perpage'])
 pos = 0
 mail_body = ""
 hostname = socket.gethostname()
+tag = 'explored'
 
 log = open("/home/pi/flickr_tasks/find_explored/explored.log", "w")
 
@@ -56,8 +70,15 @@ for page_number in range(1, number_of_pages+1):
         owner_id = explore['photos']['photo'][photo_number]['owner']
         # if a user's photo has been found
         if owner_id == user_id:
+           # add tag 'explored' to photo
+           if not hasTag(photo_id, tag):
+               try:
+                   flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
+               except:
+                   pass
            # add title, url and position of the photo the the body of e-mail
            mail_body = mail_body + "\"{0}\nhttp://www.flickr.com/photos/{1}/{2}\nLast position: {3}\n\"".format(photo_title, owner_id, photo_id, pos)
+
 
 # get current time
 now = datetime.strftime(datetime.now(), "%d/%m/%y %H:%M:%S")
