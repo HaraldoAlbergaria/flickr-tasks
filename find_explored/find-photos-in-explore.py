@@ -24,6 +24,9 @@ api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
 
+# id of set to add explored photos
+set_id = '72157651834915447'
+
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
@@ -40,6 +43,16 @@ def hasTag(photo_id, tag):
             return True
     return False
 
+def isInSet(photo_id, set_id):
+    try:
+        photo_sets = flickr.photos.getAllContexts(photo_id=photo_id)['set']
+        for i in range(len(photo_sets)):
+            if photo_sets[i]['id'] == set_id:
+                return True
+    except:
+        pass
+    return False
+
 
 #===== MAIN CODE ==============================================================#
 
@@ -51,7 +64,7 @@ photos_per_page = int(explore['photos']['perpage'])
 
 # set variables
 pos = 0
-mail_body = ""
+mail_body = "\""
 hostname = socket.gethostname()
 tag = 'explored'
 bhl_url = "<a href=\"https://bighugelabs.com/scout.php?mode=history&id="
@@ -81,6 +94,14 @@ for page_number in range(1, number_of_pages+1):
                    flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
                except:
                    pass
+
+           # add photo to photoset
+           if not isInSet(photo_id, set_id) and hasTag(photo_id, tag):
+               try:
+                   flickr.photosets.addPhoto(api_key=api_key, photoset_id=set_id, photo_id=photo_id)
+               except:
+                   pass
+
            # add explore annotation to photo description
            annotation = "\n\n\n<b>EXPLORE {0}</b>\n{1}{2}{3}{4}</a>".format(now.strftime("%b %d, %Y").upper(), bhl_url, photo_id, hst_pos, pos)
            try:
@@ -91,14 +112,22 @@ for page_number in range(1, number_of_pages+1):
            except:
                pass
            # add title, url and position of the photo the the body of e-mail
-           mail_body = mail_body + "\"{0}\nhttp://www.flickr.com/photos/{1}/{2}\nLast position: {3}\n\"".format(photo_title, owner_id, photo_id, pos)
+           try:
+               photos_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
+               thumb_url = flickr.photos.getSizes(api_key=api_key, user_id=user_id, photo_id=photo_id)['sizes']['size'][0]['source']
+               mail_body = mail_body + "Title: {0}\nURL: {1}{2}/\nLast position: {3}\n".format(photo_title, photos_url, photo_id, pos)
+               mail_body = mail_body + "\n----- Copy to profile --------------->\n<a href=\\\"{0}{1}/in/album-{2}/\\\" title=\\\"{3}\\\"><img src=\\\"{4}\\\" width=\\\"59\\\" height=\\\"59\\\" alt=\\\"{5}\\\" /></a> \n<---- Copy to profile ----------------".format(photos_url, photo_id, set_id, photo_title, thumb_url, photo_title)
+               mail_body = mail_body + "\n\n\n"
+           except:
+               pass
 
 now = datetime.strftime(datetime.now(), "%d/%m/%y %H:%M:%S")
 
 # Sends e-mail with the photos in explore
-if mail_body != '':
+if mail_body != '\"':
+    mail_body = mail_body + "\""
     mail_send = "echo {0} | mail -s {1} -a From:\{2}\<{3}\> {4}".format(mail_body, mail.SUBJECT, hostname, mail.FROM, mail.TO)
-    #os.system(mail_send)
+    os.system(mail_send)
     log.write("[{0}] PHOTOS FOUND!!! An e-mail with the list was sent to {1}".format(now, mail.TO))
 else:
     log.write("[{0}] No photos were found.".format(now))
