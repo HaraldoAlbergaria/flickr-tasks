@@ -13,6 +13,7 @@ import socket
 import mail
 import flickrapi
 import api_credentials
+import procs
 
 from datetime import datetime
 from datetime import date
@@ -24,34 +25,8 @@ api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
 
-# id of set to add explored photos
-set_id = '72157651834915447'
-
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
-
-
-#===== PROCEDURES =======================================================#
-
-def hasTag(photo_id, tag):
-    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        if tag_raw == tag :
-            return True
-    return False
-
-def isInSet(photo_id, set_id):
-    try:
-        photo_sets = flickr.photos.getAllContexts(photo_id=photo_id)['set']
-        for i in range(len(photo_sets)):
-            if photo_sets[i]['id'] == set_id:
-                return True
-    except:
-        pass
-    return False
 
 
 #===== MAIN CODE ==============================================================#
@@ -72,11 +47,12 @@ hst_pos = "\">Highest position: "
 
 log = open("/home/pi/flickr_tasks/find_explored/explored.log", "w")
 
-# get current time
+# get current date
 now = datetime.now()
 
 # iterate over each explore page
 for page_number in range(1, number_of_pages+1):
+
     explore = flickr.interestingness.getList(api_key=api_key, page=page_number)
     photos_per_page = len(explore['photos']['photo'])
 
@@ -86,22 +62,21 @@ for page_number in range(1, number_of_pages+1):
         photo_id = explore['photos']['photo'][photo_number]['id']
         photo_title = explore['photos']['photo'][photo_number]['title']
         owner_id = explore['photos']['photo'][photo_number]['owner']
+
         # if a user's photo has been found
         if owner_id == user_id:
            # add tag 'explored' to photo
-           if not hasTag(photo_id, tag):
+           if not procs.hasTag(photo_id, tag):
                try:
                    flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
                except:
                    pass
-
            # add photo to photoset
-           if not isInSet(photo_id, set_id) and hasTag(photo_id, tag):
+           if not procs.isInSet(photo_id, procs.set_id) and hasTag(photo_id, tag):
                try:
-                   flickr.photosets.addPhoto(api_key=api_key, photoset_id=set_id, photo_id=photo_id)
+                   flickr.photosets.addPhoto(api_key=api_key, photoset_id=procs.set_id, photo_id=photo_id)
                except:
                    pass
-
            # add explore annotation to photo description
            annotation = "\n\n\n<b>EXPLORE {0}</b>\n{1}{2}{3}{4}</a>".format(now.strftime("%b %d, %Y").upper(), bhl_url, photo_id, hst_pos, pos)
            try:
@@ -116,11 +91,12 @@ for page_number in range(1, number_of_pages+1):
                photos_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
                thumb_url = flickr.photos.getSizes(api_key=api_key, user_id=user_id, photo_id=photo_id)['sizes']['size'][0]['source']
                mail_body = mail_body + "Title: {0}\nURL: {1}{2}/\nLast position: {3}\n".format(photo_title, photos_url, photo_id, pos)
-               mail_body = mail_body + "\n----- Copy to profile --------------->\n<a href=\\\"{0}{1}/in/album-{2}/\\\" title=\\\"{3}\\\"><img src=\\\"{4}\\\" width=\\\"59\\\" height=\\\"59\\\" alt=\\\"{5}\\\" /></a> \n<---- Copy to profile ----------------".format(photos_url, photo_id, set_id, photo_title, thumb_url, photo_title)
+               mail_body = mail_body + "\n----- Copy to profile --------------->\n<a href=\\\"{0}{1}/in/album-{2}/\\\" title=\\\"{3}\\\"><img src=\\\"{4}\\\" width=\\\"59\\\" height=\\\"59\\\" alt=\\\"{5}\\\" /></a> \n<---- Copy to profile ----------------".format(photos_url, photo_id, procs.set_id, photo_title, thumb_url, photo_title)
                mail_body = mail_body + "\n\n\n"
            except:
                pass
 
+# get current time
 now = datetime.strftime(datetime.now(), "%d/%m/%y %H:%M:%S")
 
 # Sends e-mail with the photos in explore
