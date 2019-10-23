@@ -78,6 +78,7 @@ This will open a web browser to get the user approval. After approve, type in th
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
 
 - **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+    - **procs.py**: Open the file and edit the variable _set_id_ with the id of the photoset to where the explored photos will be added.
     - **mail.py**: Copy the file from 'mail_cfg' to 'find_explored' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
     
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
