@@ -21,9 +21,16 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
-group_url = 'https://www.flickr.com/groups/worldsfavorite/'
-group_id = flickr.urls.lookupGroup(api_key=api_key, url=group_url)['group']['id']
-group_name = flickr.urls.lookupGroup(api_key=api_key, url=group_url)['group']['groupname']['_content']
+# World's Favorites
+wf_group_url  = 'https://www.flickr.com/groups/worldsfavorite/'
+wf_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=wf_group_url)['group']['id']
+wf_group_name = flickr.urls.lookupGroup(api_key=api_key, url=wf_group_url)['group']['groupname']['_content']
+
+# Fav/View >= 5% (please mind the rules)
+fv_group_url  = 'https://www.flickr.com/groups/favs/'
+fv_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=fv_group_url)['group']['id']
+fv_group_name = flickr.urls.lookupGroup(api_key=api_key, url=fv_group_url)['group']['groupname']['_content']
+
 not_add_tag = 'DNA'
 
 summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_groups/summary_groups.log'
@@ -54,7 +61,7 @@ def isInGroup(photo_id, group_id):
         pass
     return False
 
-def addPhotoToGroup(photo_id, photo_title):
+def addPhotoToGroup(photo_id, photo_title, group_id, group_name):
     try:
         flickr.groups.pools.add(api_key=api_key, photo_id=photo_id, group_id=group_id)
         print('\nAdded photo to \'{0}\' group'.format(group_name), end='')
@@ -65,7 +72,7 @@ def addPhotoToGroup(photo_id, photo_title):
         print('\nERROR: Unable to add photo \'{0}\' to group \'{1}\''.format(photo_title, group_name))
         print(e)
 
-def remPhotoFromGroup(photo_id, photo_title):
+def remPhotoFromGroup(photo_id, photo_title, group_id, group_name):
     try:
         flickr.groups.pools.remove(api_key=api_key, photo_id=photo_id, group_id=group_id)
         print('\nRemoved photo from \'{0}\' group'.format(group_name), end='')
@@ -82,16 +89,32 @@ def remPhotoFromGroup(photo_id, photo_title):
 def processPhoto(photo_id, photo_title, user_id):
     try:
         favorites = flickr.photos.getFavorites(photo_id=photo_id)
+        info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+        
         permissions = flickr.photos.getPerms(photo_id=photo_id)
         is_public = permissions['perms']['ispublic']
-        in_group = isInGroup(photo_id, group_id)
+        
         photo_favs = int(favorites['photo']['total'])
+        photo_views = int(info['photo']['views'])
+        
         print('favorites: {0}'.format(photo_favs), end='')
+        print('views: {0}'.format(photo_views), end='')
+        
+        # Word's Favorites
+        in_group = isInGroup(photo_id, wf_group_id)
         if photo_favs >= 1 and is_public == 1 and not in_group and not hasTag(photo_id, not_add_tag):
-            addPhotoToGroup(photo_id, photo_title)
+            addPhotoToGroup(photo_id, photo_title, wf_group_id, wf_groups_name)
         if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
-            remPhotoFromGroup(photo_id, photo_title)
+            remPhotoFromGroup(photo_id, photo_title, wf_group_id, wf_groups_name)
+            
+        # Fav/View >= 5% (please mind the rules)
+        in_group = isInGroup(photo_id, fv_group_id)
+        if photo_favs/photo_views >= 0.05 and is_public == 1 and not in_group):
+            addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_groups_name)
+        if in_group and photo_favs/photo_views < 0.05:
+            remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_groups_name)
+            
         print(' ')
+        
     except:
         print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
-
