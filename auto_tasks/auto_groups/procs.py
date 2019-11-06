@@ -90,31 +90,31 @@ def processPhoto(photo_id, photo_title, user_id):
     try:
         favorites = flickr.photos.getFavorites(photo_id=photo_id)
         info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
-        
+
         permissions = flickr.photos.getPerms(photo_id=photo_id)
         is_public = permissions['perms']['ispublic']
-        
+
         photo_favs = int(favorites['photo']['total'])
         photo_views = int(info['photo']['views'])
-        
-        print('favorites: {0}'.format(photo_favs), end='')
-        print('views: {0}'.format(photo_views), end='')
-        
+        fv_ratio = photo_favs/photo_views
+
+        print('favorites: {0}\nviews: {1}\nratio: {2:.1f}%'.format(photo_favs, photo_views, fv_ratio*100), end='')
+
         # Word's Favorites
         in_group = isInGroup(photo_id, wf_group_id)
-        if photo_favs >= 1 and is_public == 1 and not in_group and not hasTag(photo_id, not_add_tag):
-            addPhotoToGroup(photo_id, photo_title, wf_group_id, wf_groups_name)
+        if  not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 1:
+            addPhotoToGroup(photo_id, photo_title, wf_group_id, wf_group_name)
         if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
-            remPhotoFromGroup(photo_id, photo_title, wf_group_id, wf_groups_name)
-            
+            remPhotoFromGroup(photo_id, photo_title, wf_group_id, wf_group_name)
+
         # Fav/View >= 5% (please mind the rules)
         in_group = isInGroup(photo_id, fv_group_id)
-        if photo_favs/photo_views >= 0.05 and is_public == 1 and not in_group):
-            addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_groups_name)
-        if in_group and photo_favs/photo_views < 0.05:
-            remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_groups_name)
-            
+        if not in_group and  is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
+            addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_group_name)
+        if in_group and fv_ratio < 0.05:
+            remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_group_name)
+
         print(' ')
-        
+
     except:
-        print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
+        print('\nERROR: Unable to get information for photo \'{0}\''.format(photo_title))
