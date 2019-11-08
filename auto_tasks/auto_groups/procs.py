@@ -109,7 +109,10 @@ def processPhoto(photo_id, photo_title, user_id):
 
         # Fav/View >= 5% (please mind the rules)
         in_group = isInGroup(photo_id, fv_group_id)
-        if not in_group and  is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
+        summary = open(summary_file, 'r')
+        summary_str = summary.read()
+        summary.close()
+        if not in_group and fv_group_name not in summary_str and is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
             addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_group_name)
         if in_group and fv_ratio < 0.05:
             remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_group_name)
