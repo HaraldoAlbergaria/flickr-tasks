@@ -71,10 +71,19 @@ def processPhoto(photo_id, user_id):
     exif = getExif(photo_id)
     camera = getCameraModel(exif).replace(' ', '')
     lens = getLensModel(exif).replace(' ', '')
+    tags = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)['photo']['tags']['tag']
+
+    current_tags = ''
+
+    for tag in tags:
+        current_tags = current_tags + ' ' + tag['raw']
+
     camera_tag = camera_tags[camera]
     lens_tag = lens_tags[lens]
-    tags = camera_tag + ' ' + lens_tag
-    flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tags)
-    print("Added tags: {0}".format(tags))
+    gear_tags = camera_tag + ' ' + lens_tag
+
+    new_tags = gear_tags + ' ' + current_tags
+    flickr.photos.setTags(api_key=api_key, photo_id=photo_id, tags=new_tags)
+    print("Added tags: {0}".format(gear_tags))
     print(' ')
 
