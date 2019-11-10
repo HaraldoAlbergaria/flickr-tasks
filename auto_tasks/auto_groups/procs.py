@@ -26,6 +26,11 @@ wf_group_url  = 'https://www.flickr.com/groups/worldsfavorite/'
 wf_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=wf_group_url)['group']['id']
 wf_group_name = flickr.urls.lookupGroup(api_key=api_key, url=wf_group_url)['group']['groupname']['_content']
 
+# MAS DE 100 FAVORITAS
+mc_group_url  = 'https://www.flickr.com/groups/2874597@N21/'
+mc_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=mc_group_url)['group']['id']
+mc_group_name = flickr.urls.lookupGroup(api_key=api_key, url=mc_group_url)['group']['groupname']['_content']
+
 # Fav/View >= 5% (please mind the rules)
 fv_group_url  = 'https://www.flickr.com/groups/favs/'
 fv_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=fv_group_url)['group']['id']
@@ -102,10 +107,17 @@ def processPhoto(photo_id, photo_title, user_id):
 
         # Word's Favorites
         in_group = isInGroup(photo_id, wf_group_id)
-        if  not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 1:
+        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 1:
             addPhotoToGroup(photo_id, photo_title, wf_group_id, wf_group_name)
         if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
             remPhotoFromGroup(photo_id, photo_title, wf_group_id, wf_group_name)
+
+        # MAS DE 100 FAVORITAS
+        in_group = isInGroup(photo_id, mc_group_id)
+        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 100:
+            addPhotoToGroup(photo_id, photo_title, mc_group_id, mc_group_name)
+        if in_group and (photo_favs < 100 or hasTag(photo_id, not_add_tag)):
+            remPhotoFromGroup(photo_id, photo_title, mc_group_id, mc_group_name)
 
         # Fav/View >= 5% (please mind the rules)
         in_group = isInGroup(photo_id, fv_group_id)
