@@ -76,7 +76,7 @@ def processPhoto(photo_id, user_id):
     current_tags = ''
 
     for tag in tags:
-        current_tags = current_tags + ' ' + tag['raw']
+        current_tags = current_tags + ' \"' + tag['raw'] + '\"'
 
     camera_tag = camera_tags[camera]
     lens_tag = lens_tags[lens]
