@@ -31,6 +31,12 @@ mc_group_url  = 'https://www.flickr.com/groups/2874597@N21/'
 mc_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=mc_group_url)['group']['id']
 mc_group_name = flickr.urls.lookupGroup(api_key=api_key, url=mc_group_url)['group']['groupname']['_content']
 
+# 100 views + 10 favourites (unlimited)
+ht_group_url  = 'https://www.flickr.com/groups/100v10f/'
+ht_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=ht_group_url)['group']['id']
+ht_group_name = flickr.urls.lookupGroup(api_key=api_key, url=ht_group_url)['group']['groupname']['_content']
+ht_group_tag  = '100v+10f'
+
 # Fav/View >= 5% (please mind the rules)
 fv_group_url  = 'https://www.flickr.com/groups/favs/'
 fv_group_id   = flickr.urls.lookupGroup(api_key=api_key, url=fv_group_url)['group']['id']
@@ -119,12 +125,23 @@ def processPhoto(photo_id, photo_title, user_id):
         if in_group and (photo_favs < 100 or hasTag(photo_id, not_add_tag)):
             remPhotoFromGroup(photo_id, photo_title, mc_group_id, mc_group_name)
 
+        # 100 views + 10 favourites (unlimited)
+        in_group = isInGroup(photo_id, ht_group_id)
+        summary = open(summary_file, 'r')
+        summary_str = summary.read()
+        summary.close()
+        if not in_group and ht_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_views >= 100 and photo_favs >= 10:
+            addPhotoToGroup(photo_id, photo_title, ht_group_id, ht_group_name)
+            flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=ht_group_tag)
+        if in_group and (photo_views < 100 or photo_favs < 10 or hasTag(photo_id, not_add_tag)):
+            remPhotoFromGroup(photo_id, photo_title, ht_group_id, ht_group_name)
+
         # Fav/View >= 5% (please mind the rules)
         in_group = isInGroup(photo_id, fv_group_id)
         summary = open(summary_file, 'r')
         summary_str = summary.read()
         summary.close()
-        if not in_group and fv_group_name not in summary_str and is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
+        if not in_group and fv_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
             addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_group_name)
         if in_group and fv_ratio < 0.05:
             remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_group_name)
