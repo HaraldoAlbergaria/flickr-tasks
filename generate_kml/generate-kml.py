@@ -33,7 +33,8 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 #===== MAIN CODE ==============================================================#
 
-os.system('cp /home/pi/flickr_tasks/generate_kml/header.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.kml')
+os.system('cp /home/pi/flickr_tasks/generate_kml/header.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml')
+os.system('cp /home/pi/flickr_tasks/generate_kml/header.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml')
 
 photos = flickr.people.getPhotos(user_id=user_id)
 
@@ -61,7 +62,11 @@ for pg in range(1, npages+1):
 
 print('\n\n')
 
-output = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.kml", "a")
-output.write("    </Folder>\n</Document>\n</kml>\n")
-output.close()
+earth_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml", "a")
+earth_file.write("    </Folder>\n</Document>\n</kml>\n")
+earth_file.close()
+
+mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml", "a")
+mymaps_file.write("    </Folder>\n</Document>\n</kml>\n")
+mymaps_file.close()
 
