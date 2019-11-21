@@ -33,8 +33,8 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 #===== MAIN CODE ==============================================================#
 
-os.system('cp /home/pi/flickr_tasks/generate_kml/header.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml')
-os.system('cp /home/pi/flickr_tasks/generate_kml/header.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml')
+os.system('cp /home/pi/flickr_tasks/generate_kml/header.earth.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml')
+os.system('cp /home/pi/flickr_tasks/generate_kml/header.mymaps.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml')
 
 photos = flickr.people.getPhotos(user_id=user_id)
 
