@@ -21,7 +21,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
 - **_generate_kml/_**
-    - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the user's photos that can be imported on [_Google Earth™_](https://www.google.com/earth/) and [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
+    - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the user's photos that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
     
 - **_group_admin/_**
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
@@ -80,16 +80,16 @@ This will open a web browser to get the user approval. After approve, type in th
 - **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
 
-- **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+- **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There are two additional file necessary to run the script:
     - **procs.py**: Open the file and edit the variable _set_id_ with the id of the photoset to where the explored photos will be added.
     - **mail.py**: Copy the file from 'mail_cfg' to 'find_explored' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
 
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
 
 
-- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There is two additional files necessary to run the script:
+- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the script:
     - **procs.py**: If there are photos that must not be included on the map, tag these photos, open the file and edit the variable _not_map_tag_ with the value of the chosen tag.
-    - **header.kml**: This file contains the initial code for the generated _kml_ file. **Do not delete it, otherwise the generated file will be useless**.
+    - **header.earth.kml** and **header.mymaps.kml**: These files contain the initial code for the generated _kml_ files. **Do not delete any of them, otherwise the generated file will be useless**. The generated files will be **my_flickr_photos.earth.kml** and **my_flickr_photos.mymaps.kml**.
 
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
