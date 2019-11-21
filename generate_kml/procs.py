@@ -30,7 +30,6 @@ def hasTag(photo_id, tag):
         tag_id = tags[i]['id']
         tag_raw = tags[i]['raw']
         if tag_raw == tag :
-            flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
             return True
     return False
 
