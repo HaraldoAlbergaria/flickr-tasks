@@ -58,7 +58,7 @@ def getMyMapsThumbUrl(photo_id, photo_sizes):
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
-def processPhoto(photo_id, photo_title, user_id):
+def processPhoto(photo_id, photo_title, user_id, retries):
     try:
         # get photo information
         photo_title = photo_title.replace('&', 'and')
@@ -87,4 +87,11 @@ def processPhoto(photo_id, photo_title, user_id):
             mymaps_file.close()
             print("Added marker to 'Google My Maps!'")
     except:
-        pass
+        if retries < 10:
+            time.sleep(3)
+            retries += 1
+            print("ERROR when adding marker to map")
+            print("Retrying: {0}".format(retries))
+            processPhoto(photo_id, photo_title, user_id, retries)
+        else:
+            pass

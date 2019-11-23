@@ -58,7 +58,7 @@ for pg in range(1, npages+1):
         photo_id = page['photos']['photo'][ph]['id']
         photo_title = page['photos']['photo'][ph]['title']
         print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))
-        set_id = procs.processPhoto(photo_id, photo_title, user_id)
+        set_id = procs.processPhoto(photo_id, photo_title, user_id, 0)
 
 print('\n\n')
 
