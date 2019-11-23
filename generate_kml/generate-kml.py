@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
-# This script executes tasks in all photos on a photostrean
-# according to rules defined by the user. Can be used to add
-# tags or add photos to groups according to views, favorites, etc.,
-# for example.
+# This script generates a kml file of all the photos on
+# user's photostream that can be imported on 'Google Earth'
+# and/or 'Googlee My Maps'.
 #
 # Author: Haraldo Albergaria
-# Date  : Jul 17, 2019
+# Date  : Nov 20, 2019
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 

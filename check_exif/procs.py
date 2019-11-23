@@ -25,6 +25,10 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 # If photo has this tag, do not add to photoset
 skip_tag = 'Exhibition'
 
+# getExif retries
+max_retries = 10
+retry_wait  = 1
+
 
 #===== PROCEDURES =======================================================#
 
@@ -54,26 +58,25 @@ def hasTag(photo_id, tag):
             return True
     return False
 
-def getExif(photo_id):
+def getExif(photo_id, retry):
     try:
         exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         if len(exif) == 0:
-            retry = 0
-            while len(exif) == 0 and retry < 10:
-                time.sleep(1)
+            while len(exif) == 0 and retry < max_retries:
+                time.sleep(retry_wait)
+                retry += 1
+                print("ERROR when getting Exif")
+                print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                retry = retry + 1
     except:
-        try:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-            if len(exif) == 0:
-                retry = 0
-                while len(exif) == 0 and retry < 10:
-                    time.sleep(1)
-                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                    retry = retry + 1
-        except:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+        if retry < max_retries:
+            time.sleep(retry_wait)
+            retry += 1
+            print("ERROR when getting Exif")
+            print("Retrying: {0}".format(retry))
+            getExif(photo_id, retry)
+        else:
+            pass
     return exif
 
 def getLensModel(exif):
@@ -136,30 +139,33 @@ def remPhotoFromSet(set_id, photo_id, photo_title, in_set):
 # The defaut is camera_model, lens_model, focal_length and aperture
 # If needed, add others as stated in the next comment line
 def isExifMissing(photo_id):
-    try:
-        exif = getExif(photo_id)
-        camera_maker = getCameraMaker(exif)
-        camera_model = getCameraModel(exif)
-        lens_model = getLensModel(exif)
-        focal_length = getFocalLength(exif)
-        aperture = getAperture(exif)
-        iso = getISO(exif)
-    except:
-        print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
-        pass
+    if not hasTag(photo_id, skip_tag):
+        try:
+            exif = getExif(photo_id, 0)
+            camera_maker = getCameraMaker(exif)
+            camera_model = getCameraModel(exif)
+            lens_model = getLensModel(exif)
+            focal_length = getFocalLength(exif)
+            aperture = getAperture(exif)
+            iso = getISO(exif)
+        except:
+            print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
+            pass
 
-    # Do not edit the next 1st, 2nd and 4th lines. Edit the 3rd line to include any additional condition
-    if (camera_model == '' or lens_model == '' or focal_length == '' or aperture == '' or iso == '') \
-            and not hasTag(photo_id, skip_tag) \
-            and (camera_maker != 'NIKON' and camera_maker != 'Vivitar' and camera_maker != 'Fujifilm') \
-            and True:
-        return True
+        # Do not edit the next 1st, 2nd and 4th lines. Edit the 3rd line to include any additional condition
+        if (camera_model == '' or lens_model == '' or focal_length == '' or aperture == '' or iso == '') \
+                and (camera_maker != 'NIKON' and camera_maker != 'Vivitar' and camera_maker != 'Fujifilm') \
+                and True:
+            return True
+        else:
+            return False
     else:
+        print("SKIPPED!")
         return False
 
 
-### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
+### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def processPhoto(photo_id, photo_title, user_id, set_id, set_title):
     if isExifMissing(photo_id):

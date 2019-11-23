@@ -1,4 +1,4 @@
-# Procedures of script process-photos.py
+# Procedures of script generate-kml.py
 #
 # Author: Haraldo Albergaria
 # Date  : Nov 18, 2019
@@ -20,6 +20,10 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 # Photos im this set
 # won't be included on map
 not_map_set_id = '72157704077352525'
+
+# Retries
+max_retries = 10
+retry_wait  = 3
 
 
 #===== PROCEDURES =======================================================#
@@ -58,7 +62,7 @@ def getMyMapsThumbUrl(photo_id, photo_sizes):
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
-def processPhoto(photo_id, photo_title, user_id, retries):
+def processPhoto(photo_id, photo_title, user_id, retry):
     try:
         # get photo information
         photo_title = photo_title.replace('&', 'and')
@@ -87,11 +91,11 @@ def processPhoto(photo_id, photo_title, user_id, retries):
             mymaps_file.close()
             print("Added marker to 'Google My Maps!'")
     except:
-        if retries < 10:
-            time.sleep(3)
-            retries += 1
+        if retry < max_retries:
+            time.sleep(retry_wait)
+            retry += 1
             print("ERROR when adding marker to map")
-            print("Retrying: {0}".format(retries))
-            processPhoto(photo_id, photo_title, user_id, retries)
+            print("Retrying: {0}".format(retry))
+            processPhoto(photo_id, photo_title, user_id, retry)
         else:
             pass

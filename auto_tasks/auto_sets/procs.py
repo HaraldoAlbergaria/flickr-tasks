@@ -12,6 +12,7 @@
 
 import flickrapi
 import json
+import time
 import api_credentials
 
 api_key = api_credentials.api_key
@@ -29,6 +30,10 @@ at1p8_id = '72157703794055595'
 
 tag = 'DNA'
 summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.log'
+
+# getExif Retries
+max_retries = 10
+retry_wait  = 1
 
 
 #===== PROCEDURES =======================================================#
@@ -56,26 +61,25 @@ def hasTag(photo_id, tag):
             return True
     return False
 
-def getExif(photo_id):
+def getExif(photo_id, retry):
     try:
         exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         if len(exif) == 0:
-            retry = 0
-            while len(exif) == 0 and retry < 10:
-                time.sleep(1)
+            while len(exif) == 0 and retry < max_retries:
+                time.sleep(retry_wait)
+                retry += 1
+                print("ERROR when getting Exif")
+                print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                retry = retry + 1
     except:
-        try:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-            if len(exif) == 0:
-                retry = 0
-                while len(exif) == 0 and retry < 10:
-                    time.sleep(1)
-                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                    retry = retry + 1
-        except:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+        if retry < max_retries:
+            time.sleep(retry_wait)
+            retry += 1
+            print("ERROR when getting Exif")
+            print("Retrying: {0}".format(retry))
+            getExif(photo_id, retry)
+        else:
+            pass
     return exif
 
 def getFocalLength(exif):
@@ -148,14 +152,16 @@ def processPhoto(photo_id, photo_title, user_id):
         print('ERROR: Unable to get galleries for photo \'{0}\''.format(photo_title))
 
     # Lenses Exif Sets
+    exif = getExif(photo_id, 0)
     try:
-        exif = getExif(photo_id)
         focal_length = getFocalLength(exif)
         aperture = getAperture(exif)
         print('focal length: {0}\n'.format(focal_length), end='')
         print('aperture: {0}\n'.format(aperture), end='')
     except:
         print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
+        focal_length = ''
+        aperture = ''
         pass
 
     ## @10mm
