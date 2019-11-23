@@ -1,4 +1,4 @@
-# Procedures of script process-photos.py
+# Procedures of script add-gear-tags.py
 #
 # Author: Haraldo Albergaria
 # Date  : Sep 3, 2019

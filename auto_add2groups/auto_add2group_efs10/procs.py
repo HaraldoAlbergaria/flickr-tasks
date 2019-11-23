@@ -12,6 +12,7 @@
 
 import flickrapi
 import json
+import time
 import api_credentials
 import data
 
@@ -22,29 +23,32 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
+# getExif retries
+max_retries = 10
+retry_wait  = 1
+
 
 #===== PROCEDURES =======================================================#
 
-def getExif(photo_id):
+def getExif(photo_id, retry):
     try:
         exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         if len(exif) == 0:
-            retry = 0
-            while len(exif) == 0 and retry < 10:
-                time.sleep(1)
+            while len(exif) == 0 and retry < max_retries:
+                time.sleep(retry_wait)
+                retry += 1
+                print("ERROR when getting Exif")
+                print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                retry = retry + 1
     except:
-        try:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-            if len(exif) == 0:
-                retry = 0
-                while len(exif) == 0 and retry < 10:
-                    time.sleep(1)
-                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                    retry = retry + 1
-        except:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+        if retry < max_retries:
+            time.sleep(retry_wait)
+            retry += 1
+            print("ERROR when getting Exif")
+            print("Retrying: {0}".format(retry))
+            getExif(photo_id, retry)
+        else:
+            pass
     return exif
 
 def getLensModel(exif):
@@ -53,9 +57,9 @@ def getLensModel(exif):
             return exif[i]['raw']['_content']
     return ''
 
-def getFocalLength(exif):
+def getAperture(exif):
     for i in range(len(exif)):
-        if exif[i]['tag'] == "FocalLength":
+        if exif[i]['tag'] == "FNumber":
             return exif[i]['raw']['_content']
     return ''
 
@@ -65,10 +69,13 @@ def getFocalLength(exif):
 def isOkToAdd(photo_id):
     permissions = flickr.photos.getPerms(photo_id=photo_id)
     is_public = permissions['perms']['ispublic']
-    exif = getExif(photo_id)
-    lens_model = getLensModel(exif)
-    focal_length = getFocalLength(exif)
-    if is_public and lens_model in data.lens_models and focal_length in data.focal_lengths:
+    try:
+        exif = getExif(photo_id, 0)
+        lens_model = getLensModel(exif)
+        aperture = getAperture(exif)
+    except:
+        return False
+    if is_public and lens_model in data.lens_models and aperture in data.apertures:
         return True
     else:
         return False

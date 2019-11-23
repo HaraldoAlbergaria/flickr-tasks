@@ -30,29 +30,32 @@ exif_tag = group_data.exif_tags
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
+# getExif retries
+max_retries = 10
+retry_wait  = 1
+
 
 #===== PROCEDURES =======================================================#
 
-def getExif(photo_id):
+def getExif(photo_id, retry):
     try:
         exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         if len(exif) == 0:
-            retry = 0
-            while len(exif) == 0 and retry < 10:
-                time.sleep(1)
+            while len(exif) == 0 and retry < max_retries:
+                time.sleep(retry_wait)
+                retry += 1
+                print("ERROR when getting Exif")
+                print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                retry = retry + 1
     except:
-        try:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-            if len(exif) == 0:
-                retry = 0
-                while len(exif) == 0 and retry < 10:
-                    time.sleep(1)
-                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                    retry = retry + 1
-        except:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+        if retry < max_retries:
+            time.sleep(retry_wait)
+            retry += 1
+            print("ERROR when getting Exif")
+            print("Retrying: {0}".format(retry))
+            getExif(photo_id, retry)
+        else:
+            pass
     return exif
 
 def get(exif):
