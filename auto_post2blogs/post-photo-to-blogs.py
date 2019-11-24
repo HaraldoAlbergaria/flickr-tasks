@@ -16,6 +16,8 @@ def open_file(mode):
     file_path = dir_path + '/current_id'
     return open(file_path, mode)
 
+error_1 = 'Error: 1: Photo not found'
+
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
@@ -41,13 +43,13 @@ while True:
     current_id = current_id_file.read().replace('\n', '')
     current_id_file.close()
 
-    error_1 = 'Error: 1: Photo not found'
+    error_1_id = 'Error: 1: Photo \"' + current_id + '\" not found (invalid ID)'
 
     try:
         flickr.photos.getInfo(photo_id=current_id)
     except flickrapi.exceptions.FlickrError as e:
         print(e)
-        if str(e) == error_1:
+        if str(e) == error_1 or str(e) == error_1_id:
             print("Warng: Using the last photo from the user\'s photostream")
             current_id = flickr.people.getPublicPhotos(user_id=user_id)['photos']['photo'][1]['id']
         else:
