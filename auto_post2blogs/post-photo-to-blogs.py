@@ -41,7 +41,7 @@ while True:
     current_id = current_id_file.read().replace('\n', '')
     current_id_file.close()
 
-    error_1 = 'Error: 1: Photo \"' + current_id + '\" not found (invalid ID)'
+    error_1 = 'Error: 1: Photo not found'
 
     try:
         flickr.photos.getInfo(photo_id=current_id)
