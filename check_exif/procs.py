@@ -138,7 +138,7 @@ def remPhotoFromSet(set_id, photo_id, photo_title, in_set):
 # This function checks if any exif information is missing
 # The defaut is camera_model, lens_model, focal_length and aperture
 # If needed, add others as stated in the next comment line
-def isExifMissing(photo_id):
+def isExifMissing(photo_id, photo_title):
     if not hasTag(photo_id, skip_tag):
         try:
             exif = getExif(photo_id, 0)
@@ -150,8 +150,7 @@ def isExifMissing(photo_id):
             iso = getISO(exif)
         except:
             print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
-            pass
-
+            return True
         # Do not edit the next 1st, 2nd and 4th lines. Edit the 3rd line to include any additional condition
         if (camera_model == '' or lens_model == '' or focal_length == '' or aperture == '' or iso == '') \
                 and (camera_maker != 'NIKON' and camera_maker != 'Vivitar' and camera_maker != 'Fujifilm') \
@@ -168,7 +167,7 @@ def isExifMissing(photo_id):
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def processPhoto(photo_id, photo_title, user_id, set_id, set_title):
-    if isExifMissing(photo_id):
+    if isExifMissing(photo_id, photo_title):
         if set_id == '':
             photoset = flickr.photosets.create(api_key=api_key, title=set_title, primary_photo_id=photo_id)
             set_id = photoset['photoset']['id']

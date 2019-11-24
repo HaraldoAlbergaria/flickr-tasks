@@ -16,10 +16,13 @@
 ####################################################
 
 
+import os
+import socket
 import flickrapi
 import json
 import api_credentials
 import procs
+import mail
 
 # Credentials
 api_key = api_credentials.api_key
@@ -59,3 +62,15 @@ for pg in range(1, npages+1):
         set_id = procs.processPhoto(photo_id, photo_title, user_id, set_id, set_title)
 
 print('\n\n')
+
+
+# Send e-mail
+if set_id != '':
+    try:
+        hostname     = socket.gethostname()
+        photos_url   = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
+        mail_body    = "\"Some photos are missing exif information. Open the set \'{0}\' to see them:\n{1}albums/{2}\"".format(set_title, photos_url, set_id)
+        mail_send    = "echo {0} | mail -s {1} -a From:\{2}\<{3}\> {4}".format(mail_body, mail.SUBJECT, hostname, mail.FROM, mail.TO)
+        os.system(mail_send)
+    except:
+        print("Unable to send e-mail")
