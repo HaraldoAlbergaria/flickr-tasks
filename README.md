@@ -15,7 +15,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
 - [**_check_exif/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/check_exif)
-    - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it.
+    - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it. Also, an e-mail will be sent with the link for the photoset.
 
 - [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
@@ -79,6 +79,7 @@ This will open a web browser to get the user approval. After approve, type in th
 
 - **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
+    - **mail.py**: Copy the file from 'mail_cfg' to 'check_exif' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
 
 - **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There are two additional file necessary to run the script:
     - **procs.py**: Open the file and edit the variable _set_id_ with the id of the photoset to where the explored photos will be added.
