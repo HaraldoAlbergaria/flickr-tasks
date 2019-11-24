@@ -2,28 +2,28 @@
 
 A collection of _python_ scripts to automate some tasks on [_Flickr™_](https://www.flickr.com/). At the moment, the following are available:
 
-- **_add_gear_tags/_**
+- [**_add_gear_tags/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/add_gear_tags)
    - **_add-gear-tags.py_**: Automatically add tags for the gear used (eg: camera model, lens model) according to exif data.
    
-- **_auto_add2groups/_**
+- [**_auto_add2groups/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/auto_add2groups)
     - **_add-photo-to-group.py_**: Automatically add photos to a group according to the group rules. These rules can be regarding the limit for the number of added photos (eg: 3 each day) or the actual content of the photos (eg: a given camera or lens).
 
-- **_auto_post2blogs/_**
+- [**_auto_post2blogs/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/auto_post2blogs)
     - **_post-photo-to-blogs.py_**: Automatically post photos to all the blogs configured in the user's account.
 
-- **_auto_tasks/_**
+- [**_auto_tasks/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/auto_tasks)
     - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
-- **_check_exif/_**
+- [**_check_exif/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/check_exif)
     - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it.
 
-- **_find_explored/_**
+- [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
-- **_generate_kml/_**
+- [**_generate_kml/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_kml)
     - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the user's photos that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
     
-- **_group_admin/_**
+- [**_group_admin/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/group_admin)
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
     - **_group-admin-monthly-report.py_**: Same as above, but the report shows all photos since the group creation and is good to catch photos the should have been removed but for any reason were not. This can happen, for example, if photos are removed of the group by the owner after others been added, which will make some added photos do not show up in the daily report. Made to be run at least once a month.
 
