@@ -6,14 +6,17 @@
 #########################################################################################
 
 import flickrapi
-import webbrowser
 import api_credentials
+import os
+import webbrowser
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
 
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
+
+runlevel = os.system('runlevel')
 
 print('Authenticate')
 
@@ -28,7 +31,10 @@ if not flickr.token_valid(perms='write'):
     # Open a browser at the authentication URL. Do this however
     # you want, as long as the user visits that URL.
     authorize_url = flickr.auth_url(perms='write')
-    webbrowser.open_new_tab(authorize_url)
+    if  runlevel == 'N 5':
+        webbrowser.open_new_tab(authorize_url)
+    else:
+        print("Authorization URL: {}".format(authorize_url))
 
     # Get the verifier code from the user. Do this however you
     # want, as long as the user gives the application the code.
