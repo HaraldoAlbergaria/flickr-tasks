@@ -40,7 +40,8 @@ photos_per_page = int(explore['photos']['perpage'])
 # set variables
 pos = 0
 mail_body = "\""
-hostname = socket.gethostname()
+#hostname = socket.gethostname()
+hostname = "Flickr Tasks"
 tag = 'explored'
 bhl_url = "<a href=\"https://bighugelabs.com/scout.php?mode=history&id="
 hst_pos = "\">Highest position: "

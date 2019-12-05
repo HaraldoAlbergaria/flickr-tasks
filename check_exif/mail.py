@@ -6,5 +6,5 @@
 
 FROM          = "wozniak.iot@gmail.com"
 TO            = "wozniak.iot@gmail.com"
-SUBJECT       = "\"You have photos in Flickr which are missing exif information\""
+SUBJECT       = "\"[Flickr] You have photos which are missing exif information\""
 
