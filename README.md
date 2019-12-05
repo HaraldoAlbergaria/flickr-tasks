@@ -52,9 +52,7 @@ Then, [authenticate](https://stuvel.eu/flickrapi-doc/3-auth.html#authenticating-
 ```
 % ./authenticate.py
 ```
-This will open a web browser to get the user approval. After approve, type in the terminal the generated code.
-
-**_Important Note:_** If a headless computer is being used the procedure above must be done in a graphical environment and the generated directory _~/.flickr_ copied to the same location at the headless system.
+A web browser will be opened to get the user approval (in a non-graphical environment, just copy and paste the authorization url in any external web browser). After approve, type in the terminal the generated code.
 
 ## Usage
 
