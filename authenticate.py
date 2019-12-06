@@ -7,8 +7,9 @@
 
 import flickrapi
 import api_credentials
-import os
+import subprocess
 import webbrowser
+import time
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -16,7 +17,9 @@ user_id = api_credentials.user_id
 
 flickr = flickrapi.FlickrAPI(api_key, api_secret)
 
-runlevel = os.system('runlevel')
+proc = subprocess.Popen(["runlevel"], stdout=subprocess.PIPE, shell=True)
+(runlevel, err) = proc.communicate()
+runlevel = str(runlevel).replace("b\'N ","").replace("\\n\'","")
 
 print('Authenticate')
 
@@ -31,10 +34,10 @@ if not flickr.token_valid(perms='write'):
     # Open a browser at the authentication URL. Do this however
     # you want, as long as the user visits that URL.
     authorize_url = flickr.auth_url(perms='write')
-    if  runlevel == 'N 5':
+    print("Authorization URL: {}".format(authorize_url))
+    if runlevel == '5':
         webbrowser.open_new_tab(authorize_url)
-    else:
-        print("Authorization URL: {}".format(authorize_url))
+        time.sleep(1)
 
     # Get the verifier code from the user. Do this however you
     # want, as long as the user gives the application the code.
