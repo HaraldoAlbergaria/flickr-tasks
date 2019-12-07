@@ -57,9 +57,9 @@ def getLensModel(exif):
             return exif[i]['raw']['_content']
     return ''
 
-def getAperture(exif):
+def getFocalLength(exif):
     for i in range(len(exif)):
-        if exif[i]['tag'] == "FNumber":
+        if exif[i]['tag'] == "FocalLength":
             return exif[i]['raw']['_content']
     return ''
 
@@ -72,10 +72,10 @@ def isOkToAdd(photo_id):
     try:
         exif = getExif(photo_id, 0)
         lens_model = getLensModel(exif)
-        aperture = getAperture(exif)
+        focal_length = getFocalLength(exif)
     except:
         return False
-    if is_public and lens_model in data.lens_models and aperture in data.apertures:
+    if is_public and lens_model in data.lens_models and focal_length in data.focal_lengths:
         return True
     else:
         return False
