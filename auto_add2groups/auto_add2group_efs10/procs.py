@@ -40,6 +40,7 @@ def getExif(photo_id, retry):
                 print("ERROR when getting Exif")
                 print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+        return exif
     except:
         if retry < max_retries:
             time.sleep(retry_wait)
@@ -48,8 +49,7 @@ def getExif(photo_id, retry):
             print("Retrying: {0}".format(retry))
             getExif(photo_id, retry)
         else:
-            pass
-    return exif
+            return ''
 
 def getLensModel(exif):
     for i in range(len(exif)):
