@@ -73,7 +73,7 @@ for page_number in range(1, number_of_pages+1):
                except:
                    pass
            # add photo to photoset
-           if not procs.isInSet(photo_id, procs.set_id) and hasTag(photo_id, tag):
+           if not procs.isInSet(photo_id, procs.set_id) and procs.hasTag(photo_id, tag):
                try:
                    flickr.photosets.addPhoto(api_key=api_key, photoset_id=procs.set_id, photo_id=photo_id)
                except:

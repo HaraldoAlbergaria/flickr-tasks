@@ -87,7 +87,7 @@ def processPhoto(photo_id, photo_title, user_id, retry):
         # write to Google My Maps' file if photo and location are public
         if photo_perm == 1 and geo_perm == 1 and not isInSet(photo_id, not_map_set_id):
             mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml", "a")
-            mymaps_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<img src=\"{1}\" />{2}]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#icon-1535-0288D1</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, mymaps_thumb_url, photo_url, latitude, longitude))
+            mymaps_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<img src=\"{1}\" />{2}]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#icon-1535-C2185B</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, mymaps_thumb_url, photo_url, latitude, longitude))
             mymaps_file.close()
             print("Added marker to 'Google My Maps!'")
     except:
