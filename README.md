@@ -17,6 +17,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - [**_check_exif/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/check_exif)
     - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it. Also, an e-mail will be sent with the link for the photoset.
 
+- [**_del_img_comments/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/del_img_comments)
+    - **_find-image-comments.py_**: Find, in the user's photostream, comments containg images and generates the script **_delete-comments.py_** to delete them.
+    
 - [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
@@ -75,9 +78,13 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 - **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
 
-- **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+- **check_exif**: Inside directory 'check_exif' create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
     - **mail.py**: Copy the file from 'mail_cfg' to 'check_exif' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
+    
+- **del_img_comments**: Inside directory 'del_img_comments' create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
+    - **procs.py**: There is no need to edit this file, keep it as is.
+    - **skip.py**: List to skip comments from deletion in case any text of the list is found on it.
 
 - **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There are two additional file necessary to run the script:
     - **procs.py**: Open the file and edit the variable _set_id_ with the id of the photoset to where the explored photos will be added.
