@@ -40,7 +40,7 @@ def createDeleteFile():
     delete_file.write('### COMMENTS TO DELETE:\n')
     delete_file.close()
 
-def delImgComments(photo_id, photo_title, photo_url):
+def findImgComments(photo_id, photo_title, photo_url):
 
     delete_file = open("/home/pi/flickr_tasks/del_img_comments/delete-comments.py", 'a')
 
@@ -58,7 +58,9 @@ def delImgComments(photo_id, photo_title, photo_url):
             for s in skip.list:
                 if s in comments_list[i]['_content']:
                     skipped = True
-            if comments_list[i]['author'] != user_id and ('img src' in comments_list[i]['_content'] or '/in/pool' in comments_list[i]['_content']) and not skipped:
+            if comments_list[i]['author'] != user_id and ('img src' in comments_list[i]['_content'] \
+                or ('www.flickr.com/photos' in comments_list[i]['_content'] and not 'hpfilho' in comments_list[i]['_content'] and not '30622510@N02' in comments_list[i]['_content']) \
+                or '/in/pool' in comments_list[i]['_content']) and not skipped:
                 img_cmt_id = comments_list[i]['id']
                 img_cmt_author = comments_list[i]['author']
                 img_cmt_name = comments_list[i]['authorname']
@@ -88,5 +90,5 @@ def delImgComments(photo_id, photo_title, photo_url):
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def processPhoto(photo_id, photo_title, photo_url):
-    delImgComments(photo_id, photo_title, photo_url)
+    findImgComments(photo_id, photo_title, photo_url)
 
