@@ -70,9 +70,10 @@ while True:
     photo_description = flickr.photos.getInfo(photo_id=photo_id)['photo']['description']['_content']
 
     for i in range(len(user_blogs)):
-        permissions = flickr.photos.getPerms(photo_id=photo_id)
-        is_public = permissions['perms']['ispublic']
-        if is_public:
+        info = flickr.photos.getInfo(photo_id=photo_id)['photo']
+        is_public = info['visibility']['ispublic']
+        safety_level = info['safety_level']
+        if is_public and safety_level == '0':
             try:
                 flickr.blogs.postPhoto(api_key=api_key, blog_id=user_blogs[i]['id'], photo_id=photo_id, title=photo_title, description=photo_description)
                 print("Postd: Succesfully posted photo \'{0}\' to \'{1}\'!".format(photo_title, user_blogs[i]['service']))

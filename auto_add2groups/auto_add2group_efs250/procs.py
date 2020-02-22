@@ -67,15 +67,16 @@ def getFocalLength(exif):
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def isOkToAdd(photo_id):
-    permissions = flickr.photos.getPerms(photo_id=photo_id)
-    is_public = permissions['perms']['ispublic']
+    info = flickr.photos.getInfo(photo_id=photo_id)['photo']
+    is_public = info['visibility']['ispublic']
+    safety_level = info['safety_level']
     try:
         exif = getExif(photo_id, 0)
         lens_model = getLensModel(exif)
         focal_length = getFocalLength(exif)
     except:
         return False
-    if is_public and lens_model in data.lens_models and focal_length in data.focal_lengths:
+    if is_public and safety_level == '0' and lens_model in data.lens_models and focal_length in data.focal_lengths:
         return True
     else:
         return False

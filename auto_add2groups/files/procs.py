@@ -29,9 +29,10 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def isOkToAdd(photo_id):
-    permissions = flickr.photos.getPerms(photo_id=photo_id)
-    is_public = permissions['perms']['ispublic']
-    if is_public:
+    info = flickr.photos.getInfo(photo_id=photo_id)['photo']
+    is_public = info['visibility']['ispublic']
+    safety_level = info['safety_level']
+    if is_public and safety_level == '0':
         return True
     else:
         return False
