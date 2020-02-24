@@ -99,28 +99,28 @@ def remPhotoFromGroup(photo_id, photo_title, group_id, group_name):
 
 def processPhoto(photo_id, photo_title, user_id):
     try:
-        favorites = flickr.photos.getFavorites(photo_id=photo_id)
-        info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)
+        favorites = flickr.photos.getFavorites(photo_id=photo_id)['photo']
+        info = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)['photo']
 
-        permissions = flickr.photos.getPerms(photo_id=photo_id)
-        is_public = permissions['perms']['ispublic']
+        is_public = info['visibility']['ispublic']
+        safety_level = info['safety_level']
 
-        photo_favs = int(favorites['photo']['total'])
-        photo_views = int(info['photo']['views'])
+        photo_favs = int(favorites['total'])
+        photo_views = int(info['views'])
         fv_ratio = photo_favs/photo_views
 
         print('favorites: {0}\nviews: {1}\nratio: {2:.1f}%'.format(photo_favs, photo_views, fv_ratio*100), end='')
 
         # Word's Favorites
         in_group = isInGroup(photo_id, wf_group_id)
-        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 1:
+        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and safety_level == 0 and photo_favs >= 1:
             addPhotoToGroup(photo_id, photo_title, wf_group_id, wf_group_name)
         if in_group and (photo_favs == 0 or hasTag(photo_id, not_add_tag)):
             remPhotoFromGroup(photo_id, photo_title, wf_group_id, wf_group_name)
 
         # MAS DE 100 FAVORITAS
         in_group = isInGroup(photo_id, mc_group_id)
-        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 100:
+        if not in_group and not hasTag(photo_id, not_add_tag) and is_public == 1 and safety_level == 0 and photo_favs >= 100:
             addPhotoToGroup(photo_id, photo_title, mc_group_id, mc_group_name)
         if in_group and (photo_favs < 100 or hasTag(photo_id, not_add_tag)):
             remPhotoFromGroup(photo_id, photo_title, mc_group_id, mc_group_name)
@@ -130,7 +130,7 @@ def processPhoto(photo_id, photo_title, user_id):
         summary = open(summary_file, 'r')
         summary_str = summary.read()
         summary.close()
-        if not in_group and ht_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_views >= 100 and photo_favs >= 10:
+        if not in_group and ht_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and safety_level == 0 and photo_views >= 100 and photo_favs >= 10:
             addPhotoToGroup(photo_id, photo_title, ht_group_id, ht_group_name)
             flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=ht_group_tag)
         if in_group and (photo_views < 100 or photo_favs < 10 or hasTag(photo_id, not_add_tag)):
@@ -141,7 +141,7 @@ def processPhoto(photo_id, photo_title, user_id):
         summary = open(summary_file, 'r')
         summary_str = summary.read()
         summary.close()
-        if not in_group and fv_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and photo_favs >= 5 and fv_ratio >= 0.05:
+        if not in_group and fv_group_name not in summary_str and not hasTag(photo_id, not_add_tag) and is_public == 1 and safety_level == 0 and photo_favs >= 5 and fv_ratio >= 0.05:
             addPhotoToGroup(photo_id, photo_title, fv_group_id, fv_group_name)
         if in_group and fv_ratio < 0.05:
             remPhotoFromGroup(photo_id, photo_title, fv_group_id, fv_group_name)
