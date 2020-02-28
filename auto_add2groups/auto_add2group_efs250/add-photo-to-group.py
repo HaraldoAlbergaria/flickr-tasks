@@ -84,7 +84,8 @@ while added < data.group_limit:
         print("Warng: Reached the end of the photostream")
         break
 
-    photo_title = flickr.photos.getInfo(photo_id=photo_id)['photo']['title']['_content']
+    photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
+    photo_title = photo_info['title']['_content']
 
     if procs.isOkToAdd(photo_id):
         try:
@@ -105,6 +106,13 @@ while added < data.group_limit:
             break
     else:
         print("Error: Photo \'{0}\' is not elegible to be added to the group \'{1}\'".format(photo_title, group_name))
+
+    is_public = photo_info['visibility']['ispublic']
+    is_friend = photo_info['visibility']['isfriend']
+    is_family = photo_info['visibility']['isfamily']
+    if not is_public and not is_friend and not is_family:
+        print("Error: Photo \'{0}\' is private. Stopped script to wait it become public until next run.".format(photo_title))
+        break
 
     current_id_file = open_file('w')
     current_id_file.write('{0}'.format(photo_id))

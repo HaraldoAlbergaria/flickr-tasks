@@ -72,6 +72,8 @@ while True:
     for i in range(len(user_blogs)):
         info = flickr.photos.getInfo(photo_id=photo_id)['photo']
         is_public = info['visibility']['ispublic']
+        is_friend = info['visibility']['isfriend']
+        is_family = info['visibility']['isfamily']
         safety_level = info['safety_level']
         if is_public and safety_level == '0':
             try:
@@ -80,6 +82,10 @@ while True:
             except flickrapi.exceptions.FlickrError as e:
                 print("Error: Failure on posting photo \'{0}\' to \'{1}\'".format(photo_title, user_blogs[i]['service']))
                 print(e)
+
+    if not is_public and not is_friend and not is_family:
+        print("Error: Photo \'{0}\' is private. Stopped script to wait it become public until next run.".format(photo_title))
+        break
 
     current_id_file = open_file('w')
     current_id_file.write('{0}'.format(photo_id))
