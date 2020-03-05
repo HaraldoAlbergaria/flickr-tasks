@@ -27,6 +27,19 @@ def open_file(mode):
     file_path = dir_path + '/current_id'
     return open(file_path, mode)
 
+def hasTag(photo_id, tag):
+    try:
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+    except:
+        return False
+    tags = photo_tags['photo']['tags']['tag']
+    for i in range(len(tags)):
+        tag_id = tags[i]['id']
+        tag_raw = tags[i]['raw']
+        if tag_raw == tag :
+            return True
+    return False
+
 
 error_1 = 'Error: 1: Photo not found'
 error_3 = 'Error: 3: Photo already in pool'
@@ -45,6 +58,7 @@ group_id = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']
 group_name = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']['groupname']['_content']
 
 added = 0
+not_add_tag = 'DNA'
 
 while added < data.group_limit:
 
@@ -87,7 +101,7 @@ while added < data.group_limit:
     photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
     photo_title = photo_info['title']['_content']
 
-    if procs.isOkToAdd(photo_id):
+    if procs.isOkToAdd(photo_id) and not hasTag(photo_id, not_add_tag):
         try:
             flickr.groups.pools.add(group_id=group_id, photo_id=photo_id)
             print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
