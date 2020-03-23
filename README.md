@@ -24,7 +24,8 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
 - [**_generate_kml/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_kml)
-    - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the user's photos that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
+    - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the photos on the user's photostream, that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
+    - **_generate-set-kml.py_**: Generates two _kml_ files with the coordinates of the photos on a given user's photoset, that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
     
 - [**_group_admin/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/group_admin)
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
@@ -93,7 +94,7 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
 
 
-- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the script:
+- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the scripts:
     - **procs.py**: If there are photos that must not be included on the map, tag these photos, open the file and edit the variable _not_map_tag_ with the value of the chosen tag.
     - **header.earth.kml** and **header.mymaps.kml**: These files contain the initial code for the generated _kml_ files. **Do not delete any of them, otherwise the generated file will be useless**. The generated files will be **my_flickr_photos.earth.kml** and **my_flickr_photos.mymaps.kml**.
 
