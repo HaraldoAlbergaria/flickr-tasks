@@ -47,15 +47,13 @@ summary.write('SUMMARY REPORT:\n')
 summary.write('-----------------------------------------------\n')
 summary.close()
 
-for pg in range(1, npages+1):
+for pg in range(npages, 0, -1):
     page = flickr.people.getPhotos(user_id=user_id, page=pg)
-    if pg == npages:
-        pp = (npages - 1) * ppage
-        ppage = total - pp
+    ppage = len(page['photos']['photo'])
     print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 
-    for ph in range(0, ppage):
+    for ph in range(ppage-1, -1, -1):
         photo_id = page['photos']['photo'][ph]['id']
         photo_title = page['photos']['photo'][ph]['title']
         print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))

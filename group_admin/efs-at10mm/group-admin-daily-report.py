@@ -82,13 +82,13 @@ for page_number in range(1, number_of_pages+1):
     # add header to photos page
     procs.addPageHeader(report_file_name, page_number, number_of_pages, photos_per_page)
     # iterate over each photo in page
+    photos_per_page=len(pool['photos']['photo'])
     for photo_number in range(photos_per_page):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
         procs.addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number)
-        # add page footer if it is the last photo of the page
-        if photo_number == photos_per_page-1:
-            procs.addPageFooter(report_file_name)
+    # add page footer if it is the last photo of the page
+    procs.addPageFooter(report_file_name)
 
 # write to a file the number of remaining photos in the pool after the last remove
 procs.addLastRemoveRunProcedure(remove_file_name, group_id)

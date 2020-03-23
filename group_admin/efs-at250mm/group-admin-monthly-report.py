@@ -71,9 +71,8 @@ for page_number in range(1, number_of_pages+1):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
         procs.addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number)
-        # add page footer if it is the last photo of the page
-        if photo_number == photos_per_page-1:
-            procs.addPageFooter(report_file_name)
+    # add page footer
+    procs.addPageFooter(report_file_name)
 
 procs.addLastRemoveRunProcedure(remove_file_name, group_id)
 
