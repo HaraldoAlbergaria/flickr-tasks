@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-# This script generates a kml file of all the photos on
-# user's photostream that can be imported on 'Google Earth'
+# This script generates a kml file of all the photos on a given 
+# user's photoset that can be imported on 'Google Earth'
 # and/or 'Googlee My Maps'.
 #
 # Author: Haraldo Albergaria
-# Date  : Nov 20, 2019
+# Date  : Mar 23, 2020
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
