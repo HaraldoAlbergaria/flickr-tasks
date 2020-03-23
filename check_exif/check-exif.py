@@ -49,9 +49,7 @@ print('=============================================')
 
 for pg in range(1, npages+1):
     page = flickr.people.getPhotos(user_id=user_id, page=pg)
-    if pg == npages:
-        pp = (npages - 1) * ppage
-        ppage = total - pp
+    ppage = len(page['photos']['photo'])
     print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 

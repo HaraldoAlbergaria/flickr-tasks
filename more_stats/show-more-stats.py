@@ -39,9 +39,7 @@ photo = 0
 
 for pg in range(1, npages+1):
     page = flickr.people.getPhotos(user_id=user_id, page=pg)
-    if pg == npages:
-        pp = (npages - 1) * ppage
-        ppage = total_photos - pp
+    ppage = len(page['photos']['photo'])
     for ph in range(0, ppage):
         photo += 1
         photo_id = page['photos']['photo'][ph]['id']

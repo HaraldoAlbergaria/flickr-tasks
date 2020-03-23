@@ -47,9 +47,7 @@ print('=============================================')
 
 for pg in range(1, npages+1):
     page = flickr.photosets.getPhotos(photoset_id=photoset_id, user_id=user_id, page=pg)
-    if pg == npages:
-        pp = (npages - 1) * ppage
-        ppage = total - pp
+    ppage = len(page['photoset']['photo'])
     print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 
