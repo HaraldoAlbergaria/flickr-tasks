@@ -38,6 +38,3 @@ xmlns:atom="http://www.w3.org/2005/Atom"> <Document>
         <ListStyle>
         </ListStyle>
     </Style>
-    <Folder>
-        <name>My Photostream</name>
-        <open>1</open>
