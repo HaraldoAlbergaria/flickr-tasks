@@ -94,9 +94,10 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
 
 
-- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the scripts:
-    - **procs.py**: If there are photos that must not be included on the map, tag these photos, open the file and edit the variable _not_map_tag_ with the value of the chosen tag.
+- **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are four additional files necessary to run the scripts:
+    - **procs.py**: There is no need to edit this file, keep it as is.
     - **header.earth.kml** and **header.mymaps.kml**: These files contain the initial code for the generated _kml_ files. **Do not delete any of them, otherwise the generated file will be useless**. The generated files will be **my_flickr_photos.earth.kml** and **my_flickr_photos.mymaps.kml**.
+    - **config.py**: If there are photos that must not be included on the map, create a photoset with these photos, open the file and edit the variable _not_map_set_id_ with the id of the photoset. When running _generate-set-kml.py_, edit the variable _photoset_id_ with the id of the photoset containing the photos that will be included on the map.
 
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
