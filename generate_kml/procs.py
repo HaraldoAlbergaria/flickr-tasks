@@ -18,6 +18,10 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
+# Retries in case of errors
+max_retries = 10
+retry_wait  = 3
+
 
 #===== PROCEDURES =======================================================#
 
@@ -84,8 +88,8 @@ def processPhoto(photo_id, photo_title, user_id, retry):
             mymaps_file.close()
             print("Added marker to 'Google My Maps!'")
     except:
-        if retry < config.max_retries:
-            time.sleep(config.retry_wait)
+        if retry < max_retries:
+            time.sleep(retry_wait)
             retry += 1
             print("ERROR when adding marker to map")
             print("Retrying: {0}".format(retry))
