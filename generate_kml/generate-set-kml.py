@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-# This script generates a kml file of all the photos on a given 
-# user's photoset that can be imported on 'Google Earth'
+# This script generates a kml file of all the photos on a given
+# user's photoset, that can be imported on 'Google Earth'
 # and/or 'Googlee My Maps'.
 #
 # Author: Haraldo Albergaria
-# Date  : Mar 23, 2020
+# Date  : Mar 26, 2020
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
@@ -19,6 +19,7 @@ import flickrapi
 import json
 import api_credentials
 import procs
+import config
 import os
 
 # Credentials
@@ -29,13 +30,10 @@ user_id = api_credentials.user_id
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
-# Id of the photoset
-# to generate kml file
-photoset_id = '72157704077352525'
-photoset_title = flickr.photosets.getInfo(user_id=user_id, photoset_id=photoset_id)['photoset']['title']['_content']
-
 
 #===== MAIN CODE ==============================================================#
+
+photoset_title = flickr.photosets.getInfo(user_id=user_id, photoset_id=config.photoset_id)['photoset']['title']['_content']
 
 os.system('cp /home/pi/flickr_tasks/generate_kml/header.earth.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml')
 os.system('cp /home/pi/flickr_tasks/generate_kml/header.mymaps.kml /home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml')
@@ -48,7 +46,7 @@ mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.k
 mymaps_file.write("    <Folder>\n        <name>{}</name>\n        <open>1</open>\n".format(photoset_title))
 mymaps_file.close()
 
-photos = flickr.photosets.getPhotos(user_id=user_id, photoset_id=photoset_id)
+photos = flickr.photosets.getPhotos(user_id=user_id, photoset_id=config.photoset_id)
 
 npages = int(photos['photoset']['pages'])
 ppage = int(photos['photoset']['perpage'])
@@ -59,7 +57,7 @@ print('Pages: {0} | Per page: {1} | Total: {2}'.format(npages, ppage, total))
 print('=============================================')
 
 for pg in range(1, npages+1):
-    page = flickr.photosets.getPhotos(user_id=user_id, photoset_id=photoset_id, page=pg)
+    page = flickr.photosets.getPhotos(user_id=user_id, photoset_id=config.photoset_id, page=pg)
     ppage = len(page['photoset']['photo'])
     print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
