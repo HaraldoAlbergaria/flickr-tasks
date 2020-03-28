@@ -20,6 +20,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - [**_del_img_comments/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/del_img_comments)
     - **_find-image-comments.py_**: Find, in the user's photostream, comments containg images and generates the script **_delete-comments.py_** to delete them.
     
+- [**_empty_photoset/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/empty_photoset)
+    - **_empty-photoset.py_**: Empties a give photoset, leaving just 1 photo to avoid the photoset being excluded.
+    
 - [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
@@ -87,12 +90,13 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     - **procs.py**: There is no need to edit this file, keep it as is.
     - **skip.py**: List to skip comments from deletion in case any text of the list is found on it.
 
+- **empty_photoset**: Inside directory 'empty_photoset' create a link (or copy) to the file __api_credentials.py__. There is no additional files necessary to run the script and no output file will be generated. **The script needs user inputs, so it must not be run in background**.
+
 - **find_explored**: Inside directory 'find_explored' create a link (or copy) to the file __api_credentials.py__. There are two additional file necessary to run the script:
     - **procs.py**: Open the file and edit the variable _set_id_ with the id of the photoset to where the explored photos will be added.
     - **mail.py**: Copy the file from 'mail_cfg' to 'find_explored' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
 
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
-
 
 - **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are four additional files necessary to run the scripts:
     - **procs.py**: There is no need to edit this file, keep it as is.
@@ -103,7 +107,7 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     - **group_data.py**: Include here the id, alias and url of the group.
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.
 
-- **more_stats**: Inside directory 'more_stats' create a link (or copy) to the file __api_credentials.py__. There is no additional files necessary to run the script and no output file will be generated, **the results will be shown directly on the terminal, so the scripts must not be run in background**.
+- **more_stats**: Inside directory 'more_stats' create a link (or copy) to the file __api_credentials.py__. There is no additional files necessary to run the script and no output file will be generated, **the results will be shown directly on the terminal, so the script must not be run in background**.
 
 ### IMPORTANT WARNING! Please, read before use these scripts:
 **To use these scripts it is necessary a basic knowledge of computer programming in _Python_.** They were written for my specific needs of automating tasks on [my Flickr account](https://www.flickr.com/photos/hpfilho/) and I don't know if they will be useful for anyone else. But, if you want to use them, when using the **group_admin** scripts, always review carefully the results of the generated **_remove-photos.py_** and only after that run it. If you don't do this, there is a chance of removing "good" files (or even end up with an empty group pool!), in case there is any changes in the way _Flickr_ returns the EXIF data or an error in your procedures implementation.  **Please, use these scripts with care and at your own risk.**
