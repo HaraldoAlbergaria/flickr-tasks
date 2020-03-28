@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# This script emptys a photoset, leaving 1 photo to avoid
+# This script empties a photoset, leaving 1 photo to avoid
 # the photoset being excluded.
 #
 # Author: Haraldo Albergaria
