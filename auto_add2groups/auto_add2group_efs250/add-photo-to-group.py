@@ -22,9 +22,13 @@ import data
 import procs
 import os
 
-def open_file(mode):
+def get_run_path():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    file_path = dir_path + '/current_id'
+    run_path = dir_path + '/'
+    return run_path
+
+def open_file(file_name, mode):
+    file_path = get_run_path() + file_name
     return open(file_path, mode)
 
 def hasTag(photo_id, tag):
@@ -60,16 +64,21 @@ group_name = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group
 added = 0
 not_add_tag = 'DNA'
 
+reached_end_path = get_run_path() + 'reached_end'
+if os.path.exists(reached_end_path):
+    rm_str = 'rm ' + reached_end_path
+    os.system(rm_str)
+
 while added < data.group_limit:
 
     try:
-        current_id_file = open_file('r')
+        current_id_file = open_file('current_id', 'r')
     except FileNotFoundError as e:
-        current_id_file = open_file('w')
+        current_id_file = open_file('current_id', 'w')
         current_id_file.close()
-        current_id_file = open_file('r')
+        current_id_file = open_file('current_id', 'r')
     except:
-        print("Error: FATAL")
+        print("Error: FATAL: Can\'t open file \'current_id\'")
         break
 
     current_id = current_id_file.read().replace('\n', '')
@@ -96,6 +105,8 @@ while added < data.group_limit:
     if photo_id == 0:
         print("Warng: No more photos to add to the group \'{0}\'".format(group_name))
         print("Warng: Reached the end of the photostream")
+        reached_end_file = open_file('reached_end', 'w')
+        reached_end_file.close()
         break
 
     photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
@@ -128,7 +139,9 @@ while added < data.group_limit:
         print("Error: Photo \'{0}\' is private. Stopped script to wait it become public until next run.".format(photo_title))
         break
 
-    current_id_file = open_file('w')
+    current_id_file = open_file('current_id', 'w')
     current_id_file.write('{0}'.format(photo_id))
     current_id_file.close()
+
+
 
