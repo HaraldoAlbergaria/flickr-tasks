@@ -20,6 +20,7 @@ import json
 import api_credentials
 import data
 import procs
+import sys
 import os
 
 def get_run_path():
@@ -50,6 +51,7 @@ error_3 = 'Error: 3: Photo already in pool'
 error_5 = 'Error: 5: Photo limit reached'
 error_6 = 'Error: 6: Your Photo has been added to the Pending Queue for this Pool'
 error_7 = 'Error: 7: Your Photo has already been added to the Pending Queue for this Pool'
+error_10 = 'Error: 10: Maximum number of photos in Group Pool'
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -68,6 +70,19 @@ reached_end_path = get_run_path() + 'reached_end'
 if os.path.exists(reached_end_path):
     rm_str = 'rm ' + reached_end_path
     os.system(rm_str)
+
+maxpool_path = get_run_path() + 'maxpool'
+if os.path.exists(maxpool_path):
+    rm_str = 'rm ' + maxpool_path
+    os.system(rm_str)
+
+added_path = get_run_path() + 'added'
+if os.path.exists(added_path):
+    print("Warng: Script execution for group \'{0}\' was aborted".format(group_name))
+    print("Warng: The maximum number of photos has already been added")
+    maxpool_file = open_file('maxpool', 'w')
+    maxpool_file.close()
+    sys.exit()
 
 while added < data.group_limit:
 
@@ -117,13 +132,22 @@ while added < data.group_limit:
             flickr.groups.pools.add(group_id=group_id, photo_id=photo_id)
             print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
             added = added + 1
+            if data.group_full == True:
+                added_file = open_file('added', 'w')
+                added_file.close()
         except flickrapi.exceptions.FlickrError as e:
             if str(e) != error_6:
                 print("Error: Unable to add photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
             else:
                 print("Warng: Photo \'{0}\' not added to the group \'{1}\' yet".format(photo_title, group_name))
                 added = added + 1
+                if data.group_full == True:
+                    added_file = open_file('added', 'w')
+                    added_file.close()
             print(e)
+            if str(e) == error_5 or str(e) == error_10:
+                maxpool_file = open_file('maxpool', 'w')
+                maxpool_file.close()
             if str(e) != error_3 and str(e) != error_7:
                 break
         except:
@@ -142,6 +166,4 @@ while added < data.group_limit:
     current_id_file = open_file('current_id', 'w')
     current_id_file.write('{0}'.format(photo_id))
     current_id_file.close()
-
-
 

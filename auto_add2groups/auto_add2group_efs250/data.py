@@ -15,3 +15,4 @@ lens_models = ( 'EF-S55-250mm f/4-5.6 IS STM',
 focal_lengths = ( '250.0 mm' )
 
 set_250mm_id = '72157666561896128'
+group_full = False

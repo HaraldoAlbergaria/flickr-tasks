@@ -9,3 +9,4 @@ lens_models = ( 'EF-S10-18mm f/4.5-5.6 IS STM',
 focal_lengths = ( '10.0 mm' )
 
 set_10mm_id = '72157694314388675'
+group_full = False
