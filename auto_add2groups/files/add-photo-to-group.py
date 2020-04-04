@@ -78,7 +78,7 @@ if os.path.exists(maxpool_path):
 
 added_path = get_run_path() + 'added'
 if os.path.exists(added_path):
-    print("Warng: Script execution for group \'{0}\' was aborted".format(group_name))
+    print("Warng: Script execution for group \'{0}\' has been aborted".format(group_name))
     print("Warng: The maximum number of photos has already been added")
     maxpool_file = open_file('maxpool', 'w')
     maxpool_file.close()
