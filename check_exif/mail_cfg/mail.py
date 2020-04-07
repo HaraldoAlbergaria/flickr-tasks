@@ -6,5 +6,5 @@
 
 FROM          = ""
 TO            = ""
-SUBJECT       = "\"You have photos in Flickr\'s EXPLORE!!!\""
+SUBJECT       = "\"[Flickr] You have photos which are missing exif information\""
 
