@@ -120,8 +120,9 @@ while added < data.group_limit:
     if photo_id == 0:
         print("Warng: No more photos to add to the group \'{0}\'".format(group_name))
         print("Warng: Reached the end of the photostream")
-        reached_end_file = open_file('reached_end', 'w')
-        reached_end_file.close()
+        if added == 0:
+            reached_end_file = open_file('reached_end', 'w')
+            reached_end_file.close()
         break
 
     photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
