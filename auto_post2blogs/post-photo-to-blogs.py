@@ -10,6 +10,7 @@ import flickrapi
 import json
 import api_credentials
 import os
+import config
 
 def open_file(mode):
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -27,8 +28,9 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
 user_blogs = flickr.blogs.getList()['blogs']['blog']
 
+posted = 0
 
-while True:
+while posted <= config.posts_per_run:
 
     try:
         current_id_file = open_file('r')
@@ -79,6 +81,7 @@ while True:
             try:
                 flickr.blogs.postPhoto(api_key=api_key, blog_id=user_blogs[i]['id'], photo_id=photo_id, title=photo_title, description=photo_description)
                 print("Postd: Succesfully posted photo \'{0}\' to \'{1}\'!".format(photo_title, user_blogs[i]['service']))
+                posted = posted + 1
             except flickrapi.exceptions.FlickrError as e:
                 print("Error: Failure on posting photo \'{0}\' to \'{1}\'".format(photo_title, user_blogs[i]['service']))
                 print(e)

@@ -76,8 +76,9 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 
     _**TIP**: For groups that allow to add only a limited number of photos during a period (eg: 3 photos per day), create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically do this._
 
-- **auto_post2blogs**: Inside directory 'auto_post2blogs' create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
+- **auto_post2blogs**: Inside directory 'auto_post2blogs' create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **current_id**: Include here just the id of the last photo processed by the script in the previous run. If this file is not provided or the id is invalid, the script will create a new one with the id of the last (newest) photo in the photostream. In this case, the script will run over just the photos added after it. To start the script on any photo in the photostream, set here a valid photo id. The photos will then be processed in increasing order of upload time, starting from the next photo to the id that was set here.
+    - **config.py**: Set here the maximum number of photos to post on each script run.
 
 - **auto_tasks**: Inside directory 'auto_tasks' create a new one to your specific need (name it what you want, eg: auto_tags) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There is an additional file necessary to run the script:
     - **procs.py**: Implement here the procedures that will actually process the photos.
