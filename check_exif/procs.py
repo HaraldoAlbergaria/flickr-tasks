@@ -15,6 +15,16 @@ import json
 import api_credentials
 import time
 
+from common import hasTag
+from common import isInSet
+from common import getExif
+from common import getCameraMaker
+from common import getCameraModel
+from common import getLensModel
+from common import getFocalLength
+from common import getAperture
+from common import getISO
+
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
 user_id = api_credentials.user_id
@@ -34,85 +44,6 @@ retry_wait  = 1
 
 # Do not edit any procedure, excepting 'isExifMissing()'
 # Read the comments to know how to do it
-
-def isInSet(photo_id, set_id):
-    try:
-        photo_sets = flickr.photos.getAllContexts(photo_id=photo_id)['set']
-        for i in range(len(photo_sets)):
-            if photo_sets[i]['id'] == set_id:
-                return True
-    except:
-        pass
-    return False
-
-def hasTag(photo_id, tag):
-    try:
-        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    except:
-        return False
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        if tag_raw == tag :
-            return True
-    return False
-
-def getExif(photo_id, retry):
-    try:
-        exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        if len(exif) == 0:
-            while len(exif) == 0 and retry < max_retries:
-                time.sleep(retry_wait)
-                retry += 1
-                print("ERROR when getting Exif")
-                print("Retrying: {0}".format(retry))
-                exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        return exif
-    except:
-        if retry < max_retries:
-            time.sleep(retry_wait)
-            retry += 1
-            print("ERROR when getting Exif")
-            print("Retrying: {0}".format(retry))
-            getExif(photo_id, retry)
-        else:
-            return ''
-
-def getLensModel(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "LensModel" or exif[i]['tag'] == "Lens":
-            return exif[i]['raw']['_content']
-    return ''
-
-def getCameraModel(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "Model":
-            return exif[i]['raw']['_content']
-    return ''
-
-def getCameraMaker(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "Make":
-            return exif[i]['raw']['_content']
-    return ''
-def getFocalLength(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "FocalLength":
-            return exif[i]['raw']['_content']
-    return ''
-
-def getAperture(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "FNumber":
-            return exif[i]['raw']['_content']
-    return ''
-
-def getISO(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "ISO":
-            return exif[i]['raw']['_content']
-    return ''
 
 def addPhotoToSet(set_id, photo_id, photo_title, in_set):
     try:

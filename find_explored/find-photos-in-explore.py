@@ -8,12 +8,12 @@
 # Date  : Oct 21, 2019
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+import flickrapi
+import api_credentials
 import os
 import socket
 import mail
-import flickrapi
-import api_credentials
-import procs
+import config
 
 from datetime import datetime
 from datetime import date
@@ -27,6 +27,9 @@ user_id = api_credentials.user_id
 
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+
+# Id of the explored photos photoset
+photoset_id = config.photoset_id
 
 
 #===== MAIN CODE ==============================================================#
@@ -67,15 +70,15 @@ for page_number in range(1, number_of_pages+1):
         # if a user's photo has been found
         if owner_id == user_id:
            # add tag 'explored' to photo
-           if not procs.hasTag(photo_id, tag):
+           if not hasTag(photo_id, tag):
                try:
                    flickr.photos.addTags(api_key=api_key, photo_id=photo_id, tags=tag)
                except:
                    pass
            # add photo to photoset
-           if not procs.isInSet(photo_id, procs.set_id) and procs.hasTag(photo_id, tag):
+           if not isInSet(photo_id, photoset_id) and hasTag(photo_id, tag):
                try:
-                   flickr.photosets.addPhoto(api_key=api_key, photoset_id=procs.set_id, photo_id=photo_id)
+                   flickr.photosets.addPhoto(api_key=api_key, photoset_id=photoset_id, photo_id=photo_id)
                except:
                    pass
            # add explore annotation to photo description

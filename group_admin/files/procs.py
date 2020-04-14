@@ -12,11 +12,14 @@
 
 
 import flickrapi
+import api_credentials
 import json
 import time
-import api_credentials
 import group_data
 import data
+
+from common import getExif
+
 
 #===== CONSTANTS =================================#
 
@@ -30,40 +33,8 @@ exif_tag = group_data.exif_tags
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 
-# getExif retries
-max_retries = 10
-retry_wait  = 1
-
 
 #===== PROCEDURES =======================================================#
-
-def getExif(photo_id, retry):
-    try:
-        exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        if len(exif) == 0:
-            while len(exif) == 0 and retry < max_retries:
-                time.sleep(retry_wait)
-                retry += 1
-                print("ERROR when getting Exif")
-                print("Retrying: {0}".format(retry))
-                exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-    except:
-        if retry < max_retries:
-            time.sleep(retry_wait)
-            retry += 1
-            print("ERROR when getting Exif")
-            print("Retrying: {0}".format(retry))
-            getExif(photo_id, retry)
-        else:
-            pass
-    return exif
-
-def get(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "": # complete with your own exif tag, e.g.: LensModel, Camera
-            return exif[i]['raw']['_content']
-    return ''
-
 
 def createRemoveScript(remove_file_name):
     remove_file = open(remove_file_name, 'w')
@@ -126,7 +97,7 @@ def addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number
     photo_owner = pool['photos']['photo'][photo_number]['ownername']
     owner_id = pool['photos']['photo'][photo_number]['owner']
     try:
-        exif = getExif(photo_id)
+        exif = getExif(photo_id, 0)
         exif_tag = get(exif) # modify to get your own info
     except:
         exif_tag = 'NO EXIF'

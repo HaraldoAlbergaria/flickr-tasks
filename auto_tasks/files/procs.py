@@ -11,8 +11,8 @@
 
 
 import flickrapi
-import json
 import api_credentials
+import json
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret

@@ -11,9 +11,13 @@
 
 
 import flickrapi
-import json
 import api_credentials
+import json
 import data
+
+from common import getExif
+from common import getCameraModel
+from common import getLensModel
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -28,42 +32,6 @@ lens_tags = data.lens_tags
 
 
 #===== PROCEDURES =======================================================#
-
-def getExif(photo_id):
-    try:
-        exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        if len(exif) == 0:
-            retry = 0
-            while len(exif) == 0 and retry < 10:
-                time.sleep(1)
-                exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                retry = retry + 1
-    except:
-        try:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-            if len(exif) == 0:
-                retry = 0
-                while len(exif) == 0 and retry < 10:
-                    time.sleep(1)
-                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-                    retry = retry + 1
-        except:
-            exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-    return exif
-
-def getCameraModel(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "Model":
-            return exif[i]['raw']['_content']
-    return ''
-
-def getLensModel(exif):
-    for i in range(len(exif)):
-        if exif[i]['tag'] == "LensModel":
-            return exif[i]['raw']['_content']
-    return ''
-
-
 
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 

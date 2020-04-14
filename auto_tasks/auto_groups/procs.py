@@ -11,8 +11,11 @@
 
 
 import flickrapi
-import json
 import api_credentials
+import json
+
+from common import hasTag
+from common import isInGroup
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -48,29 +51,6 @@ summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_groups/summary_groups.log'
 
 
 #===== PROCEDURES =======================================================#
-
-def hasTag(photo_id, tag):
-    try:
-        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    except:
-        return False
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        if tag_raw == tag :
-            return True
-    return False
-
-def isInGroup(photo_id, group_id):
-    try:
-        photo_groups = flickr.photos.getAllContexts(photo_id=photo_id)['pool']
-        for i in range(len(photo_groups)):
-            if photo_groups[i]['id'] == group_id:
-                return True
-    except:
-        pass
-    return False
 
 def addPhotoToGroup(photo_id, photo_title, group_id, group_name):
     try:

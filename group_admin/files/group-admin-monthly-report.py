@@ -17,9 +17,9 @@
 
 
 import flickrapi
+import api_credentials
 import json
 import time
-import api_credentials
 import group_data
 import procs
 

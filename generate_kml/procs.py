@@ -6,10 +6,12 @@
 
 
 import flickrapi
-import json
 import api_credentials
+import json
 import time
 import config
+
+from common import isInSet
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -24,16 +26,6 @@ retry_wait  = 3
 
 
 #===== PROCEDURES =======================================================#
-
-def isInSet(photo_id, set_id):
-    try:
-        photo_sets = flickr.photos.getAllContexts(photo_id=photo_id)['set']
-        for i in range(len(photo_sets)):
-            if photo_sets[i]['id'] == set_id:
-                return True
-    except:
-        pass
-    return False
 
 def getEarthThumbUrl(photo_id, photo_sizes):
     e = 1
