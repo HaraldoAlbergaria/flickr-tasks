@@ -1,1 +1,1 @@
-/home/pi/flickr_tasks/common.py
+../../common.py

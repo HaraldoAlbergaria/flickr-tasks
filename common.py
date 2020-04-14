@@ -1,19 +1,13 @@
 # Common procedures for all scripts
 #
 # Author: Haraldo Albergaria
-# Date  : Jan 01, 2018
+# Date  : Apr 14, 2020
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-###########################################
-#  !!! IMPLEMENT THE PROCEDURES HERE !!!  #
-# !!! MODIFY ONLY THE ANNOTATED LINES !!! #
-###########################################
-
 
 import flickrapi
 import api_credentials
 import time
+
 
 #===== CONSTANTS =================================#
 
