@@ -48,7 +48,7 @@ print('=============================================')
 for pg in range(1, npages+1):
     page = flickr.photosets.getPhotos(photoset_id=photoset_id, user_id=user_id, page=pg)
     ppage = len(page['photoset']['photo'])
-    print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
+    print('\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 
     for ph in range(0, ppage):
@@ -57,4 +57,4 @@ for pg in range(1, npages+1):
         print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))
         procs.processPhoto(photo_id, user_id)
 
-print('\n\n')
+print('\n')

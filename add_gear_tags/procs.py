@@ -36,22 +36,36 @@ lens_tags = data.lens_tags
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
 def processPhoto(photo_id, user_id):
-    exif = getExif(photo_id)
-    camera = getCameraModel(exif).replace(' ', '')
-    lens = getLensModel(exif).replace(' ', '')
-    tags = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)['photo']['tags']['tag']
 
-    current_tags = ''
+    try:
+        exif = getExif(photo_id, 0)
+        camera = getCameraModel(exif).replace(' ', '')
+        lens = getLensModel(exif).replace(' ', '')
+        tags = flickr.photos.getInfo(api_key=api_key, photo_id=photo_id)['photo']['tags']['tag']
 
-    for tag in tags:
-        current_tags = current_tags + ' \"' + tag['raw'] + '\"'
+        current_tags = ''
 
-    camera_tag = camera_tags[camera]
-    lens_tag = lens_tags[lens]
-    gear_tags = camera_tag + ' ' + lens_tag
+        for tag in tags:
+            current_tags = current_tags + ' \"' + tag['raw'] + '\"'
+
+    except FlickrException as e:
+        print("ERROR: Unable to retrieve EXIF data")
+        print(e)
+        return
+
+    try:
+        camera_tag = camera_tags[camera]
+        lens_tag = lens_tags[lens]
+        gear_tags = camera_tag + ' ' + lens_tag
+
+    except Exception as e:
+        print("ERROR: Unable to add tags")
+        print("Key Error: {}".format(e))
+        return
 
     new_tags = gear_tags + ' ' + current_tags
     flickr.photos.setTags(api_key=api_key, photo_id=photo_id, tags=new_tags)
     print("Added tags: {0}".format(gear_tags))
     print(' ')
+
 
