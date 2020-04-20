@@ -12,6 +12,7 @@ import time
 import config
 
 from common import isInSet
+from common import hasTag
 
 api_key = api_credentials.api_key
 api_secret = api_credentials.api_secret
@@ -23,6 +24,8 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 # Retries in case of errors
 max_retries = 10
 retry_wait  = 3
+
+dont_map_tag = 'DontMap'
 
 
 #===== PROCEDURES =======================================================#
@@ -74,7 +77,7 @@ def processPhoto(photo_id, photo_title, user_id, retry):
             earth_file.close()
             print("Added marker to 'Google Earth'!")
         # write to Google My Maps' file if photo and location are public
-        if photo_perm == 1 and geo_perm == 1 and not isInSet(photo_id, config.not_map_set_id):
+        if photo_perm == 1 and geo_perm == 1 and not isInSet(photo_id, config.not_map_set_id) and not hasTag(photo_id, dont_map_tag):
             mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml", "a")
             mymaps_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<img src=\"{1}\" />{2}]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#icon-1535-C2185B</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, mymaps_thumb_url, photo_url, latitude, longitude))
             mymaps_file.close()

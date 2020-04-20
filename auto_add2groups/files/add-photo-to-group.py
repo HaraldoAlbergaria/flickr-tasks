@@ -64,7 +64,7 @@ group_id = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']
 group_name = flickr.urls.lookupGroup(api_key=api_key, url=data.group_url)['group']['groupname']['_content']
 
 added = 0
-not_add_tag = 'DNA'
+dont_add_tag = 'DontAdd'
 
 reached_end_path = get_run_path() + 'reached_end'
 if os.path.exists(reached_end_path):
@@ -128,7 +128,7 @@ while added < data.group_limit:
     photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
     photo_title = photo_info['title']['_content']
 
-    if procs.isOkToAdd(photo_id) and not hasTag(photo_id, not_add_tag):
+    if procs.isOkToAdd(photo_id) and not hasTag(photo_id, dont_add_tag):
         try:
             flickr.groups.pools.add(group_id=group_id, photo_id=photo_id)
             print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
