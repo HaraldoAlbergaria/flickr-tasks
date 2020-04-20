@@ -162,6 +162,8 @@ while added < data.group_limit:
     is_family = photo_info['visibility']['isfamily']
     if not is_public and not is_friend and not is_family:
         print("Error: Photo \'{0}\' is private. Stopped script to wait it become public until next run.".format(photo_title))
+        reached_end_file = open_file('reached_end', 'w')
+        reached_end_file.close()
         break
 
     current_id_file = open_file('current_id', 'w')
