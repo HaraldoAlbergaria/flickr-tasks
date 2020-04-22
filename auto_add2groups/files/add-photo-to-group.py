@@ -155,12 +155,15 @@ while added < data.group_limit:
             print("Error: FATAL")
             break
     else:
-        print("Error: Photo \'{0}\' is not elegible to be added to the group \'{1}\'".format(photo_title, group_name))
+        if hasTag(photo_id, dont_add_tag):
+            print("Error: Photo \'{0}\' is tagged to not be added to any group. Skipped it.".format(photo_title, group_name))
+        else:
+            print("Error: Photo \'{0}\' is not elegible to be added to the group \'{1}\'".format(photo_title, group_name))
 
     is_public = photo_info['visibility']['ispublic']
     is_friend = photo_info['visibility']['isfriend']
     is_family = photo_info['visibility']['isfamily']
-    if not is_public and not is_friend and not is_family:
+    if not hasTag(photo_id, dont_add_tag) and not is_public and not is_friend and not is_family:
         print("Error: Photo \'{0}\' is private. Stopped script to wait it become public until next run.".format(photo_title))
         reached_end_file = open_file('reached_end', 'w')
         reached_end_file.close()
