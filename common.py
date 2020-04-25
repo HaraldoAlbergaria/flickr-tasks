@@ -24,23 +24,25 @@ retry_wait  = 1
 
 #===== PROCEDURES =======================================================#
 
-def getExif(photo_id, retry):
+def getExif(photo_id, retry, print_retry=True):
     try:
         exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         if len(exif) == 0:
             while len(exif) == 0 and retry < max_retries:
                 time.sleep(retry_wait)
                 retry += 1
-                print("ERROR when getting Exif")
-                print("Retrying: {0}".format(retry))
+                if print_retry:
+                    print("ERROR when getting Exif")
+                    print("Retrying: {0}".format(retry))
                 exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
         return exif
     except:
         if retry < max_retries:
             time.sleep(retry_wait)
             retry += 1
-            print("ERROR when getting Exif")
-            print("Retrying: {0}".format(retry))
+            if print_retry:
+                print("ERROR when getting Exif")
+                print("Retrying: {0}".format(retry))
             getExif(photo_id, retry)
         else:
             return ''

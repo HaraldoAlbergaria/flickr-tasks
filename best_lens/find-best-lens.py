@@ -15,8 +15,10 @@ import json
 import time
 import data
 
+from common import getExif
 from common import getCameraMaker
 from common import getCameraModel
+from common import getFocalLength
 
 # Credentials
 api_key = api_credentials.api_key
@@ -30,32 +32,11 @@ flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
 max_retries = 10
 retry_wait  = 1
 
+# report file name
+report_file_name = "best_lens_report.txt"
+
 
 #===== Procedures ===========================================================#
-
-def getExif(photo_id, retry):
-    try:
-        exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        if len(exif) == 0:
-            while len(exif) == 0 and retry < max_retries:
-                time.sleep(retry_wait)
-                retry += 1
-                exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
-        return exif
-    except:
-        if retry < max_retries:
-            time.sleep(retry_wait)
-            retry += 1
-            getExif(photo_id, retry)
-        else:
-            return ''
-
-def getFocalLength(exif):
-    if exif != '':
-        for i in range(len(exif)):
-            if exif[i]['tag'] == "FocalLength":
-                return float(exif[i]['raw']['_content'].replace(' mm', ''))
-    return 0
 
 def getBestLens(data):
     best_lens = [ "", 0 ]
@@ -65,9 +46,9 @@ def getBestLens(data):
             best_lens[1] = data[i][3]
     return best_lens[0]
 
-def genReport(data):
+def genReport(data, file_name):
     best_lens = getBestLens(data)
-    report_file = open("best_lens_report.txt", "w")
+    report_file = open(file_name, "w")
     report_file.write("+==========================================================================+\n")
     report_file.write("| Lens                                               |   Score   | Is Best |\n")
     report_file.write("+==========================================================================+\n")
@@ -80,6 +61,7 @@ def genReport(data):
         else:
             report_file.write("|         |\n")
     report_file.write("+==========================================================================+\n")
+    report_file.close()
 
 
 #===== MAIN CODE ==============================================================#
@@ -103,10 +85,14 @@ for pg in range(1, npages+1):
         photo = photo + 1
         photo_id = page['photos']['photo'][ph]['id']
         try:
-            exif = getExif(photo_id, 0)
+            exif = getExif(photo_id, 0, False)
             camera_maker = getCameraMaker(exif)
             camera_model = getCameraModel(exif)
             focal_length = getFocalLength(exif)
+            if focal_length == '':
+                focal_length = 0
+            else:
+                focal_length = float(focal_length.replace(' mm', ''))
         except:
             break
         if camera_maker == data.camera['maker'] and data.camera['system'] in camera_model:
@@ -116,7 +102,7 @@ for pg in range(1, npages+1):
                     lenses[i][3] = n + 1
         print("Processed photo {0}/{1}".format(photo, total_photos), end='\r')
 
-genReport(lenses)
+genReport(lenses, report_file_name)
 best_lens = getBestLens(lenses)
 print("Best Lens: {}".format(best_lens))
 
