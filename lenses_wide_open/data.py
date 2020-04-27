@@ -17,16 +17,12 @@ camera = {
 }
 
 
-# Lenses to check the number of photos that were taken with wide open f/number,
-# or in case mode is 'max_open' the ones that were taken with an f/number
-# below the defined threshold.
+# Lenses to check the number of photos that were taken with a wide open
+# diaphragm (minum f/number), or in case mode is 'max_open' the ones 
+# that were taken with an f/number below the defined threshold.
 #
 # The fields are:
 # [ 'Lens', min f/number, number of photos, total of photos ]
-#
-# The 'lens score' is the number of photos in the user's photostream
-# taken with the camera and system defined above and with a focal length
-# that is covered by the 'Lens'. Its initial value must always be 0.
 
 lenses = [
     [ 'Canon EF-S 10-18mm f/4.5-5.6 IS STM',       4.5, 0, 0 ],
