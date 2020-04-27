@@ -49,9 +49,9 @@ def getBestLens(data):
 def genReport(data, file_name):
     best_lens = getBestLens(data)
     report_file = open(file_name, "w")
-    report_file.write("+==========================================================================+\n")
+    report_file.write("+--------------------------------------------------------------------------+\n")
     report_file.write("| Lens                                               |   Score   | Is Best |\n")
-    report_file.write("+==========================================================================+\n")
+    report_file.write("+--------------------------------------------------------------------------+\n")
     for i in range(len(data)):
         lens = data[i][0]
         score = data[i][3]
@@ -60,7 +60,7 @@ def genReport(data, file_name):
             report_file.write("|    *    |\n")
         else:
             report_file.write("|         |\n")
-    report_file.write("+==========================================================================+\n")
+    report_file.write("+--------------------------------------------------------------------------+\n")
     report_file.close()
 
 

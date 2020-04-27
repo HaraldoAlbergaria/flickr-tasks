@@ -40,15 +40,15 @@ report_file_name = "lenses_wide_open_report.txt"
 
 def genReport(data, file_name):
     report_file = open(file_name, "w")
-    report_file.write("+=========================================================================+\n")
+    report_file.write("+-------------------------------------------------------------------------+\n")
     report_file.write("| Lens                                               |  Photos  |  Total  |\n")
-    report_file.write("+=========================================================================+\n")
+    report_file.write("+-------------------------------------------------------------------------+\n")
     for i in range(len(data)):
         lens = data[i][0]
         photos = data[i][2]
         total = data[i][3]
         report_file.write("| {0:<50.50} | {1:>8} | {2:>7} |\n".format(lens, photos, total))
-    report_file.write("+=========================================================================+\n")
+    report_file.write("+-------------------------------------------------------------------------+\n")
     report_file.close()
 
 
@@ -100,4 +100,4 @@ for pg in range(1, npages+1):
 
 genReport(lenses, report_file_name)
 
-print("\nFinished! Open file {} to see the results.".format(report_file_name))
+print("\nFinished! Open file \'{}\' to see the results.".format(report_file_name))
