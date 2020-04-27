@@ -36,6 +36,10 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - [**_group_admin/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/group_admin)
     - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
     - **_group-admin-monthly-report.py_**: Same as above, but the report shows all photos since the group creation and is good to catch photos the should have been removed but for any reason were not. This can happen, for example, if photos are removed of the group by the owner after others been added, which will make some added photos do not show up in the daily report. Made to be run at least once a month.
+
+- [**_lenses_wide_open/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/lenses_wide_open)
+    - **_find-lenses-wide-open.py_**: From a list of lenses, finds the number of photos taken with the lens diaphragm wide open, i.e. at the minimum _f/number_. Can be used also to find the number of photos taken with a _f/number_ below a given value, useful if you are thinking to replace a lens with one that has a lower minimum _f/number_ and like to know how many photos in your photostream were taken below this value to have an idea of the impact of the change.
+
 - [**_more_stats/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/more_stats)
     - **_show_more_stats.py_**: Calculates and show the total and medium numbers of views, favorites and comments on the user's photostream.
 
@@ -117,6 +121,11 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **group_data.py**: Include here the id, alias and url of the group.
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.
+
+- **lenses_wide_open**: Inside directory 'lenses_wide_open' create a link (or copy) to the file __api_credentials.py__. There is one additional file necessary to run the script:
+    - **data.py**: Include here the camera maker, system and the list of lenses following the instruction inside the file. To find the number of photos taken with a _f/number_ below a given value, change the 'mode' variable value from 'wide_open' to 'max_open'. 
+
+    _**IMPORTANT NOTICE:** The progress will be shown directly on the terminal, so it is recommended to not run the script in background. It will be generated a report file with the number of photos taken with the diaphragm wide open for each lens._
 
 - **more_stats**: Inside directory 'more_stats' create a link (or copy) to the file __api_credentials.py__. There is no additional files necessary to run the script and no output file will be generated.
 
