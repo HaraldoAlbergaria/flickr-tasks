@@ -54,9 +54,10 @@ photos_per_page = int(pool['photos']['perpage'])
 # set output files names
 report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.monthly.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
+html_file_name   = '/home/pi/github/pages/flickr-group-admin-reports/{0}.monthly.html'.format(group_name).replace(' ','_')
 
 # create and add header to report file
-procs.addReportHeader(report_file_name, group_name, total_of_photos)
+procs.addReportHeader(report_file_name, html_file_name, group_name, total_of_photos)
 # create remove script
 procs.createRemoveScript(remove_file_name)
 
@@ -65,14 +66,14 @@ for page_number in range(1, number_of_pages+1):
     pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id, page=page_number)
     photos_per_page = len(pool['photos']['photo'])
     # add header to photos page
-    procs.addPageHeader(report_file_name, page_number, number_of_pages, photos_per_page)
+    procs.addPageHeader(report_file_name, html_file_name, page_number, number_of_pages, photos_per_page)
     # iterate over each photo in page
     for photo_number in range(photos_per_page):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
-        procs.addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number)
+        procs.addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_number, photo_number)
     # add page footer
-    procs.addPageFooter(report_file_name)
+    procs.addPageFooter(report_file_name, html_file_name)
 
 procs.addLastRemoveRunProcedure(remove_file_name, group_id)
 

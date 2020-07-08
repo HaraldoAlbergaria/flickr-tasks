@@ -56,6 +56,7 @@ photos_per_page = int(pool['photos']['perpage'])
 # set output files names
 report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.daily.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
+html_file_name   = '/home/pi/flickr_tasks/group_admin/{0}/{1}.daily.html'.format(group_alias, group_name).replace(' ','_')
 
 number_of_photos_in_last_remove = last_remove_run.number_of_photos
 added_photos = total_of_photos - number_of_photos_in_last_remove
@@ -72,7 +73,7 @@ else:
     number_of_pages = 1
 
 # create and add header to report file
-procs.addReportHeader(report_file_name, group_name, added_photos)
+procs.addReportHeader(report_file_name, html_file_name, group_name, added_photos)
 # create remove script
 procs.createRemoveScript(remove_file_name)
 
@@ -80,15 +81,15 @@ procs.createRemoveScript(remove_file_name)
 for page_number in range(1, number_of_pages+1):
     pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id, page=page_number, per_page=photos_per_page)
     # add header to photos page
-    procs.addPageHeader(report_file_name, page_number, number_of_pages, photos_per_page)
+    procs.addPageHeader(report_file_name, html_file_name, page_number, number_of_pages, photos_per_page)
     # iterate over each photo in page
     photos_per_page=len(pool['photos']['photo'])
     for photo_number in range(photos_per_page):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
-        procs.addPhoto(report_file_name, remove_file_name, pool, page_number, photo_number)
+        procs.addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_number, photo_number)
     # add page footer if it is the last photo of the page
-    procs.addPageFooter(report_file_name)
+    procs.addPageFooter(report_file_name, html_file_name)
 
 # write to a file the number of remaining photos in the pool after the last remove
 procs.addLastRemoveRunProcedure(remove_file_name, group_id)
