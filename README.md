@@ -29,6 +29,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 - [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
     - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
+- [**_generate_map/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_map)
+    - **_generate-map.py_**: Generates a html with javascript code to load a map from [MapBox]() with the coordinates of the photos on the user's photostream.
+
 - [**_generate_kml/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_kml)
     - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the photos on the user's photostream, that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
     - **_generate-set-kml.py_**: Generates two _kml_ files with the coordinates of the photos on a given user's photoset, that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
@@ -112,6 +115,11 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     - **mail.py**: Copy the file from 'mail_cfg' to 'find_explored' directory and edit it to add the e-mail addresses and change the e-mail subject if wanted.
 
     _**TIP**: Create a [cron](https://opensource.com/article/17/11/how-use-cron-linux) to automatically check for photos in Explore and configure it to run at least once a day._
+
+- **generate_map**: Inside directory 'generate_map' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the scripts:
+    - **procs.py**: There is no need to edit this file, keep it as is.
+    - **header.html**: This file contains the initial code for the generated _html_ file. **Do not delete any of them, otherwise the generated file will be useless**. The generated file will be **flickr_photos_map.html**.
+    - **config.py**: If there are photos that must not be included on the map, create a photoset with these photos, open the file and edit the variable _not_map_set_id_ with the id of the photoset.
 
 - **generate_kml**: Inside directory 'generate_kml' create a link (or copy) to the file __api_credentials.py__. There are four additional files necessary to run the scripts:
     - **procs.py**: There is no need to edit this file, keep it as is.
