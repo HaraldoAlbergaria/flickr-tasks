@@ -30,7 +30,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
    - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
 
 ### [**_generate_map/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_map)
-    - **_generate-map.py_**: Generates a html with javascript code to load a map from [Mapbox](https://www.mapbox.com/) with the coordinates of the photos on the user's photostream.
+   - **_generate-map.py_**: Generates a html with javascript code to load a map from [_Mapbox_](https://www.mapbox.com/) with the coordinates of the photos on the user's photostream.
 
 ### [**_generate_kml/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/generate_kml)
    - **_generate-kml.py_**: Generates two _kml_ files with the coordinates of the photos on the user's photostream, that can be imported on [_Google Earth™_](https://www.google.com/earth/) and/or [_Google My Maps™_](https://www.google.com/maps/about/mymaps/).
