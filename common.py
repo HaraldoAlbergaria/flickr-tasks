@@ -97,24 +97,30 @@ def getISO(exif):
     return ''
 
 def hasTag(photo_id, tag):
-    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        if tag_raw == tag :
-            return True
+    try:
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+        tags = photo_tags['photo']['tags']['tag']
+        for i in range(len(tags)):
+            tag_id = tags[i]['id']
+            tag_raw = tags[i]['raw']
+            if tag_raw == tag :
+                return True
+    except:
+        pass
     return False
 
 def hasTagRemove(photo_id, tag):
-    photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
-    tags = photo_tags['photo']['tags']['tag']
-    for i in range(len(tags)):
-        tag_id = tags[i]['id']
-        tag_raw = tags[i]['raw']
-        if tag_raw == tag :
-            flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
-            return True
+    try:
+        photo_tags = flickr.tags.getListPhoto(photo_id=photo_id)
+        tags = photo_tags['photo']['tags']['tag']
+        for i in range(len(tags)):
+            tag_id = tags[i]['id']
+            tag_raw = tags[i]['raw']
+            if tag_raw == tag :
+                flickr.photos.removeTag(api_key=api_key, tag_id=tag_id)
+                return True
+    except:
+        pass
     return False
 
 def isInGroup(photo_id, group_id):

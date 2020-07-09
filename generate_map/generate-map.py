@@ -17,9 +17,13 @@
 import flickrapi
 import json
 import api_credentials
-import procs
 import config
 import os
+
+from common import hasTag
+from common import isInSet
+from procs import createMarker
+
 
 # Credentials
 api_key = api_credentials.api_key
@@ -40,26 +44,74 @@ npages = int(photos['photos']['pages'])
 ppage = int(photos['photos']['perpage'])
 total = int(photos['photos']['total'])
 
-print('=============================================')
-print('Pages: {0} | Per page: {1} | Total: {2}'.format(npages, ppage, total))
-print('=============================================')
+coordinates = []
+photos_base_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
 
+n = 0
+print('Extracting coordinates and ids of the photos...')
 for pg in range(1, npages+1):
     page = flickr.people.getPhotos(user_id=user_id, page=pg)
     ppage = len(page['photos']['photo'])
-    print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
-    print('---------------------------------------------')
 
     for ph in range(0, ppage):
+        n = n + 1
         photo_id = page['photos']['photo'][ph]['id']
-        photo_title = page['photos']['photo'][ph]['title']
-        print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))
-        set_id = procs.processPhoto(photo_id, photo_title, user_id, 0)
 
-print('\n\n')
+        try:
+            photo_perm = flickr.photos.getPerms(api_ky=api_key, photo_id=photo_id)['perms']['ispublic']
+            geo_perm = flickr.photos.geo.getPerms(api_ky=api_key, photo_id=photo_id)['perms']['ispublic']
+        except:
+            photo_perm = 0
+            geo_perm = 0
+
+        exists = False
+        if photo_perm == 1 and geo_perm == 1 and not isInSet(photo_id, config.not_map_set_id) and not hasTag(photo_id, config.dont_map_tag):
+            try:
+                location = flickr.photos.geo.getLocation(api_ky=api_key, photo_id=photo_id)
+                longitude = location['photo']['location']['longitude']
+                latitude = location['photo']['location']['latitude']
+                for coord in coordinates:
+                    if longitude == coord[0][0] and latitude == coord[0][1]:
+                        coord[1].append(photo_id)
+                        exists = True
+                if not exists:
+                    coordinates.append([[longitude, latitude], [photo_id]])
+            except:
+                pass
+
+        print('Processed photo {0}/{1}'.format(n, total), end='\r')
+
+print('')
+
+m = 0
+n_markers = len(coordinates)
+
+print('Adding markers...')
+for marker_info in coordinates:
+    m = m + 1
+    createMarker(marker_info, photos_base_url, user_id, 0)
+    print('Added marker {0}/{1}'.format(m, n_markers), end='\r')
 
 html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
-html_file.write("\n    locations.forEach(addMarker);\n\n    function addMarker(value) {\n        new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})\n        	.setLngLat(value[0])\n            .setPopup(new mapboxgl.Popup({closeButton:false}).setHTML(value[1]))\n            .addTo(map);\n    }\n\n</script>\n\n</body>\n</html>\n")
+html_file.write("\n    locations.forEach(addMarker);\n\n    function addMarker(value) {\n        new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})\n        	.setLngLat(value[0])\n            .setPopup(new mapboxgl.Popup({closeButton:false,closeOnMove:true,maxWidth:'566px'}).setHTML(value[1]))\n            .addTo(map);\n    }\n\n</script>\n\n")
+
+# Add Statcounter code
+html_file.write('<!-- Default Statcounter code for dev website https://e-haraldo.dev -->\n')
+html_file.write('<script type=\"text/javascript\">\n')
+html_file.write('var sc_project=12350653;\n')
+html_file.write('var sc_invisible=1;\n')
+html_file.write('var sc_security="04eece67";\n')
+html_file.write('var sc_https=1;\n')
+html_file.write('var sc_remove_link=1;\n')
+html_file.write('</script>\n')
+html_file.write('<script type=\"text/javascript\"\n')
+html_file.write('src=\"https://www.statcounter.com/counter/counter.js\" async></script>\n')
+html_file.write('<noscript><div class=\"statcounter\"><img class=\"statcounter\"\n')
+html_file.write('src=\"https://c.statcounter.com/12350653/0/04eece67/1/\"\n')
+html_file.write('alt=\"Web Analytics Made Easy - StatCounter\"></div></noscript>\n')
+html_file.write('<!-- End of Statcounter Code -->\n')
+
+html_file.write("\n</body>\n</html>\n\n")
 html_file.close()
 
-os.system('cp /home/pi/flickr_tasks/generate_map/map.html /home/pi/github/pages/flickr-photos-map/index.html')
+print('Finished!')

@@ -12,16 +12,47 @@
 </style>
 </head>
 <body>
+<style>
+#menu {
+    position: absolute;
+    background: #fff;
+    padding: 10px;
+    font-family: 'Open Sans', sans-serif;
+}
+</style>
+ 
 <div id="map"></div>
+<div id="menu">
+<input id="streets-v11" type="radio" name="rtoggle" value="streets" checked="checked" />
+<label for="streets-v11">streets</label>
+<input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors" />
+<label for="outdoors-v11">outdoors</label>
+<input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
+<label for="satellite-v9">satellite</label>
+</div>
 
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyYWxkby1maWxobyIsImEiOiJja2Nid2dwNW4wNGhvMndtcHpkNHMwdGx4In0.lPEvmCbsrjIGzuC1HjyJZw';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyYWxkby1maWxobyIsImEiOiJja2NlNHVqZXowM3VzMnJwYnIxZm1nNHpwIn0.V1XC2nBlBW8GmbibpSO36w';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-30, 15],
+        center: [-40, 15],
         zoom: 2
     });
+	
+    map.addControl(new mapboxgl.NavigationControl());
+
+    var layerList = document.getElementById('menu');
+    var inputs = layerList.getElementsByTagName('input');
+ 
+    function switchLayer(layer) {
+        var layerId = layer.target.id;
+        map.setStyle('mapbox://styles/mapbox/' + layerId);
+    }
+ 
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].onclick = switchLayer;
+    }
     
     var locations = [];
 

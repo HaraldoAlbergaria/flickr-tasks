@@ -63,11 +63,16 @@ def addReportHeader(report_file_name, html_file_name, group_name, photos_in_repo
     report_file.write('+==============================================================================================================================================================================+\n')
     report_file.close()
 
+    now = datetime.now()
     report_file = open(html_file_name,'w')
     report_file.write('<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n<title>Group Admin Report</title>\n')
     report_file.write('<style>\nbody {\n  font-family: courier;\n  font-size: 12px;\n  margin: 10;\n  padding: 0;\n}\n</style>\n</head>\n\n<body>\n')
+    report_file.write('Updated at: {}<br><br>\n'.format(datetime.strftime(now, "%d/%m/%y %H:%M:%S")))
     report_file.write('+==============================================================================================================================================================================+<br>\n')
-    report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTOS ADDED                                    |<br>\n'.format(group_name, photos_in_report).replace(' ','&nbsp;'))
+    if photos_in_report > 1:
+        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTOS ADDED                                    |<br>\n'.format(group_name, photos_in_report).replace(' ','&nbsp;'))
+    else:
+        report_file.write('|                 GROUP ADMIN REPORT                     {0:30.30}                                {1:>7} PHOTO ADDED                                     |<br>\n'.format(group_name, photos_in_report).replace(' ','&nbsp;'))
     report_file.write('+==============================================================================================================================================================================+<br>\n')
     report_file.close()
 
