@@ -93,7 +93,7 @@ for marker_info in coordinates:
     print('Added marker {0}/{1}'.format(m, n_markers), end='\r')
 
 html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
-html_file.write("\n    locations.forEach(addMarker);\n\n    function addMarker(value) {\n        new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})\n        	.setLngLat(value[0])\n            .setPopup(new mapboxgl.Popup({closeButton:false,closeOnMove:true,maxWidth:'566px'}).setHTML(value[1]))\n            .addTo(map);\n    }\n\n</script>\n\n")
+html_file.write("\n        return locations;\n\n    }\n\n</script>\n\n")
 
 # Add Statcounter code
 html_file.write('<!-- Default Statcounter code for dev website https://e-haraldo.dev -->\n')
@@ -114,4 +114,5 @@ html_file.write('<!-- End of Statcounter Code -->\n')
 html_file.write("\n</body>\n</html>\n\n")
 html_file.close()
 
+print('')
 print('Finished!')

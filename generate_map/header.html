@@ -1,38 +1,46 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<title>Haraldo Albergaria's Photos Map</title>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
-<style>
+<!DOCTYPE html> <html> <head> <meta charset="utf-8" /> <title>Haraldo Albergaria's Photos Map</title> <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" /> <script 
+src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script> <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" /> <style>
 	body { margin: 0; padding: 0; }
 	#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-</style>
-</head>
-<body>
-<style>
+</style> </head> <body> <style>
 #menu {
     position: absolute;
     background: #fff;
     padding: 10px;
     font-family: 'Open Sans', sans-serif;
 }
+ul.flags_icons {
+  bottom: 0;
+  position: fixed;
+  list-style-type: none;
+  background: #fff;
+  margin-bottom: 50px;
+  width: 40px;
+  padding: 10px 10px 6px 10px;
+}
+li.flags_icons {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+img.icon {
+  width: 40px;
+  height: 40px;
+}
 </style>
  
-<div id="map"></div>
-<div id="menu">
-<input id="streets-v11" type="radio" name="rtoggle" value="streets" checked="checked" />
-<label for="streets-v11">streets</label>
-<input id="outdoors-v11" type="radio" name="rtoggle" value="outdoors" />
-<label for="outdoors-v11">outdoors</label>
-<input id="satellite-v9" type="radio" name="rtoggle" value="satellite" />
-<label for="satellite-v9">satellite</label>
-</div>
-
-<script>
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyYWxkby1maWxobyIsImEiOiJja2NlNHVqZXowM3VzMnJwYnIxZm1nNHpwIn0.V1XC2nBlBW8GmbibpSO36w';
+<div id="map"></div> <div id="menu"> <input id="streets-v11" type="radio" name="rtoggle" value="streets" checked="checked" /> <label for="streets-v11">streets</label> <input id="outdoors-v11" type="radio" name="rtoggle" 
+value="outdoors" /> <label for="outdoors-v11">outdoors</label> <input id="satellite-v9" type="radio" name="rtoggle" value="satellite" /> <label for="satellite-v9">satellite</label> </div>
+    <ul class="flags_icons">
+      <li class="flags_icons"><img class="icon" src="icons/worldwide.svg" alt="World" onclick="showWorld()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/brazil.svg" alt="Brazil" onclick="showBrazil()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/united-states.svg" alt="United States" onclick="showUSA()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/argentina.svg" alt="Argentina" onclick="showArgentina()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/paraguay.svg" alt="Paraguay" onclick="showParaguay()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/italy.svg" alt="Italy" onclick="showItaly()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/vatican.svg" alt="Vatican City" onclick="showVatican()" /></li>
+      <li class="flags_icons"><img class="icon" src="icons/croatia.svg" alt="Croatia" onclick="showCroatia()" /></li>
+    </ul> <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyYWxkby1maWxobyIsImEiOiJja2NlNmozZ3gwNWdxMnJwaHRveHNuMDE3In0.UFRldAO_nZrNCt6inNHDcQ';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -41,7 +49,6 @@
     });
 	
     map.addControl(new mapboxgl.NavigationControl());
-
     var layerList = document.getElementById('menu');
     var inputs = layerList.getElementsByTagName('input');
  
@@ -54,5 +61,54 @@
         inputs[i].onclick = switchLayer;
     }
     
-    var locations = [];
-
+	var locations = getLocations();
+	
+	locations.forEach(addMarker);
+    function addMarker(value) {
+        new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})
+        	.setLngLat(value[0])
+            .setPopup(new mapboxgl.Popup({closeButton:false,closeOnMove:true,maxWidth:'566px'}).setHTML(value[1]))
+            .addTo(map);
+    }
+    function showWorld() {
+		map.setZoom(2.0);
+	    map.panTo([-40, 15]);
+	}
+	
+	function showBrazil() {
+		map.setZoom(4.0);
+	    map.panTo([-47.942175, -15.720065]);
+	}
+	
+	function showUSA() {
+		map.setZoom(3.7);
+	    map.panTo([-98.553336, 38.001705]);
+	}
+	
+	function showArgentina() {
+		map.setZoom(11.3);
+	    map.panTo([-54.514142, -25.632677]);
+	}
+	
+	function showParaguay() {
+		map.setZoom(16.0);
+	    map.panTo([-54.597234, -25.413668]);
+	}
+	
+	function showItaly() {
+		map.setZoom(7.5);
+	    map.panTo([13.663935, 41.369012]);
+	}
+	
+	function showVatican() {
+		map.setZoom(16.4);
+	    map.panTo([12.454578, 41.905047]);
+	}
+	
+	function showCroatia() {
+		map.setZoom(6.7);
+	    map.panTo([16.494044, 44.39349]);
+	}
+	function getLocations() {
+	
+	var locations = [];

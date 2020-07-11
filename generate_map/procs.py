@@ -37,7 +37,7 @@ def createMarker(marker_info, base_url, user_id, retry):
         latitude = marker_info[0][1]
 
         html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
-        html_file.write("    locations.push([[{0}, {1}], \"".format(longitude, latitude))
+        html_file.write("        locations.push([[{0}, {1}], \"".format(longitude, latitude))
 
         for photo_id in marker_info[1]:
             # get photo information
