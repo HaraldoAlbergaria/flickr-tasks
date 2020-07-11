@@ -28,8 +28,8 @@ ul.flags_icons {
   list-style-type: none;
   background: #fff;
   margin-bottom: 50px;
-  width: 40px;
-  padding: 10px 10px 6px 10px;
+  width: 30px;
+  padding: 5px 10px 1px 10px;
 }
 
 li.flags_icons {
@@ -47,8 +47,8 @@ li.flags_icons {
 }
 
 img.icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 a:link {
@@ -78,19 +78,19 @@ a:hover {
 <label for="satellite-v9">satellite</label>
 </div>
 
-    <ul class="flags_icons">
-      <li class="flags_icons"><img class="icon" src="icons/worldwide.svg" alt="World" onclick="showWorld()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/brazil.svg" alt="Brazil" onclick="showBrazil()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/united-states.svg" alt="United States" onclick="showUSA()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/argentina.svg" alt="Argentina" onclick="showArgentina()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/paraguay.svg" alt="Paraguay" onclick="showParaguay()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/italy.svg" alt="Italy" onclick="showItaly()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/vatican.svg" alt="Vatican City" onclick="showVatican()" /></li>
-      <li class="flags_icons"><img class="icon" src="icons/croatia.svg" alt="Croatia" onclick="showCroatia()" /></li>
-    </ul>
+<ul class="flags_icons">
+    <li class="flags_icons"><img class="icon" src="icons/worldwide.svg" title="World" alt="World" onclick="showWorld()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/brazil.svg" title="Brazil" alt="Brazil" onclick="showBrazil()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/united-states.svg" title="United States" alt="United States" onclick="showUSA()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/argentina.svg" title="Argentina" alt="Argentina" onclick="showArgentina()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/paraguay.svg" title="Paraguay" alt="Paraguay" onclick="showParaguay()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/italy.svg" title="Italy" alt="Italy" onclick="showItaly()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/vatican.svg" title="Vatican City" alt="Vatican City" onclick="showVatican()" /></li>
+    <li class="flags_icons"><img class="icon" src="icons/croatia.svg" title="Croatia" alt="Croatia" onclick="showCroatia()" /></li>
+</ul>
 
 <div class="attribution">
-	Icons made by <a href="https://www.flaticon.com/authors/turkkub" title="turkkub">turkkub</a> (World) and <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> (Countries) from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    Icons made by <a href="https://www.flaticon.com/authors/turkkub" title="turkkub">turkkub</a> (World) and <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> (Countries) from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
 </div>
 	
 <script>
@@ -134,7 +134,7 @@ a:hover {
 	}
 	
 	function showBrazil() {
-		map.setZoom(4.0);
+		map.setZoom(3.7);
 	    map.panTo([-47.942175, -15.720065]);
 	}
 	
@@ -164,7 +164,7 @@ a:hover {
 	}
 	
 	function showCroatia() {
-		map.setZoom(6.7);
+		map.setZoom(6.5);
 	    map.panTo([16.494044, 44.39349]);
 	}
 
