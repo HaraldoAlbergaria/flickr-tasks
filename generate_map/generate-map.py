@@ -48,7 +48,7 @@ coordinates = []
 photos_base_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
 
 n = 0
-print('Extracting coordinates and ids of the photos...')
+print('Extracting photos coordinates and ids...')
 for pg in range(1, npages+1):
     page = flickr.people.getPhotos(user_id=user_id, page=pg)
     ppage = len(page['photos']['photo'])
@@ -96,19 +96,19 @@ html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
 html_file.write("\n        return locations;\n\n    }\n\n</script>\n\n")
 
 # Add Statcounter code
-html_file.write('<!-- Default Statcounter code for dev website https://e-haraldo.dev -->\n')
+html_file.write('<!-- Default Statcounter code for photo website https://haraldo-albergaria.photos/ -->\n')
 html_file.write('<script type=\"text/javascript\">\n')
-html_file.write('var sc_project=12350653;\n')
+html_file.write('var sc_project=12357551;\n')
 html_file.write('var sc_invisible=1;\n')
-html_file.write('var sc_security="04eece67";\n')
+html_file.write('var sc_security="b15a6b74";\n')
 html_file.write('var sc_https=1;\n')
 html_file.write('var sc_remove_link=1;\n')
 html_file.write('</script>\n')
 html_file.write('<script type=\"text/javascript\"\n')
 html_file.write('src=\"https://www.statcounter.com/counter/counter.js\" async></script>\n')
 html_file.write('<noscript><div class=\"statcounter\"><img class=\"statcounter\"\n')
-html_file.write('src=\"https://c.statcounter.com/12350653/0/04eece67/1/\"\n')
-html_file.write('alt=\"Web Analytics Made Easy - StatCounter\"></div></noscript>\n')
+html_file.write('src=\"https://c.statcounter.com/12357551/0/b15a6b74/1/\"\n')
+html_file.write('alt=\"Web Analytics"></div></noscript>\n')
 html_file.write('<!-- End of Statcounter Code -->\n')
 
 html_file.write("\n</body>\n</html>\n\n")
