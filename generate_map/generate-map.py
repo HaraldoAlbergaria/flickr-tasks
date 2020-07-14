@@ -96,7 +96,8 @@ html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
 html_file.write("\n        return locations;\n\n    }\n\n</script>\n\n")
 
 # Add Statcounter code
-html_file.write('<!-- Default Statcounter code for photo website https://haraldo-albergaria.photos/ -->\n')
+html_file.write('<!-- Default Statcounter code for photo website\n')
+html_file.write('https://haraldo-albergaria.photos/ -->\n')
 html_file.write('<script type=\"text/javascript\">\n')
 html_file.write('var sc_project=12357551;\n')
 html_file.write('var sc_invisible=1;\n')
