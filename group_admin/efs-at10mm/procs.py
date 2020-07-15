@@ -109,6 +109,7 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     photo_title = pool['photos']['photo'][photo_number]['title']
     photo_owner = pool['photos']['photo'][photo_number]['ownername']
     owner_id = pool['photos']['photo'][photo_number]['owner']
+    photo_url = flickr.people.getInfo(api_key=api_key, user_id=owner_id)['person']['photosurl']['_content'] + photo_id
     date_added = pool['photos']['photo'][photo_number]['dateadded']
     try:
         exif = getExif(photo_id, 0)
@@ -133,7 +134,7 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     report_file = open(html_file_name,'a')
     report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date).replace(' ','&nbsp;'))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
-        report_file.write('| REMOVE |<br>\n'.replace(' ','&nbsp;'))
+        report_file.write('| <ahref=\"{}\">REMOVE</a> |<br>\n'.format(photo_url).replace(' ','&nbsp;').replace('ahref','a href'))
         addPhotoToRemove(remove_file_name, page_number, photo_number+1, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length)
     else:
         report_file.write('|  KEEP  |<br>\n'.replace(' ','&nbsp;'))
