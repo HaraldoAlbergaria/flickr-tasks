@@ -91,9 +91,12 @@ current_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.c
 new_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.new.txt'.format(group_alias, group_name).replace(' ','_')
 
 # read the current members file
-last_members = open(current_members_file_name, "r")
-last_members_list = last_members.readlines()
-last_members.close()
+try:
+    last_members = open(current_members_file_name, "r")
+    last_members_list = last_members.readlines()
+    last_members.close()
+except:
+    last_members_list = []
 
 # create the list for current members and open the file for writing
 current_members_list = []

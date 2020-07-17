@@ -54,7 +54,7 @@ photos_per_page = int(pool['photos']['perpage'])
 # set output files names
 report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.monthly.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
-html_file_name   = '/home/pi/github/pages/flickr-group-admin-reports/{0}.monthly.html'.format(group_name).replace(' ','_')
+html_file_name   = '/home/pi/github/hpfilho.github.io/reports/{0}.monthly.html'.format(group_name).replace(' ','_')
 
 # create and add header to report file
 procs.addReportHeader(report_file_name, html_file_name, group_name, total_of_photos)
@@ -91,9 +91,12 @@ current_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.c
 new_members_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.members.new.txt'.format(group_alias, group_name).replace(' ','_')
 
 # read the current members file
-last_members = open(current_members_file_name, "r")
-last_members_list = last_members.readlines()
-last_members.close()
+try:
+    last_members = open(current_members_file_name, "r")
+    last_members_list = last_members.readlines()
+    last_members.close()
+except:
+    last_members_list = []
 
 # create the list for current members and open the file for writing
 current_members_list = []
