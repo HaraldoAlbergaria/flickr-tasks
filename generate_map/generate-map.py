@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 # This script generates a html file of all the photos on the
-# user's photostream, that can be viewed in a web browser
+# user's photostream, that can be viewed in a web browser as a map
 #
 # Author: Haraldo Albergaria
 # Date  : Jul 07, 2020
@@ -23,7 +23,6 @@ import os
 from common import hasTag
 from common import isInSet
 from procs import createMarker
-
 
 # Credentials
 api_key = api_credentials.api_key
@@ -94,23 +93,6 @@ for marker_info in coordinates:
 
 html_file = open("/home/pi/flickr_tasks/generate_map/map.html", "a")
 html_file.write("\n        return locations;\n\n    }\n\n</script>\n\n")
-
-# Add Statcounter code
-html_file.write('<!-- Default Statcounter code for photo website\n')
-html_file.write('https://haraldo-albergaria.photos/ -->\n')
-html_file.write('<script type=\"text/javascript\">\n')
-html_file.write('var sc_project=12357551;\n')
-html_file.write('var sc_invisible=1;\n')
-html_file.write('var sc_security="b15a6b74";\n')
-html_file.write('var sc_https=1;\n')
-html_file.write('var sc_remove_link=1;\n')
-html_file.write('</script>\n')
-html_file.write('<script type=\"text/javascript\"\n')
-html_file.write('src=\"https://www.statcounter.com/counter/counter.js\" async></script>\n')
-html_file.write('<noscript><div class=\"statcounter\"><img class=\"statcounter\"\n')
-html_file.write('src=\"https://c.statcounter.com/12357551/0/b15a6b74/1/\"\n')
-html_file.write('alt=\"Web Analytics"></div></noscript>\n')
-html_file.write('<!-- End of Statcounter Code -->\n')
 
 html_file.write("\n</body>\n</html>\n\n")
 html_file.close()

@@ -123,7 +123,7 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 
 - **generate_map**: Inside directory 'generate_map' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the scripts:
     - **procs.py**: There is no need to edit this file, keep it as is.
-    - **header.html**: This file contains the initial code for the generated _html_ file. **Do not delete any of them, otherwise the generated file will be useless**. The generated file will be **flickr_photos_map.html**.
+    - **header.html**: This file contains the initial code for the generated _html_ file. An API key must be inserted in the proper field in order to the map can be loaded. To get one, [sign up](https://account.mapbox.com/auth/signup/) to [Mapbox](https://www.mapbox.com/). The generated file will be **map.html**.
     - **config.py**: If there are photos that must not be included on the map, create a photoset with these photos, open the file and edit the variable _not_map_set_id_ with the id of the photoset.
 
 - **group_admin**: Inside directory 'group_admin' create a new one to your specific need (name it what you want, eg: group_name) and copy the content of the directory 'files' into it. Create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:

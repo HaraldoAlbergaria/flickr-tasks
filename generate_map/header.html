@@ -2,12 +2,15 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Haraldo Albergaria | Photos Map</title>
-<link rel="shortcut icon" type="image/x-icon" href="../res/icons/favicon.ico">
-<link rel="stylesheet" type="text/css" href="style.css" />
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+#menu { position: absolute; background: #fff; padding: 10px; 
+font-family: 'Open Sans', sans-serif; cursor: default; }
+</style>
 </head>
 
 <body>
@@ -22,29 +25,14 @@
 <label for="satellite-v9">satellite</label>
 </div>
 
-<ul class="flags_icons">
-    <li class="flags_icons"><img class="icon" src="icons/worldwide.svg" title="World" alt="World" onclick="showWorld()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/brazil.svg" title="Brazil" alt="Brazil" onclick="flyToBrazil()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/united-states.svg" title="United States" alt="United States" onclick="flyToUSA()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/argentina.svg" title="Argentina" alt="Argentina" onclick="flyToArgentina()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/paraguay.svg" title="Paraguay" alt="Paraguay" onclick="flyToParaguay()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/italy.svg" title="Italy" alt="Italy" onclick="flyToItaly()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/vatican.svg" title="Vatican City" alt="Vatican City" onclick="flyToVatican()" /></li>
-    <li class="flags_icons"><img class="icon" src="icons/croatia.svg" title="Croatia" alt="Croatia" onclick="flyToCroatia()" /></li>
-</ul>
-
-<div class="attribution">
-    Icons made by <a href="https://www.flaticon.com/authors/turkkub" title="turkkub" target="_blank">turkkub</a> (World) and <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> (Countries) from <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a>
-</div>
-
 <script>
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGFyYWxkby1maWxobyIsImEiOiJja2NpNmNtNWUwZnZnMnlycDBwM3FjeXp2In0.B1eDc6wvyIq1r_LTC6hX0g';
+    mapboxgl.accessToken = '<-- Insert here the Mapbox API Key -->';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
-        center: [-40, 15],
-        zoom: 1.8
+        center: [0, 30],
+        zoom: 1.5
     });
 
     map.addControl(new mapboxgl.NavigationControl());
@@ -61,73 +49,17 @@
         inputs[i].onclick = switchLayer;
     }
 
-	var locations = getLocations();
+    var locations = getLocations();
 
-	locations.forEach(addMarker);
+    locations.forEach(addMarker);
 
     function addMarker(value) {
         new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})
-        	.setLngLat(value[0])
+            .setLngLat(value[0])
             .setPopup(new mapboxgl.Popup({closeButton:false,closeOnMove:true,maxWidth:'566px'}).setHTML(value[1]))
             .addTo(map);
     }
 
-    function showWorld() {
-	    map.flyTo({
-		    center: [-40, 15],
-			zoom: 1.8
-		});
-	}
-
-	function flyToBrazil() {
-	    map.flyTo({
-		    center: [-47.942175, -15.720065],
-			zoom: 3.5
-		});
-	}
-
-	function flyToUSA() {
-	    map.flyTo({
-		    center: [-98.353336, 38.001705],
-			zoom: 3.5
-		});
-	}
-
-	function flyToArgentina() {
-	    map.flyTo({
-		    center: [-54.514142, -25.632677],
-			zoom: 11.0
-		});
-	}
-
-	function flyToParaguay() {
-	    map.flyTo({
-		    center: [-54.593004, -25.410668],
-			zoom: 15.0
-		});
-	}
-
-	function flyToItaly() {
-	    map.flyTo({
-		    center: [13.663935, 41.369012],
-			zoom: 6.7
-		});
-	}
-
-	function flyToVatican() {
-	    map.flyTo({
-		    center: [12.452778, 41.904047],
-			zoom: 15.5
-		});
-	}
-
-	function flyToCroatia() {
-	    map.flyTo({
-		    center: [16.494044, 44.39349],
-			zoom: 6.3
-		});
-	}
-
-	function getLocations() {
+    function getLocations() {
 
         var locations = [];
