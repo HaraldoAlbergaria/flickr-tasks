@@ -27,7 +27,7 @@ font-family: 'Open Sans', sans-serif; cursor: default; }
 
 <script>
 
-    mapboxgl.accessToken = '<-- Insert here the Mapbox API Key -->';
+    mapboxgl.accessToken = '<-- Insert here the Mapbox API access token -->';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
@@ -56,7 +56,7 @@ font-family: 'Open Sans', sans-serif; cursor: default; }
     function addMarker(value) {
         new mapboxgl.Marker({color:'#C2185B',scale:0.7,draggable:false})
             .setLngLat(value[0])
-            .setPopup(new mapboxgl.Popup({closeButton:false,closeOnMove:true,maxWidth:'566px'}).setHTML(value[1]))
+            .setPopup(new mapboxgl.Popup({closeButton:false,maxWidth:'566px'}).setHTML(value[1]))
             .addTo(map);
     }
 
