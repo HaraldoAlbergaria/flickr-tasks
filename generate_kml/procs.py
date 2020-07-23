@@ -51,33 +51,29 @@ def getMyMapsThumbUrl(photo_id, photo_sizes):
     return photo_sizes[m]['source']
 
 
-
 ### !!! DO NOT DELETE OR CHANGE THE SIGNATURE OF THIS PROCEDURE !!!
 
-def processPhoto(photo_id, photo_title, user_id, retry):
+def processPhoto(photo, photos_base_url, user_id, retry):
     try:
         # get photo information
-        photo_title = photo_title.replace('&', 'and')
-        photos_base_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
+        photo_id = photo['id']
+        photo_title = photo['title'].replace('&', 'and')
+        print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))
         photo_url = photos_base_url + photo_id
-        photo_perm = flickr.photos.getPerms(api_ky=api_key, photo_id=photo_id)['perms']['ispublic']
         # get thumbnails urls
         photo_sizes = flickr.photos.getSizes(api_key=api_key, user_id=user_id, photo_id=photo_id)['sizes']['size']
         earth_thumb_url = getEarthThumbUrl(photo_id, photo_sizes)
         mymaps_thumb_url = getMyMapsThumbUrl(photo_id, photo_sizes)
         # get photo location data
-        location = flickr.photos.geo.getLocation(api_ky=api_key, photo_id=photo_id)
-        latitude = location['photo']['location']['latitude']
-        longitude = location['photo']['location']['longitude']
-        geo_perm = flickr.photos.geo.getPerms(api_ky=api_key, photo_id=photo_id)['perms']['ispublic']
+        latitude = photo['latitude']
+        longitude = photo['longitude']
         # write to Google Earth's file
-        if not isInSet(photo_id, config.not_map_set_id):
-            earth_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml", "a")
-            earth_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<a href=\"{1}\"><img src=\"{2}\" /></a>]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#msn_placemark_circle</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, photo_url, earth_thumb_url, latitude, longitude))
-            earth_file.close()
-            print("Added marker to 'Google Earth'!")
+        earth_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.earth.kml", "a")
+        earth_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<a href=\"{1}\"><img src=\"{2}\" /></a>]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#msn_placemark_circle</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, photo_url, earth_thumb_url, latitude, longitude))
+        earth_file.close()
+        print("Added marker to 'Google Earth'!")
         # write to Google My Maps' file if photo and location are public
-        if photo_perm == 1 and geo_perm == 1 and not isInSet(photo_id, config.not_map_set_id) and not hasTag(photo_id, dont_map_tag):
+        if photo['ispublic'] == 1 and photo['geo_is_public'] == 1 and not dont_map_tag in photo['tags']:
             mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.kml", "a")
             mymaps_file.write("        <Placemark>\n            <name>{0}</name>\n            <description><![CDATA[<img src=\"{1}\" />{2}]]></description>\n            <LookAt>\n                <longitude>{3}</longitude>\n                <latitude>{4}</latitude>\n                <altitude>0</altitude>\n            </LookAt>\n            <styleUrl>#icon-1535-C2185B</styleUrl>\n            <Point>\n                <gx:drawOrder>1</gx:drawOrder>\n                <coordinates>{4},{3}</coordinates>\n            </Point>\n        </Placemark>\n".format(photo_title, mymaps_thumb_url, photo_url, latitude, longitude))
             mymaps_file.close()
@@ -88,6 +84,6 @@ def processPhoto(photo_id, photo_title, user_id, retry):
             retry += 1
             print("ERROR when adding marker to map")
             print("Retrying: {0}".format(retry))
-            processPhoto(photo_id, photo_title, user_id, retry)
+            processPhoto(photo, photos_base_url, user_id, retry)
         else:
             pass

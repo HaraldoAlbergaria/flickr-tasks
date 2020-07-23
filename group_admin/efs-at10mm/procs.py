@@ -109,8 +109,14 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     photo_title = pool['photos']['photo'][photo_number]['title']
     photo_owner = pool['photos']['photo'][photo_number]['ownername']
     owner_id = pool['photos']['photo'][photo_number]['owner']
-    photo_url = flickr.people.getInfo(api_key=api_key, user_id=owner_id)['person']['photosurl']['_content'] + photo_id
-    date_added = pool['photos']['photo'][photo_number]['dateadded']
+
+    try:
+        photo_url = flickr.people.getInfo(api_key=api_key, user_id=owner_id)['person']['photosurl']['_content'] + photo_id
+        date_added = pool['photos']['photo'][photo_number]['dateadded']
+    except:
+        photo_url = ''
+        date_added = '0000000000'
+
     try:
         exif = getExif(photo_id, 0)
         lens_model = getLensModel(exif)
@@ -118,6 +124,7 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     except:
         lens_model = 'NO EXIF'
         focal_length = 'NO EXIF'
+
     asian = photo_title.strip(data.eastern_chars)
     no_asian = photo_title.replace(asian,'')
     date = datetime.fromtimestamp(int(date_added)).strftime('%d/%m/%Y')
@@ -163,10 +170,12 @@ def removePhoto(api_key, group_id, photo_id, photo_title, photo_owner):
         print('FAILED removing photo: \"{0}\" by {1}'.format(photo_title, photo_owner))
 
 def writeLastRemoveRun(group_id):
-    pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)
-    number_of_photos_after_current_remove = int(pool['photos']['total'])
-    last_run = open('last_remove_run.py', 'w')
-    last_run.write('number_of_photos = {0}'.format(number_of_photos_after_current_remove))
-    last_run.close()
-
+    try:
+        pool = flickr.groups.pools.getPhotos(api_key=api_key, group_id=group_id)
+        number_of_photos_after_current_remove = int(pool['photos']['total'])
+        last_run = open('last_remove_run.py', 'w')
+        last_run.write('number_of_photos = {0}'.format(number_of_photos_after_current_remove))
+        last_run.close()
+    except:
+        pass
 

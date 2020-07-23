@@ -32,19 +32,23 @@ def getExif(photo_id, retry, print_retry=True):
                 time.sleep(retry_wait)
                 retry += 1
                 if print_retry:
-                    print("ERROR when getting Exif")
+                    print("ERROR when getting Exif for photo id: {}".format(photo_id))
                     print("Retrying: {0}".format(retry))
-                exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+                try:
+                    exif = flickr.photos.getExif(api_key=api_key, photo_id=photo_id)['photo']['exif']
+                except:
+                    exif = ''
         return exif
     except:
         if retry < max_retries:
             time.sleep(retry_wait)
             retry += 1
             if print_retry:
-                print("ERROR when getting Exif")
+                print("ERROR when getting Exif for photo id: {}".format(photo_id))
                 print("Retrying: {0}".format(retry))
             getExif(photo_id, retry)
         else:
+            print('Unable to get Exif for photo id: {}'.format(photo_id))
             return ''
 
 def getCameraMaker(exif):

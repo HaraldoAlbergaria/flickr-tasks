@@ -29,6 +29,7 @@ user_id = api_credentials.user_id
 
 # Flickr api access
 flickr = flickrapi.FlickrAPI(api_key, api_secret, format='parsed-json')
+photos_per_page = '500'
 
 
 #===== MAIN CODE ==============================================================#
@@ -44,7 +45,8 @@ mymaps_file = open("/home/pi/flickr_tasks/generate_kml/my_flickr_photos.mymaps.k
 mymaps_file.write("    <Folder>\n        <name>My Photostream</name>\n        <open>1</open>\n")
 mymaps_file.close()
 
-photos = flickr.people.getPhotos(user_id=user_id)
+photos = flickr.photos.getWithGeoData(api_key=api_key, user_id=user_id, privacy_filter='1', per_page=photos_per_page)
+photos_base_url = flickr.people.getInfo(api_key=api_key, user_id=user_id)['person']['photosurl']['_content']
 
 npages = int(photos['photos']['pages'])
 ppage = int(photos['photos']['perpage'])
@@ -55,16 +57,13 @@ print('Pages: {0} | Per page: {1} | Total: {2}'.format(npages, ppage, total))
 print('=============================================')
 
 for pg in range(1, npages+1):
-    page = flickr.people.getPhotos(user_id=user_id, page=pg)
-    ppage = len(page['photos']['photo'])
+    page = flickr.photos.getWithGeoData(api_key=api_key, user_id=user_id, privacy_filter='1', extras='geo,tags', page=pg, per_page=ppage)['photos']['photo']
+    ppage = len(page)
     print('\n\n\nPage: {0}/{1} | Photos: {2}'.format(pg, npages, ppage))
     print('---------------------------------------------')
 
     for ph in range(0, ppage):
-        photo_id = page['photos']['photo'][ph]['id']
-        photo_title = page['photos']['photo'][ph]['title']
-        print(u'\nid: {0}\ntitle: {1}'.format(photo_id, photo_title))
-        set_id = procs.processPhoto(photo_id, photo_title, user_id, 0)
+        procs.processPhoto(page[ph], photos_base_url, user_id, 0)
 
 print('\n\n')
 
