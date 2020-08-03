@@ -128,7 +128,7 @@ while added < data.group_limit:
     photo_info = flickr.photos.getInfo(photo_id=photo_id)['photo']
     photo_title = photo_info['title']['_content']
 
-    if procs.isOkToAdd(photo_id) and not hasTag(photo_id, dont_add_tag):
+    if not hasTag(photo_id, dont_add_tag) and procs.isOkToAdd(photo_id):
         try:
             flickr.groups.pools.add(group_id=group_id, photo_id=photo_id)
             print("Added: Photo \'{0}\' to the group \'{1}\'".format(photo_title, group_name))
