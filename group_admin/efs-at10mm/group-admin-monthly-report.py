@@ -54,6 +54,7 @@ photos_per_page = int(pool['photos']['perpage'])
 # set output files names
 report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.monthly.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
+review_file_name = '/home/pi/flickr_tasks/group_admin/{0}/review-photos.txt'.format(group_alias)
 html_file_name   = '/home/pi/github/hpfilho.github.io/reports/{0}.monthly.html'.format(group_name).replace(' ','_')
 
 # create and add header to report file
@@ -71,7 +72,7 @@ for page_number in range(1, number_of_pages+1):
     for photo_number in range(photos_per_page):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
-        procs.addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_number, photo_number)
+        procs.addPhoto(report_file_name, html_file_name, remove_file_name, review_file_name, pool, page_number, photo_number)
     # add page footer
     procs.addPageFooter(report_file_name, html_file_name)
 
