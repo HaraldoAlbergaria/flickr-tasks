@@ -72,7 +72,7 @@ for page_number in range(1, number_of_pages+1):
     for photo_number in range(photos_per_page):
         # add photo to report with action to be performed
         # add also to remove script in case should be removed
-        procs.addPhoto(report_file_name, html_file_name, remove_file_name, review_file_name, pool, page_number, photo_number)
+        procs.addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_number, photo_number)
     # add page footer
     procs.addPageFooter(report_file_name, html_file_name)
 

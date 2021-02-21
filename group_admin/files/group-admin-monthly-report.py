@@ -54,6 +54,7 @@ photos_per_page = int(pool['photos']['perpage'])
 # set output files names
 report_file_name = '/home/pi/flickr_tasks/group_admin/{0}/{1}.photos.admin.monthly.txt'.format(group_alias, group_name).replace(' ','_')
 remove_file_name = '/home/pi/flickr_tasks/group_admin/{0}/remove-photos.py'.format(group_alias)
+review_file_name = '/home/pi/flickr_tasks/group_admin/{0}/review-photos.txt'.format(group_alias)
 html_file_name   = '/home/pi/github/hpfilho.github.io/reports/{0}.monthly.html'.format(group_name).replace(' ','_')
 
 # create and add header to report file
