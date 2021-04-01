@@ -83,9 +83,9 @@ def isExifMissing(photo_id, photo_title):
             print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
             return True
         # Do not edit the next 1st, 2nd and 4th lines. Edit the 3rd line to include any additional condition
-        if (camera_model == '' or lens_model == '' or focal_length == '' or aperture == '' or iso == '') \
-                and (camera_maker != 'NIKON' and camera_maker != 'Vivitar' and camera_maker != 'Fujifilm') \
-                and True:
+        if camera_model == '' or (lens_model == '' and (camera_maker != 'NIKON' and camera_maker != 'Fujifilm')) \
+                or (focal_length == '' and camera_maker != 'Vivitar') or ((aperture == '' or iso == '') \
+                and (camera_maker != 'Vivitar' and camera_maker != 'Fujifilm')):
             return True
         else:
             return False
