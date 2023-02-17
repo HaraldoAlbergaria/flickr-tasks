@@ -15,6 +15,9 @@ import socket
 import mail
 import config
 
+from common import hasTag
+from common import isInSet
+
 from datetime import datetime
 from datetime import date
 
