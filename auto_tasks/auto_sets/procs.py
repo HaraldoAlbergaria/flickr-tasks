@@ -33,6 +33,12 @@ galleries_id = '72157662142350881'
 at10mm_id = '72157694314388675'
 at250mm_id = '72157666561896128'
 at1p8_id = '72157703794055595'
+landscape_id = '72177720307187606'
+portrait_id = '72177720307183543'
+square_id = '72177720307183558'
+panoramic_id = '72177720307187626'
+
+
 
 tag = 'DNA'
 summary_file = '/home/pi/flickr_tasks/auto_tasks/auto_sets/summary_sets.log'
@@ -154,3 +160,30 @@ def processPhoto(photo_id, photo_title, user_id):
             print(e)
 
 
+    # Format Sets
+    try:
+        sizes = flickr.photos.getSizes(photo_id=photo_id)['sizes']
+        original_idx = len(sizes['size']) - 1
+        photo_width = sizes['size'][original_idx]['width']
+        photo_height = sizes['size'][original_idx]['height']
+        photo_ratio = photo_width / photo_height
+        print('aspect ratio: {0:.2f}\n'.format(photo_ratio), end='')
+        if photo_ratio > 1 and photo_ratio < 2:
+            in_set = isInSet(photo_id, landscape_id)
+            if not in_set:
+                addPhotoToSet(landscape_id, photo_id, photo_title)
+        if photo_ratio < 1:
+            in_set = isInSet(photo_id, portrait_id)
+            if not in_set:
+                addPhotoToSet(portrait_id, photo_id, photo_title)
+        if photo_ratio == 1:
+            in_set = isInSet(photo_id, square_id)
+            if not in_set:
+                addPhotoToSet(square_id, photo_id, photo_title)
+        if photo_ratio >= 2:
+            in_set = isInSet(photo_id, panoramic_id)
+            if not in_set:
+                addPhotoToSet(panoramic_id, photo_id, photo_title)
+
+    except:
+        print('ERROR: Unable to get information for photo \'{0}\''.format(photo_title))
