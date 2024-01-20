@@ -13,6 +13,7 @@ import flickrapi
 import api_credentials
 import json
 import time
+import os
 import data
 
 from common import getExif
@@ -49,24 +50,24 @@ def getBestLens(data):
 def genReport(data, file_name):
     best_lens = getBestLens(data)
     report_file = open(file_name, "w")
-    report_file.write("+--------------------------------------------------------------------------+\n")
-    report_file.write("| Lens                                               |   Score   | Is Best |\n")
-    report_file.write("+--------------------------------------------------------------------------+\n")
+    report_file.write("+----------------------------------------------------------------------+\n")
+    report_file.write("| Lens                                               | Score | Is Best |\n")
+    report_file.write("+----------------------------------------------------------------------+\n")
     for i in range(len(data)):
         lens = data[i][0]
         score = data[i][3]
-        report_file.write("| {0:<50.50} | {1:>9} ".format(lens, score))
+        report_file.write("| {0:<50.50} | {1:>5} ".format(lens, score))
         if lens == best_lens:
             report_file.write("|    *    |\n")
         else:
             report_file.write("|         |\n")
-    report_file.write("+--------------------------------------------------------------------------+\n")
+    report_file.write("+----------------------------------------------------------------------+\n")
     report_file.close()
 
 
 #===== MAIN CODE ==============================================================#
 
-photos = flickr.people.getPhotos(user_id=user_id)
+photos = flickr.people.getPhotos(user_id=user_id, content_types=0)
 
 npages = int(photos['photos']['pages'])
 ppage = int(photos['photos']['perpage'])
@@ -78,7 +79,7 @@ photo = 0
 lenses = data.lenses
 
 for pg in range(1, npages+1):
-    page = flickr.people.getPhotos(user_id=user_id, page=pg)
+    page = flickr.people.getPhotos(user_id=user_id, content_types=0, page=pg)
     ppage = len(page['photos']['photo'])
 
     for ph in range(0, ppage):
@@ -103,6 +104,8 @@ for pg in range(1, npages+1):
         print("Processed photo {0}/{1}".format(photo, total_photos), end='\r')
 
 genReport(lenses, report_file_name)
+os.system("more {}".format(report_file_name))
+
 best_lens = getBestLens(lenses)
 print("Best Lens: {}".format(best_lens))
 

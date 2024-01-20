@@ -73,11 +73,14 @@ def getCameraType(exif):
     return ''
 
 def getLensModel(exif):
+    maker = ''
     if exif != '':
+        maker = getCameraMaker(exif)
         for i in range(len(exif)):
             if exif[i]['tag'] == "LensModel" or exif[i]['tag'] == "Lens":
-                return exif[i]['raw']['_content']
-    return ''
+                if exif[i]['raw']['_content'] != '':
+                    return exif[i]['raw']['_content']
+    return maker
 
 def getFocalLength(exif):
     if exif != '':
