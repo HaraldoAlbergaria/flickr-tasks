@@ -24,7 +24,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
    - **_find-image-comments.py_**: Find, in the user's photostream, comments containg images and generates the script **_delete-comments.py_** to delete them.
     
 ### [**_empty_photoset/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/empty_photoset)
-   - **_empty-photoset.py_**: Empties a give photoset, leaving just 1 photo to avoid the photoset being excluded.
+   - **_empty-photoset.py_**: Empties a given photoset, leaving just 1 photo to avoid the photoset being excluded.
     
 ### [**_find_explored/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/find_explored)
    - **_find-photos-in-explore.py_**: Find user's photos in _Explore_ for the current day and send an e-mail with the list of photos if any is found.
@@ -36,6 +36,9 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 ### [**_group_admin/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/group_admin)
    - **_group-admin-daily-report.py_**: Reports which photos should be removed or kept in a group according to specified exif parameters. e.g.: Lens Model. Also, generates the script **_remove-photos.py_** to remove the photos that need to be removed. The report shows only the photos that were added after the last removal plus the last 100 photos before that, to guarantee that any photos added or removed during the last run will be included in the current report. Additionaly, it reports the usernames of the group's new members. Made to be run at least once a day.
    - **_group-admin-monthly-report.py_**: Same as above, but the report shows all photos since the group creation and is good to catch photos the should have been removed but for any reason were not. This can happen, for example, if photos are removed of the group by the owner after others been added, which will make some added photos do not show up in the daily report. Made to be run at least once a month.
+
+### [**_lens_usage/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/lens_usage)
+   - **_get-lens-usage.py_**: Generates a report with the usage, in number of photos and percentage of total photos in the user's photostream or a given photoset.
 
 ### [**_lenses_wide_open/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/lenses_wide_open)
    - **_find-lenses-wide-open.py_**: From a list of lenses, finds the number of photos taken with the lens diaphragm wide open, i.e. at the minimum _f/number_. Can be used also to find the number of photos taken with a _f/number_ below a given value, useful if you are thinking to replace a lens with one that has a lower minimum _f/number_ and like to know how many photos in your photostream were taken below this value to have an idea of the impact of the change.
@@ -91,7 +94,7 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     - **procs.py**: Implement here the procedures that will actually process the photos.
 
 - **best_lens**: Inside directory 'best_lens' create a link (or copy) to the file __api_credentials.py__. There is one additional file necessary to run the script:
-    - **data.py**: Include here the camera maker, system and the list of lenses following the instruction inside the file.
+    - **data.py**: Include here the camera maker, system and the list of lenses, following the instruction inside the file.
 
     _**IMPORTANT NOTICE:** The progress and the selected lens will be shown directly on the terminal, so the script must not be run in background. It will also be generated a report file with the score of each lens and an indication of the selected one._
 
@@ -122,8 +125,13 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
     - **group_data.py**: Include here the id, alias and url of the group.
     - **procs.py**: Implement here the procedures that will actually process the photos to generate the reports.
 
+- **lens_usage**: Inside directory 'lens_usage' create a link (or copy) to the file __api_credentials.py__. There is one additional file necessary to run the script:
+    - **config.py**: Include here the camera maker and/or the photoset id, following the instruction inside the file.
+
+    _**IMPORTANT NOTICE:** The progress will be shown directly on the terminal, so the script must not be run in background. It will also be generated a report file with the usage data for each lens._
+
 - **lenses_wide_open**: Inside directory 'lenses_wide_open' create a link (or copy) to the file __api_credentials.py__. There is one additional file necessary to run the script:
-    - **data.py**: Include here the camera maker, system and the list of lenses following the instruction inside the file. To find the number of photos taken with a _f/number_ below a given value, change the 'mode' variable value from 'wide_open' to 'max_open'. 
+    - **data.py**: Include here the camera maker, system and the list of lenses, following the instruction inside the file. To find the number of photos taken with a _f/number_ below a given value, change the 'mode' variable value from 'wide_open' to 'max_open'. 
 
     _**IMPORTANT NOTICE:** The progress will be shown directly on the terminal, so it is recommended to not run the script in background. It will be generated a report file with the number of photos taken with the diaphragm wide open for each lens._
 
