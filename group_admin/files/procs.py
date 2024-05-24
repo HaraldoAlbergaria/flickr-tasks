@@ -97,7 +97,7 @@ def addPageHeader(report_file_name, html_file_name, page, number_of_pages, photo
 
 def addPhotoToRemove(remove_file_name, page_number, photo_number, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length):
     remove_file = open(remove_file_name, 'a')
-    remove_file.write('# {0},{1} {2}:{3} @{4}'.format(page_number, photo_number, photo_title, lens_model, focal_length))
+    remove_file.write('# {0},{1} {2}: {3} @{4}'.format(page_number, photo_number, photo_title, lens_model, focal_length))
     remove_file.write('\n# https://www.flickr.com/photos/{0}/{1}/in/pool-{2}\n'.format(owner_id, photo_id, group_data.group_alias))
     remove_file.write('procs.removePhoto(api_key, \'{0}\', \'{1}\', \'{2}\', \'{3}\')\n\n'.format(group_id, photo_id, photo_title.replace("\'", "\\\'"), photo_owner))
     remove_file.close()
@@ -130,7 +130,7 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     report_file = open(report_file_name,'a')
     report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
-        if lens_model != 'NO EXIF' and focal_length != 'NO EXIF' and lens_model != '' and focal_length != '':
+        if ((lens_model != 'NO EXIF' and lens_model != '') or (focal_length != 'NO EXIF' and focal_length != '')):
             report_file.write('| REMOVE |\n')
             addPhotoToRemove(remove_file_name, page_number, photo_number+1, photo_id, owner_id, photo_title, photo_owner, lens_model, focal_length)
         else:
@@ -142,7 +142,7 @@ def addPhoto(report_file_name, html_file_name, remove_file_name, pool, page_numb
     report_file = open(html_file_name,'a')
     report_file.write('| {0:3} | {1:50.50} | {2:35.35} | {3:40.40} | {4:>10.10} | {5:>10.10} '.format(photo_number+1, no_asian, photo_owner, lens_model, focal_length, date).replace(' ','&nbsp;'))
     if (not(lens_model in lens_models)) or (not(focal_length in focal_lengths)):
-        if lens_model != 'NO EXIF' and focal_length != 'NO EXIF' and lens_model != '' and focal_length != '':
+        if ((lens_model != 'NO EXIF' and lens_model != '') or (focal_length != 'NO EXIF' and focal_length != '')):
             report_file.write('| <ahref=\"{}\"target=\"_blank\">REMOVE</a> |<br>\n'.format(photo_url).replace(' ','&nbsp;').replace('ahref','a href').replace('target', ' target'))
         else:
             report_file.write('| <ahref=\"{}\"target=\"_blank\">REVIEW</a> |<br>\n'.format(photo_url).replace(' ','&nbsp;').replace('ahref','a href').replace('target', ' target'))
