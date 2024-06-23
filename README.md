@@ -2,6 +2,9 @@
 
 A collection of _python_ scripts to automate some tasks on [_Flickr™_](https://www.flickr.com/). At the moment, the following are available:
 
+### [**_add_description/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/add_description)
+   - **_add-description.py_**: Automatically add or append a description to photos on a photoset.
+   
 ### [**_add_gear_tags/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/add_gear_tags)
    - **_add-gear-tags.py_**: Automatically add tags for the gear used (eg: camera model, lens model) according to exif data.
    
@@ -75,7 +78,12 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 
 ## Usage
 
-- **add_gear_tags**: Inside directory 'add_gear_tags' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the script:
+- **add_description**: Inside directory 'add_description' create a link (or copy) to the file __api_credentials.py__. There are three additional files necessary to run the script:
+    - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
+    - **data.py**: Include here the id of the photoset where you want to apply the description. Also, you can define if the script will overwrite or append to existent descriptions.
+    - **description.txt**: Create a file containing the description you want to add or append.
+
+- **add_gear_tags**: Inside directory 'add_gear_tags' create a link (or copy) to the file __api_credentials.py__. There are two additional files necessary to run the script:
     - **procs.py**: Open the file and read the comments to know how to customize it for your specific needs.
     - **data.py**: Include here the id of the photoset where you want to apply the tags and create dictionaries associating the exif data to the tags.
 
