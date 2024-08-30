@@ -53,6 +53,17 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
 
 The scripts were developed to run on _Linux_ systems and need _Python 3.x_ to run.
 
+To start, open a terminal and execute the following commands:
+
+```
+git clone https://github.com/HaraldoFilho/FlickrTasks.git
+cd FlickrTasks
+```
+
+The script uses *[Flickr](https://www.flickr.com/)™* API. To get and use this API follow the instructions below.
+
+#### Flickr API key
+
 First, install the [_flickrapi_](https://stuvel.eu/flickrapi) package by typing in a terminal:
 
 ```
