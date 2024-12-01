@@ -4,5 +4,5 @@ dont_map_tag = 'DontMap'
 
 # Id of the photoset
 # to generate kml file
-photoset_id = '72157613092654125'
+photoset_id = ''
 

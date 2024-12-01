@@ -22,8 +22,6 @@ xmlns:atom="http://www.w3.org/2005/Atom"> <Document>
         </IconStyle>
         <BalloonStyle>
         </BalloonStyle>
-        <ListStyle>
-        </ListStyle>
     </Style>
     <Style id="sh_placemark_circle_highlight">
         <IconStyle>
@@ -35,6 +33,4 @@ xmlns:atom="http://www.w3.org/2005/Atom"> <Document>
         </IconStyle>
         <BalloonStyle>
         </BalloonStyle>
-        <ListStyle>
-        </ListStyle>
     </Style>
