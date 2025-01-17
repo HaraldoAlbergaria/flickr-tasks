@@ -11,6 +11,7 @@
 
 import flickrapi
 import api_credentials
+import config
 import json
 import time
 import os
@@ -36,6 +37,8 @@ retry_wait  = 1
 # report file name
 report_file_name = "best_lens_report.txt"
 
+# photoset id
+photoset_id = ''
 
 #===== Procedures ===========================================================#
 
@@ -67,24 +70,36 @@ def genReport(data, file_name):
 
 #===== MAIN CODE ==============================================================#
 
-photos = flickr.people.getPhotos(user_id=user_id, content_types=0)
+if config.photoset_id != '':
+    photos = flickr.photosets.getPhotos(api_key=api_key, user_id=user_id, photoset_id=config.photoset_id, privacy_filter=config.photo_privacy, content_types=0)
+    npages = int(photos['photoset']['pages'])
+    total_photos = int(photos['photoset']['total'])
+    title = photos['photoset']['title']
+    print("Searching the best lens for photos\nsimilar to album: {}".format(title))
+    print("Please, wait...")
+else:
+    photos = flickr.people.getPhotos(user_id=user_id, content_types=0)
+    npages = int(photos['photos']['pages'])
+    total_photos = int(photos['photos']['total'])
+    print("Searching for best lens... Please, wait.")
 
-npages = int(photos['photos']['pages'])
-ppage = int(photos['photos']['perpage'])
-total_photos = int(photos['photos']['total'])
-
-print("Searching for best lens... Please, wait.")
 
 photo = 0
 lenses = data.lenses
 
 for pg in range(1, npages+1):
-    page = flickr.people.getPhotos(user_id=user_id, content_types=0, page=pg)
-    ppage = len(page['photos']['photo'])
+    if config.photoset_id != '':
+        page = flickr.photosets.getPhotos(api_key=api_key, user_id=user_id, photoset_id=config.photoset_id, privacy_filter=config.photo_privacy, content_types=0)
+        photos = page['photoset']
+    else:
+        page = flickr.people.getPhotos(user_id=user_id, content_types=0, page=pg)
+        photos = page['photos']
+
+    ppage = len(photos['photo'])
 
     for ph in range(0, ppage):
         photo = photo + 1
-        photo_id = page['photos']['photo'][ph]['id']
+        photo_id = photos['photo'][ph]['id']
         try:
             exif = getExif(photo_id, 0, False)
             camera_maker = getCameraMaker(exif)

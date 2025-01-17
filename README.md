@@ -18,7 +18,7 @@ A collection of _python_ scripts to automate some tasks on [_Flickr™_](https:/
    - **_process-photos.py_**: Process photos in a photostream to do an action according to specified rules. e.g: Add tags to photos for views, favorites and comments counts.
 
 ### [**_best_lens/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/best_lens)
-   - **_find-best-lens.py_**: Given a list of lenses, finds the best (more useful) one according to the current photos on the user's photostream. For each lens, the script counts how many photos were taken with a focal length covered by the lens and selects the one with the highest score. Can be used, for example, when buying a new lens, to decide from some options the one that will probably be used the most times.
+   - **_find-best-lens.py_**: Given a list of lenses, finds the best (more useful) one according to the current photos on the user's photostream or a given photoset. For each lens, the script counts how many photos were taken with a focal length covered by the lens and selects the one with the highest score. Can be used, for example, when buying a new lens, to decide from some options the one that will probably be used the most times. Or, you can use it to decide which lenses carry with you in a trip, based on a photoset with photos taken in a similar past trip (nature, city...).
     
 ### [**_check_exif/_**](https://github.com/HaraldoFilho/FlickrTasks/tree/master/check_exif)
    - **_check_exif.py_**: Checks for missing exif information on photos of a photostream.  When the script is run, if there are photos with missing exif information, the photoset 'Missing Exif' will be automatically created, and they will be added to it. Also, an e-mail will be sent with the link for the photoset.
@@ -114,6 +114,7 @@ A web browser will be opened to get the user approval (in a non-graphical enviro
 
 - **best_lens**: Inside directory 'best_lens' create a link (or copy) to the file __api_credentials.py__. There is one additional file necessary to run the script:
     - **data.py**: Include here the camera maker, system and the list of lenses, following the instruction inside the file.
+    - **config.py**: Include here the user id, photoset id and the privacy filter. If no photoset id is provided the script will get photos from the entire user's photostream. 
 
     _**IMPORTANT NOTICE:** The progress and the selected lens will be shown directly on the terminal, so the script must not be run in background. It will also be generated a report file with the score of each lens and an indication of the selected one._
 
